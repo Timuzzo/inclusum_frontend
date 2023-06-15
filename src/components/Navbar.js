@@ -8,12 +8,15 @@ import {
   IconButton,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar({ user, setUser }) {
   const handleClick = () => {
     localStorage.removeItem("user");
     setUser(null);
   };
+  const navigate = useNavigate();
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -37,8 +40,12 @@ export default function Navbar({ user, setUser }) {
           )}
           {user === null && (
             <>
-              <Button color="inherit">Login</Button>
-              <Button color="inherit">Signup</Button>
+              <Button color="inherit" onClick={() => navigate("/login")}>
+                Login
+              </Button>
+              <Button color="inherit" onClick={() => navigate("/signup")}>
+                Signup
+              </Button>
             </>
           )}
         </Toolbar>
