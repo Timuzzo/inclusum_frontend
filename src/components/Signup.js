@@ -20,9 +20,14 @@ export default function Signup({ setUser }) {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [city, setCity] = useState("");
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setIsLoading(true);
+    setError(null);
 
     const databody = {
       email: email,
@@ -33,11 +38,24 @@ export default function Signup({ setUser }) {
       points: 0,
     };
 
-    await fetch("http://localhost:8080/user/signup", {
+    const response = await fetch("http://localhost:8080/user/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(databody),
     });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setIsLoading(false);
+      setError(data.error);
+    }
+
+    if (response.ok) {
+      localStorage.setItem("user", JSON.stringify(data));
+      setIsLoading(false);
+      setUser(data);
+    }
 
     setEmail("");
     setCity("");
