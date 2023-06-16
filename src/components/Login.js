@@ -18,9 +18,14 @@ import LockOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 export default function Login({ setUser }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setIsLoading(true);
+    setError(null);
 
     const dataBody = {
       email: email,
@@ -30,8 +35,22 @@ export default function Login({ setUser }) {
     const response = await fetch("http://localhost:8080/user/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify,
+      body: JSON.stringify({ email, password }),
     });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setIsLoading(false);
+      setError(data.error);
+    }
+
+    if (response.ok) {
+      localStorage.setItem("user", JSON.stringify(data));
+      setIsLoading(false);
+      setUser(data);
+    }
+
     setEmail("");
     setPassword("");
   };
