@@ -1,34 +1,29 @@
-import { useState, useEffect } from "react";
+import { useContext } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 import Navbar from "./components/Navbar";
 import Dashboard from "./components/Dashboard";
+import { AuthContext } from "./context/AuthContext";
 
 function App() {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    if (!user) {
-      setUser(JSON.parse(localStorage.getItem("user")));
-    }
-  }, [user]);
+  const { token } = useContext(AuthContext);
   return (
     <>
-      <Navbar user={user} setUser={setUser} />
+      <Navbar />
       <Routes>
         <Route
           path="/"
-          element={user ? <Dashboard user={user} /> : <Navigate to="/login" />}
+          element={token ? <Dashboard /> : <Navigate to="/login" />}
         />
         <Route
           path="/login"
-          element={!user ? <Login setUser={setUser} /> : <Navigate to="/" />}
+          element={!token ? <Login /> : <Navigate to="/" />}
         />
         <Route
           path="/signup"
-          element={!user ? <Signup setUser={setUser} /> : <Navigate to="/" />}
+          element={!token ? <Signup /> : <Navigate to="/" />}
         />
       </Routes>
     </>

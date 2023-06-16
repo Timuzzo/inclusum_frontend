@@ -1,45 +1,52 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
-export default function Dashboard({ user }) {
+export default function Dashboard() {
   const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const { token } = useContext(AuthContext);
 
   useEffect(() => {
     const getData = async () => {
       try {
         const res = await fetch("http://localhost:8080/posts", {
           headers: {
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${token}`,
           },
         });
         const data = await res.json();
         setPosts(data);
+        setLoading(false);
       } catch (error) {
         console.log(error);
+        setLoading(false);
       }
     };
-    if (user) {
+    if (token) {
       getData();
     }
-  }, [user]);
+  }, [token]);
 
   return (
     <div className="posts">
-      {posts.length ? (
-        posts.map((post) => (
-          <div key={post._id}>
-            <h2>{post.title}</h2>
-            <p>
-              <strong>title: </strong>
-              {post.title}
-            </p>
-            <p>
-              <strong>text: </strong>
-              {post.body}
-            </p>
-          </div>
-        ))
+      {loading ? ( // Show loading message if loading is true
+        <h1>Loading...</h1>
       ) : (
-        <h1 style={{ color: "red" }}>No posts found</h1>
+        <>
+          {posts.length ? (
+            posts.map((post) => (
+              <div
+                key={post._id}
+                style={{ border: "2px solid black", margin: "10px" }}
+              >
+                <h2>{post.title}</h2>
+                <p>{post.body}</p>
+              </div>
+            ))
+          ) : (
+            <h1 style={{ color: "red" }}>No posts found</h1>
+          )}
+        </>
       )}
     </div>
   );
