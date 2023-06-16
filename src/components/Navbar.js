@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { useContext } from "react";
 import {
   AppBar,
   Box,
@@ -8,14 +8,20 @@ import {
   IconButton,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import { useJwt } from "react-jwt";
 
 export default function Navbar({ user, setUser }) {
-  const handleClick = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-  };
+  const { logout, token } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const handleClick = () => {
+    localStorage.removeItem("token");
+    logout();
+  };
+
+  const { decodedToken } = useJwt(token);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -31,14 +37,19 @@ export default function Navbar({ user, setUser }) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Inclusum
+            <Link to="/">Inclusum</Link>
           </Typography>
-          {user !== null && (
-            <Button color="inherit" onClick={handleClick}>
-              Log out
-            </Button>
+          {token !== null && (
+            <>
+              <span style={{ padding: "10px" }}>
+                Hello, {decodedToken?.name}
+              </span>
+              <Button color="inherit" onClick={handleClick}>
+                Log out
+              </Button>
+            </>
           )}
-          {user === null && (
+          {token === null && (
             <>
               <Button color="inherit" onClick={() => navigate("/login")}>
                 Login

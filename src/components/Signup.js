@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   Avatar,
   Button,
@@ -14,6 +14,8 @@ import {
   Typography,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
+import { AuthContext } from "../context/AuthContext";
+import CircularIndeterminate from "./Spinner";
 
 export default function Signup({ setUser }) {
   const [email, setEmail] = useState("");
@@ -22,6 +24,7 @@ export default function Signup({ setUser }) {
   const [city, setCity] = useState("");
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { login } = useContext(AuthContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,9 +55,9 @@ export default function Signup({ setUser }) {
     }
 
     if (response.ok) {
-      localStorage.setItem("user", JSON.stringify(data));
+      localStorage.setItem("token", data.token);
       setIsLoading(false);
-      setUser(data);
+      login(data.token);
     }
 
     setEmail("");
@@ -67,6 +70,7 @@ export default function Signup({ setUser }) {
 
   return (
     <ThemeProvider theme={defaultTheme}>
+      {isLoading ? <CircularIndeterminate /> : <></>}
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box

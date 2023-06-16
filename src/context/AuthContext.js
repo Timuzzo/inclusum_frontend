@@ -15,7 +15,7 @@ export default function AuthContextProvider(props) {
   //observe change state of token and put it in localStorage, if there is no token, remove it from localStorage
   useEffect(() => {
     if (token) {
-      localStorage.setItem("token");
+      localStorage.setItem("token", token);
     }
   }, [token]);
 
