@@ -1,19 +1,17 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   Avatar,
   Button,
   CssBaseline,
   TextField,
-  FormControlLabel,
   Link,
-  Grid,
   Box,
-  createTheme,
   ThemeProvider,
   Container,
   Typography,
 } from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
+import LoginIcon from "@mui/icons-material/Login";
+import { ThemeContext } from "../context/ThemeContext";
 
 export default function Login({ setUser }) {
   const [email, setEmail] = useState("");
@@ -21,21 +19,25 @@ export default function Login({ setUser }) {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  const { theme, themeToggle } = useContext(ThemeContext);
+
+  const { theme, themeToggle } = useContext(ThemeContext);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     setIsLoading(true);
     setError(null);
 
-    const dataBody = {
+    const databody = {
       email: email,
       password: password,
     };
 
-    const response = await fetch("http://localhost:8080/user/login", {
+    await fetch("http://localhost:8080/user/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify(databody),
     });
 
     const data = await response.json();
@@ -55,9 +57,8 @@ export default function Login({ setUser }) {
     setPassword("");
   };
 
-  const defaultTheme = createTheme();
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -69,7 +70,7 @@ export default function Login({ setUser }) {
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
+            <LoginIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Login
@@ -80,18 +81,34 @@ export default function Login({ setUser }) {
             noValidate
             sx={{ mt: 1 }}
           >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-            />
+            {themeToggle ? (
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                inputProps={{
+                  style: { WebkitBoxShadow: "0 0 0 100px #121212 inset" },
+                }}
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+              />
+            ) : (
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+              />
+            )}
             <TextField
               margin="normal"
               required
@@ -104,23 +121,19 @@ export default function Login({ setUser }) {
               onChange={(e) => setPassword(e.target.value)}
               value={password}
             />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Login
-            </Button>
-            <Grid container>
-              <Grid item xs></Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
           </Box>
+          <Button
+            type="submit"
+            variant="contained"
+            color="secondary"
+            size="large"
+            sx={{ mt: 2, mb: 2, width: "50%" }}
+          >
+            <Typography fontFamily="Poppins">Login</Typography>
+          </Button>
+          <Link href="#" variant="body2" color="primary">
+            {"Don't have an account? Sign Up"}
+          </Link>
         </Box>
       </Container>
     </ThemeProvider>
