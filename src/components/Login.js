@@ -1,44 +1,43 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   Avatar,
   Button,
   CssBaseline,
   TextField,
-  FormControlLabel,
   Link,
-  Grid,
   Box,
-  createTheme,
   ThemeProvider,
   Container,
   Typography,
 } from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
+import LoginIcon from '@mui/icons-material/Login';
+import { ThemeContext } from "../context/ThemeContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const {theme, themeToggle} = useContext(ThemeContext);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const dataBody = {
+    const databody = {
       email: email,
       password: password,
     };
 
-    const response = await fetch("http://localhost:8080/user/login", {
+    await fetch("http://localhost:8080/user/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify,
+      body: JSON.stringify(databody),
     });
     setEmail("");
     setPassword("");
   };
 
-  const defaultTheme = createTheme();
   return (
-    <ThemeProvider theme={defaultTheme}>
+     <ThemeProvider theme={theme}> 
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -49,8 +48,8 @@ export default function Login() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main"}}>
+            <LoginIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Login
@@ -61,7 +60,7 @@ export default function Login() {
             noValidate
             sx={{ mt: 1 }}
           >
-            <TextField
+            {themeToggle? <TextField
               margin="normal"
               required
               fullWidth
@@ -70,9 +69,22 @@ export default function Login() {
               name="email"
               autoComplete="email"
               autoFocus
+              inputProps={{ style: {WebkitBoxShadow: '0 0 0 100px #121212 inset' }}}
               onChange={(e) => setEmail(e.target.value)}
               value={email}
             />
+            :
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+            />
+            }
             <TextField
               margin="normal"
               required
@@ -85,24 +97,22 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
               value={password}
             />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Login
-            </Button>
-            <Grid container>
-              <Grid item xs></Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
           </Box>
-        </Box>
+          <Button
+              type="submit"
+              variant="contained"
+              color="secondary"
+              size="large"
+              sx={{ mt: 2, mb: 2, width: '50%'}}
+            >
+            <Typography fontFamily='Poppins'>
+                Login
+            </Typography>
+          </Button> 
+          <Link href="#" variant="body2" color='primary'>
+          {"Don't have an account? Sign Up"}
+          </Link>
+        </Box> 
       </Container>
     </ThemeProvider>
   );
