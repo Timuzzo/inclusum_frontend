@@ -4,16 +4,14 @@ import {
   Button,
   CssBaseline,
   TextField,
-  FormControlLabel,
   Link,
-  Grid,
   Box,
-  createTheme,
   ThemeProvider,
   Container,
   Typography,
 } from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { ThemeContext } from "../context/ThemeContext";
 import { AuthContext } from "../context/AuthContext";
 import CircularIndeterminate from "./Spinner";
 
@@ -25,6 +23,8 @@ export default function Signup({ setUser }) {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useContext(AuthContext);
+
+  const { theme, themeToggle } = useContext(ThemeContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -66,10 +66,8 @@ export default function Signup({ setUser }) {
     setUsername("");
   };
 
-  const defaultTheme = createTheme();
-
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={theme}>
       {isLoading ? <CircularIndeterminate /> : <></>}
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -82,7 +80,7 @@ export default function Signup({ setUser }) {
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
+            <AccountCircleIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign up
@@ -93,18 +91,36 @@ export default function Signup({ setUser }) {
             noValidate
             sx={{ mt: 1 }}
           >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-            />
+            {themeToggle ? (
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                inputProps={{
+                  style: { WebkitBoxShadow: "0 0 0 100px #121212 inset" },
+                }}
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+              />
+            ) : (
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+              />
+            )}
             <TextField
               margin="normal"
               required
@@ -141,23 +157,19 @@ export default function Signup({ setUser }) {
               onChange={(e) => setCity(e.target.value)}
               value={city}
             />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign Up
-            </Button>
-            <Grid container>
-              <Grid item xs></Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Already have an account? Log in"}
-                </Link>
-              </Grid>
-            </Grid>
           </Box>
+          <Button
+            type="submit"
+            variant="contained"
+            color="secondary"
+            size="large"
+            sx={{ mt: 3, mb: 2, width: "50%" }}
+          >
+            <Typography fontFamily="Poppins">Sign Up</Typography>
+          </Button>
+          <Link href="#" variant="body2" color="primary">
+            {"Already have an account? Log in"}
+          </Link>
         </Box>
       </Container>
     </ThemeProvider>
