@@ -10,20 +10,27 @@ import {
   Container,
   Typography,
 } from "@mui/material";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { ThemeContext } from "../context/ThemeContext";
+import { AuthContext } from "../context/AuthContext";
+import CircularIndeterminate from "./Spinner";
 
-
-export default function Signup() {
+export default function Signup({ setUser }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [city, setCity] = useState("");
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const { login } = useContext(AuthContext);
 
-  const {theme, themeToggle} = useContext(ThemeContext);
+  const { theme, themeToggle } = useContext(ThemeContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setIsLoading(true);
+    setError(null);
 
     const databody = {
       email: email,
@@ -34,11 +41,24 @@ export default function Signup() {
       points: 0,
     };
 
-    await fetch("http://localhost:8080/user/signup", {
+    const response = await fetch("http://localhost:8080/user/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(databody),
     });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setIsLoading(false);
+      setError(data.error);
+    }
+
+    if (response.ok) {
+      localStorage.setItem("token", data.token);
+      setIsLoading(false);
+      login(data.token);
+    }
 
     setEmail("");
     setCity("");
@@ -48,6 +68,7 @@ export default function Signup() {
 
   return (
     <ThemeProvider theme={theme}>
+      {isLoading ? <CircularIndeterminate /> : <></>}
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -70,33 +91,36 @@ export default function Signup() {
             noValidate
             sx={{ mt: 1 }}
           >
-            {themeToggle? <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              inputProps={{ style: {WebkitBoxShadow: '0 0 0 100px #121212 inset' }}}
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-            /> 
-            :
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-            />
-            }
+            {themeToggle ? (
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                inputProps={{
+                  style: { WebkitBoxShadow: "0 0 0 100px #121212 inset" },
+                }}
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+              />
+            ) : (
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+              />
+            )}
             <TextField
               margin="normal"
               required
@@ -135,18 +159,16 @@ export default function Signup() {
             />
           </Box>
           <Button
-              type="submit"
-              variant="contained"
-              color="secondary"
-              size="large"
-              sx={{ mt: 3, mb: 2, width: '50%' }}
-            >
-            <Typography fontFamily='Poppins'>
-              Sign Up
-            </Typography>
+            type="submit"
+            variant="contained"
+            color="secondary"
+            size="large"
+            sx={{ mt: 3, mb: 2, width: "50%" }}
+          >
+            <Typography fontFamily="Poppins">Sign Up</Typography>
           </Button>
-          <Link href="#" variant="body2" color='primary'>
-              {"Already have an account? Log in"}
+          <Link href="#" variant="body2" color="primary">
+            {"Already have an account? Log in"}
           </Link>
         </Box>
       </Container>
