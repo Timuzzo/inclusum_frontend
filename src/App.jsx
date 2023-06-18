@@ -34,18 +34,4 @@ function App() {
   );
 }
 
-// function App() {
-//   const {theme} = useContext(ThemeContext);
-//   return (
-//     <div>
-//       <ThemeProvider theme={theme}>
-//       <CssBaseline />
-//         <Login />
-//         <Signup />
-//       </ThemeProvider>
-//     </div>
-
-//   );
-// }
-
 export default App;

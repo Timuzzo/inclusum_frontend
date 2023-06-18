@@ -15,11 +15,19 @@ import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { ThemeContext } from "../context/ThemeContext";
 import { useJwt } from "react-jwt";
+import { useTranslation } from "react-i18next";
 
 export default function Navbar({ user, setUser }) {
   const { logout, token } = useContext(AuthContext);
   const {theme, themeToggle, setThemeToggle} = useContext(ThemeContext)
   const navigate = useNavigate();
+
+  const {t, i18n} = useTranslation()
+
+  const languages = {
+    en: {nativeName: 'English'},
+    de: {nativeName: 'Deutsch'}
+  }
 
   const handleClickLogout = () => {
     localStorage.removeItem("token");
@@ -50,24 +58,27 @@ export default function Navbar({ user, setUser }) {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link to="/">Inclusum</Link>
           </Typography>
+          {Object.keys(languages).map(lng => (
+              <Button type="submit" key={lng} onClick={() => i18n.changeLanguage(lng)} disabled={i18n.resolvedLanguage === lng}>{languages[lng].nativeName}</Button>
+            ))}
           <DarkModeRoundedIcon sx={{mr: 1, ml: 1}} onClick={handleClickTheme}/>
           {token !== null && (
             <>
               <span style={{ padding: "10px" }}>
-                Hello, {decodedToken?.name}
+                {t('greeting')}, {decodedToken?.name}
               </span>
               <Button color="inherit" onClick={handleClickLogout}>
-                Log out
+                {t('logout')}
               </Button>
             </>
           )}
           {token === null && (
             <>
               <Button color="inherit" onClick={() => navigate("/login")}>
-                Login
+              {t('login')}
               </Button>
               <Button color="inherit" onClick={() => navigate("/signup")}>
-                Signup
+              {t('signup')}
               </Button>
             </>
           )}
