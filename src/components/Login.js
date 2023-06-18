@@ -15,6 +15,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import { ThemeContext } from "../context/ThemeContext";
 import { AuthContext } from "../context/AuthContext";
 import CircularIndeterminate from "./Spinner";
+import { useTranslation } from "react-i18next";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -24,6 +25,8 @@ export default function Login() {
   const { login } = useContext(AuthContext);
 
   const { theme, themeToggle } = useContext(ThemeContext);
+
+  const {t} = useTranslation()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -76,7 +79,7 @@ export default function Login() {
             <LoginIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Login
+          {t('login')}
           </Typography>
           <Box
             component="form"
@@ -90,7 +93,7 @@ export default function Login() {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label={t('email')}
                 name="email"
                 autoComplete="email"
                 autoFocus
@@ -106,7 +109,7 @@ export default function Login() {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label={t('email')}
                 name="email"
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
@@ -117,7 +120,7 @@ export default function Login() {
               required
               fullWidth
               name="password"
-              label="Password"
+              label={t('password')}
               type="password"
               id="password"
               autoComplete="current-password"
@@ -132,10 +135,10 @@ export default function Login() {
             size="large"
             sx={{ mt: 2, mb: 2, width: "50%" }}
           >
-            <Typography fontFamily="Poppins">Login</Typography>
+            <Typography fontFamily="Poppins">{t('login')}</Typography>
           </Button>
           <Link href="#" variant="body2" color="primary">
-            {"Don't have an account? Sign Up"}
+            {t('no_existing_account')}
           </Link>
         </Box>
       </Container>
