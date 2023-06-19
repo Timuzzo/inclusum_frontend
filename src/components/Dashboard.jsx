@@ -16,28 +16,28 @@ export default function Dashboard() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const { token } = useContext(AuthContext);
-  const { theme } = useContext(ThemeContext)
+  const { theme } = useContext(ThemeContext);
 
   const disruptions = [
     {
-      value: 'Elevators'
+      value: "Elevators",
     },
     {
-      value: 'Toilets'
+      value: "Toilets",
     },
     {
-      value: 'Sliding/revolving doors'
+      value: "Sliding/revolving doors",
     },
     {
-      value: 'Escalators'
+      value: "Escalators",
     },
     {
-      value: 'Displays'
+      value: "Displays",
     },
     {
-      value: 'Others'
+      value: "Others",
     },
-  ]
+  ];
 
   useEffect(() => {
     const getData = async () => {
@@ -84,54 +84,40 @@ export default function Dashboard() {
         )}
       </div>
       <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "20px"
-          }}>
-          <Typography component="h1" variant="h5">
-            Create a post
-          </Typography>
-            <TextField
-            fullWidth
-            id="titel"
-            label="Titel"
-            select
-            >
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <Box
+            sx={{
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "20px",
+            }}
+          >
+            <Typography component="h1" variant="h5">
+              Create a post
+            </Typography>
+            <TextField fullWidth id="title" label="Title" select>
               {disruptions.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.value}
-            </MenuItem>
-          ))}
+                <MenuItem key={option.value} value={option.value}>
+                  {option.value}
+                </MenuItem>
+              ))}
             </TextField>
-            <TextField
-            fullWidth
-            id="text"
-            label="Text"
-            multiline
-            rows={10}
-            />
-          <Button
-            type="submit"
-            variant="contained"
-            color="secondary"
-            size="large"
-            sx={{ mt: 3, mb: 2, width: "50%" }}
-          >
-          <Typography 
-          fontFamily="Poppins"
-          >
-          Create a post
-          </Typography>
-          </Button>
-        </Box>
-      </Container>
-    </ThemeProvider>
+            <TextField fullWidth id="text" label="Text" multiline rows={10} />
+            <Button
+              type="submit"
+              variant="contained"
+              color="secondary"
+              size="large"
+              sx={{ mt: 3, mb: 2, width: "50%" }}
+            >
+              <Typography fontFamily="Poppins">Create a post</Typography>
+            </Button>
+          </Box>
+        </Container>
+      </ThemeProvider>
     </>
   );
 }
