@@ -1,5 +1,4 @@
 import { useState, useContext } from "react";
-
 import {
   Avatar,
   Button,
@@ -11,14 +10,16 @@ import {
   Container,
   Typography,
 } from "@mui/material";
-import LoginIcon from "@mui/icons-material/Login";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { ThemeContext } from "../context/ThemeContext";
 import { AuthContext } from "../context/AuthContext";
 import CircularIndeterminate from "./Spinner";
 
-export default function Login() {
+export default function Signup({ setUser }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [city, setCity] = useState("");
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useContext(AuthContext);
@@ -26,6 +27,7 @@ export default function Login() {
   const { theme, themeToggle } = useContext(ThemeContext);
 
   const handleSubmit = async (e) => {
+    console.log("firing handleSubmit");
     e.preventDefault();
 
     setIsLoading(true);
@@ -34,9 +36,13 @@ export default function Login() {
     const databody = {
       email: email,
       password: password,
+      username: username,
+      city: city,
+      avatar: "",
+      points: 0,
     };
 
-    const response = await fetch("http://localhost:8080/user/login", {
+    const response = await fetch("http://localhost:8080/user/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(databody),
@@ -56,7 +62,9 @@ export default function Login() {
     }
 
     setEmail("");
+    setCity("");
     setPassword("");
+    setUsername("");
   };
 
   return (
@@ -73,17 +81,12 @@ export default function Login() {
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LoginIcon />
+            <AccountCircleIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Login
+            Sign up
           </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
-          >
+          <Box component="form" noValidate sx={{ mt: 1 }}>
             {themeToggle ? (
               <TextField
                 margin="normal"
@@ -108,6 +111,8 @@ export default function Login() {
                 id="email"
                 label="Email Address"
                 name="email"
+                autoComplete="email"
+                autoFocus
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
               />
@@ -124,18 +129,43 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
               value={password}
             />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="username"
+              label="Username"
+              name="username"
+              autoComplete="username"
+              autoFocus
+              onChange={(e) => setUsername(e.target.value)}
+              value={username}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="city"
+              label="City"
+              name="city"
+              autoComplete="city"
+              autoFocus
+              onChange={(e) => setCity(e.target.value)}
+              value={city}
+            />
           </Box>
           <Button
             type="submit"
+            onClick={handleSubmit}
             variant="contained"
             color="secondary"
             size="large"
-            sx={{ mt: 2, mb: 2, width: "50%" }}
+            sx={{ mt: 3, mb: 2, width: "50%" }}
           >
-            <Typography fontFamily="Poppins">Login</Typography>
+            <Typography fontFamily="Poppins">Sign Up</Typography>
           </Button>
           <Link href="#" variant="body2" color="primary">
-            {"Don't have an account? Sign Up"}
+            {"Already have an account? Log in"}
           </Link>
         </Box>
       </Container>
