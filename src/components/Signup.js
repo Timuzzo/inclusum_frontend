@@ -27,6 +27,7 @@ export default function Signup({ setUser }) {
   const { theme, themeToggle } = useContext(ThemeContext);
 
   const handleSubmit = async (e) => {
+    console.log("firing handleSubmit");
     e.preventDefault();
 
     setIsLoading(true);
@@ -85,12 +86,7 @@ export default function Signup({ setUser }) {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
-          >
+          <Box component="form" noValidate sx={{ mt: 1 }}>
             {themeToggle ? (
               <TextField
                 margin="normal"
@@ -160,6 +156,7 @@ export default function Signup({ setUser }) {
           </Box>
           <Button
             type="submit"
+            onClick={handleSubmit}
             variant="contained"
             color="secondary"
             size="large"
