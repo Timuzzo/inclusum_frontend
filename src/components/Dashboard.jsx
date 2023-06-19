@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { ThemeContext } from "../context/ThemeContext";
 import { useJwt } from "react-jwt";
+import { useTranslation } from "react-i18next";
 import {
   Button,
   CssBaseline,
@@ -25,24 +26,26 @@ export default function Dashboard() {
   const { login } = useContext(AuthContext);
   const [error, setError] = useState(null);
 
+  const {t} = useTranslation()
+
   const disruptions = [
     {
-      value: "Elevators",
+      value: t('dashboard.elevators'),
     },
     {
-      value: "Toilets",
+      value: t('dashboard.toilets'),
     },
     {
-      value: "Sliding/revolving doors",
+      value: t('dashboard.sliding_revolving_doors'),
     },
     {
-      value: "Escalators",
+      value: t('dashboard.escalators'),
     },
     {
-      value: "Displays",
+      value: t('dashboard.displays'),
     },
     {
-      value: "Others",
+      value: t('dashboard.others'),
     },
   ];
 
@@ -94,7 +97,7 @@ export default function Dashboard() {
     <>
       <div className="posts">
         {loading ? ( // Show loading message if loading is true
-          <h1>Loading...</h1>
+          <h1>{t('dashboard.loading')}...</h1>
         ) : (
           <>
             {posts.length ? (
@@ -104,11 +107,11 @@ export default function Dashboard() {
                   style={{ border: "2px solid black", margin: "10px" }}
                 >
                   <h2>{post.title}</h2>
-                  <p>{post.body}</p>
+                  <p>{post.text}</p>
                 </div>
               ))
             ) : (
-              <h1 style={{ color: "red" }}>No posts found</h1>
+              <h1 style={{ color: "red" }}>{t('dashboard.no_posts_found')}</h1>
             )}
           </>
         )}
@@ -129,14 +132,14 @@ export default function Dashboard() {
             }}
           >
             <Typography component="h1" variant="h5">
-              Create a post
+              {t('dashboard.create_malfunction_info')}
             </Typography>
             <TextField
               fullWidth
-              id="title"
-              label="Title"
+              id="category"
+              label={t('dashboard.category')}
               select
-              placeholder="Please select category"
+              helperText={t('dashboard.please_select_category')}
               onChange={(e) => setTitle(e.target.value)}
               value={title}
             >
@@ -149,9 +152,10 @@ export default function Dashboard() {
             <TextField
               fullWidth
               id="text"
-              label="Text"
+              label={t('dashboard.text')}
               multiline
               rows={10}
+              helperText={t('dashboard.please_describe_the_issue')}
               onChange={(e) => setText(e.target.value)}
               value={text}
             />
@@ -162,7 +166,7 @@ export default function Dashboard() {
               size="large"
               sx={{ mt: 3, mb: 2, width: "50%" }}
             >
-              <Typography fontFamily="Poppins">Create a post</Typography>
+              <Typography fontFamily="Poppins">{t('dashboard.create')}</Typography>
             </Button>
           </Box>
         </Container>
