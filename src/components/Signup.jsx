@@ -14,6 +14,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { ThemeContext } from "../context/ThemeContext";
 import { AuthContext } from "../context/AuthContext";
 import CircularIndeterminate from "./Spinner";
+import { useTranslation } from "react-i18next";
 
 export default function Signup({ setUser }) {
   const [email, setEmail] = useState("");
@@ -25,6 +26,8 @@ export default function Signup({ setUser }) {
   const { login } = useContext(AuthContext);
 
   const { theme, themeToggle } = useContext(ThemeContext);
+
+  const {t} = useTranslation()
 
   const handleSubmit = async (e) => {
     console.log("firing handleSubmit");
@@ -84,7 +87,7 @@ export default function Signup({ setUser }) {
             <AccountCircleIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            {t('signup.signup')}
           </Typography>
           <Box component="form" noValidate sx={{ mt: 1 }}>
             {themeToggle ? (
@@ -93,7 +96,7 @@ export default function Signup({ setUser }) {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label={t('signup.email')}
                 name="email"
                 autoComplete="email"
                 autoFocus
@@ -109,7 +112,7 @@ export default function Signup({ setUser }) {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label={t('signup.email')}
                 name="email"
                 autoComplete="email"
                 autoFocus
@@ -122,7 +125,7 @@ export default function Signup({ setUser }) {
               required
               fullWidth
               name="password"
-              label="Password"
+              label={t('signup.password')}
               type="password"
               id="password"
               autoComplete="current-password"
@@ -134,7 +137,7 @@ export default function Signup({ setUser }) {
               required
               fullWidth
               id="username"
-              label="Username"
+              label={t('signup.username')}
               name="username"
               autoComplete="username"
               autoFocus
@@ -146,7 +149,7 @@ export default function Signup({ setUser }) {
               required
               fullWidth
               id="city"
-              label="City"
+              label={t('signup.city')}
               name="city"
               autoComplete="city"
               autoFocus
@@ -162,10 +165,12 @@ export default function Signup({ setUser }) {
             size="large"
             sx={{ mt: 3, mb: 2, width: "50%" }}
           >
-            <Typography fontFamily="Poppins">Sign Up</Typography>
+            <Typography fontFamily="Poppins">
+            {t('signup.signup')}
+            </Typography>
           </Button>
           <Link href="#" variant="body2" color="primary">
-            {"Already have an account? Log in"}
+            {t('signup.existing_account')}
           </Link>
         </Box>
       </Container>
