@@ -87,7 +87,7 @@ export default function Signup({ setUser }) {
             <AccountCircleIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            {t('signup')}
+            {t('signup.signup')}
           </Typography>
           <Box component="form" noValidate sx={{ mt: 1 }}>
             {themeToggle ? (
@@ -96,7 +96,7 @@ export default function Signup({ setUser }) {
                 required
                 fullWidth
                 id="email"
-                label={t('email')}
+                label={t('signup.email')}
                 name="email"
                 autoComplete="email"
                 autoFocus
@@ -112,7 +112,7 @@ export default function Signup({ setUser }) {
                 required
                 fullWidth
                 id="email"
-                label={t('email')}
+                label={t('signup.email')}
                 name="email"
                 autoComplete="email"
                 autoFocus
@@ -125,7 +125,7 @@ export default function Signup({ setUser }) {
               required
               fullWidth
               name="password"
-              label={t('password')}
+              label={t('signup.password')}
               type="password"
               id="password"
               autoComplete="current-password"
@@ -137,7 +137,7 @@ export default function Signup({ setUser }) {
               required
               fullWidth
               id="username"
-              label={t('username')}
+              label={t('signup.username')}
               name="username"
               autoComplete="username"
               autoFocus
@@ -149,7 +149,7 @@ export default function Signup({ setUser }) {
               required
               fullWidth
               id="city"
-              label={t('city')}
+              label={t('signup.city')}
               name="city"
               autoComplete="city"
               autoFocus
@@ -166,11 +166,11 @@ export default function Signup({ setUser }) {
             sx={{ mt: 3, mb: 2, width: "50%" }}
           >
             <Typography fontFamily="Poppins">
-            {t('signup')}
+            {t('signup.signup')}
             </Typography>
           </Button>
           <Link href="#" variant="body2" color="primary">
-            {t('existing_account')}
+            {t('signup.existing_account')}
           </Link>
         </Box>
       </Container>

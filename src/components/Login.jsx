@@ -80,7 +80,7 @@ export default function Login() {
             <LoginIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-          {t('login')}
+          {t('login.login')}
           </Typography>
           <Box component="form" noValidate sx={{ mt: 1 }}>
             {themeToggle ? (
@@ -89,7 +89,7 @@ export default function Login() {
                 required
                 fullWidth
                 id="email"
-                label={t('email')}
+                label={t('login.email')}
                 name="email"
                 autoComplete="email"
                 autoFocus
@@ -105,7 +105,7 @@ export default function Login() {
                 required
                 fullWidth
                 id="email"
-                label={t('email')}
+                label={t('login.email')}
                 name="email"
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
@@ -116,7 +116,7 @@ export default function Login() {
               required
               fullWidth
               name="password"
-              label={t('password')}
+              label={t('login.password')}
               type="password"
               id="password"
               autoComplete="current-password"
@@ -132,10 +132,10 @@ export default function Login() {
             size="large"
             sx={{ mt: 2, mb: 2, width: "50%" }}
           >
-            <Typography fontFamily="Poppins">{t('login')}</Typography>
+            <Typography fontFamily="Poppins">{t('login.login')}</Typography>
           </Button>
           <Link href="#" variant="body2" color="primary">
-            {t('no_existing_account')}
+            {t('login.no_existing_account')}
           </Link>
         </Box>
       </Container>

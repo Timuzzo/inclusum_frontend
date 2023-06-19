@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import {
   AppBar,
   Box,
@@ -8,9 +8,12 @@ import {
   IconButton,
   ThemeProvider,
   CssBaseline,
+  Menu, 
+  MenuItem
 } from "@mui/material";
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import WbSunnyRoundedIcon from '@mui/icons-material/WbSunnyRounded';
+import LanguageIcon from '@mui/icons-material/Language';
 import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
@@ -29,6 +32,16 @@ export default function Navbar({ user, setUser }) {
     en: {nativeName: 'English'},
     de: {nativeName: 'Deutsch'}
   }
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClickLanguage = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleCloseLanguage = () => {
+    setAnchorEl(null);
+  };
 
   const handleClickLogout = () => {
     localStorage.removeItem("token");
@@ -59,27 +72,38 @@ export default function Navbar({ user, setUser }) {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link to="/">Inclusum</Link>
           </Typography>
-          {Object.keys(languages).map(lng => (
-              <Button type="submit" key={lng} onClick={() => i18n.changeLanguage(lng)} disabled={i18n.resolvedLanguage === lng}>{languages[lng].nativeName}</Button>
+          <LanguageIcon 
+          sx={{mr: 1, ml: 1, cursor: "pointer"}}
+          onClick={handleClickLanguage}
+          />
+          <Menu
+            anchorEl={anchorEl}
+            onClose={handleCloseLanguage}
+            open={open}
+          >
+            {Object.keys(languages).map(lng => (
+              <MenuItem onClick={() => i18n.changeLanguage(lng)}>{languages[lng].nativeName}</MenuItem>
             ))}
-          {themeToggle? <WbSunnyRoundedIcon sx={{mr: 1, ml: 1, cursor: "pointer"}} onClick={handleClickTheme}/> : <DarkModeRoundedIcon sx={{mr: 1, ml: 1, cursor: "pointer"}} onClick={handleClickTheme}/>}
+          </Menu>
+          
+          {themeToggle? <WbSunnyRoundedIcon sx={{mr: 1, cursor: "pointer"}} onClick={handleClickTheme}/> : <DarkModeRoundedIcon sx={{mr: 1, cursor: "pointer"}} onClick={handleClickTheme}/>}
           {token !== null && (
             <>
               <span style={{ padding: "10px" }}>
-              {t('greeting')}, {decodedToken?.name}
+              {t('navbar.greeting')}, {decodedToken?.name}
               </span>
               <Button color="inherit" onClick={handleClickLogout}>
-              {t('logout')}
+              {t('navbar.logout')}
               </Button>
             </>
           )}
           {token === null && (
             <>
               <Button color="inherit" onClick={() => navigate("/login")}>
-              {t('login')}
+              {t('navbar.login')}
               </Button>
               <Button color="inherit" onClick={() => navigate("/signup")}>
-              {t('signup')}
+              {t('navbar.signup')}
               </Button>
             </>
           )}
