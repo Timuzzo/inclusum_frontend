@@ -10,6 +10,7 @@ import {
   CssBaseline,
 } from "@mui/material";
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
+import WbSunnyRoundedIcon from '@mui/icons-material/WbSunnyRounded';
 import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
@@ -50,7 +51,7 @@ export default function Navbar({ user, setUser }) {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link to="/">Inclusum</Link>
           </Typography>
-          <DarkModeRoundedIcon sx={{mr: 1, ml: 1}} onClick={handleClickTheme}/>
+          {themeToggle? <WbSunnyRoundedIcon sx={{mr: 1, ml: 1, cursor: "pointer"}} onClick={handleClickTheme}/> : <DarkModeRoundedIcon sx={{mr: 1, ml: 1, cursor: "pointer"}} onClick={handleClickTheme}/>}
           {token !== null && (
             <>
               <span style={{ padding: "10px" }}>
