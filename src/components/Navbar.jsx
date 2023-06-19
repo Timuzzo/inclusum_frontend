@@ -10,6 +10,7 @@ import {
   CssBaseline,
 } from "@mui/material";
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
+import WbSunnyRoundedIcon from '@mui/icons-material/WbSunnyRounded';
 import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
@@ -61,14 +62,14 @@ export default function Navbar({ user, setUser }) {
           {Object.keys(languages).map(lng => (
               <Button type="submit" key={lng} onClick={() => i18n.changeLanguage(lng)} disabled={i18n.resolvedLanguage === lng}>{languages[lng].nativeName}</Button>
             ))}
-          <DarkModeRoundedIcon sx={{mr: 1, ml: 1}} onClick={handleClickTheme}/>
+          {themeToggle? <WbSunnyRoundedIcon sx={{mr: 1, ml: 1, cursor: "pointer"}} onClick={handleClickTheme}/> : <DarkModeRoundedIcon sx={{mr: 1, ml: 1, cursor: "pointer"}} onClick={handleClickTheme}/>}
           {token !== null && (
             <>
               <span style={{ padding: "10px" }}>
-                {t('greeting')}, {decodedToken?.name}
+              {t('greeting')}, {decodedToken?.name}
               </span>
               <Button color="inherit" onClick={handleClickLogout}>
-                {t('logout')}
+              {t('logout')}
               </Button>
             </>
           )}
