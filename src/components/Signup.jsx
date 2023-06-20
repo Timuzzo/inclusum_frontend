@@ -1,4 +1,5 @@
 import { useState, useContext } from "react";
+import { useNavigate } from "react-router";
 import {
   Avatar,
   Button,
@@ -27,7 +28,9 @@ export default function Signup({ setUser }) {
 
   const { theme, themeToggle } = useContext(ThemeContext);
 
+  const navigate = useNavigate()
   const {t} = useTranslation()
+  
 
   const handleSubmit = async (e) => {
     console.log("firing handleSubmit");
@@ -169,7 +172,7 @@ export default function Signup({ setUser }) {
             {t('signup.signup')}
             </Typography>
           </Button>
-          <Link href="#" variant="body2" color="primary">
+          <Link onClick={() => navigate("/login")} variant="body2" color="primary" sx={{cursor: "pointer"}}>
             {t('signup.existing_account')}
           </Link>
         </Box>
