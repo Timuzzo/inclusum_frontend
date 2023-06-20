@@ -1,8 +1,7 @@
-import { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { useState, useContext } from "react";
 import { ThemeContext } from "../context/ThemeContext";
-import { useJwt } from "react-jwt";
 import { useTranslation } from "react-i18next";
+import { DataContext } from "../context/DataContext";
 import {
   Button,
   CssBaseline,
@@ -13,18 +12,13 @@ import {
   Typography,
   MenuItem,
 } from "@mui/material";
+import UserPost from "./UserPost";
 
 export default function Dashboard() {
-  const [posts, setPosts] = useState([]);
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const { token } = useContext(AuthContext);
   const { theme } = useContext(ThemeContext);
-  const { decodedToken } = useJwt(token);
-  const { login } = useContext(AuthContext);
-  const [error, setError] = useState(null);
+  const {decodedToken, token } = useContext(DataContext);
 
   const {t} = useTranslation()
 
@@ -50,7 +44,6 @@ export default function Dashboard() {
   ];
 
   const handleSubmit = async (e) => {
-    console.log("firing handleSubmit");
     e.preventDefault();
 
     const databody = {
@@ -59,7 +52,7 @@ export default function Dashboard() {
       user_id: decodedToken._id,
     };
 
-    const response = await fetch("http://localhost:8080/posts", {
+    await fetch("http://localhost:8080/posts", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -67,55 +60,13 @@ export default function Dashboard() {
       },
       body: JSON.stringify(databody),
     });
-
-    setTitle("Please select category");
+    setTitle("")
     setText("");
   };
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const res = await fetch("http://localhost:8080/posts", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await res.json();
-        setPosts(data);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
-      }
-    };
-    if (token) {
-      getData();
-    }
-  }, [token]);
-
   return (
     <>
-      <div className="posts">
-        {loading ? ( // Show loading message if loading is true
-          <h1>{t('dashboard.loading')}...</h1>
-        ) : (
-          <>
-            {posts.length ? (
-              posts.map((post) => (
-                <div
-                  key={post._id}
-                  style={{ border: "2px solid black", margin: "10px" }}
-                >
-                  <h2>{post.title}</h2>
-                  <p>{post.text}</p>
-                </div>
-              ))
-            ) : (
-              <h1 style={{ color: "red" }}>{t('dashboard.no_posts_found')}</h1>
-            )}
-          </>
-        )}
-      </div>
+    <UserPost />
       <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
