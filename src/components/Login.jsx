@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-
+import { useNavigate } from "react-router";
 import {
   Avatar,
   Button,
@@ -26,10 +26,10 @@ export default function Login() {
   const { login } = useContext(AuthContext);
   const { theme, themeToggle } = useContext(ThemeContext);
 
+  const navigate = useNavigate()
   const {t} = useTranslation()
 
   const handleSubmit = async (e) => {
-    console.log("firing handleSubmit");
     e.preventDefault();
 
     setIsLoading(true);
@@ -134,7 +134,7 @@ export default function Login() {
           >
             <Typography fontFamily="Poppins">{t('login.login')}</Typography>
           </Button>
-          <Link href="#" variant="body2" color="primary">
+          <Link onClick={() => navigate("/signup")} variant="body2" color="primary" sx={{cursor: "pointer"}}>
             {t('login.no_existing_account')}
           </Link>
         </Box>

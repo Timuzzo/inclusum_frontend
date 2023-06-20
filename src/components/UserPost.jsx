@@ -39,7 +39,7 @@ return(
 <>
     <ThemeProvider theme={theme}>
     <CssBaseline />
-    <Container maxWidth="xs">
+    <Container maxWidth="xs" sx={{mb: "150px"}}>
       {loading ? ( // Show loading message if loading is true
         <Typography>{t('dashboard.loading')}...</Typography>
         ) : (

@@ -4,7 +4,6 @@ import {
   Box,
   Toolbar,
   Typography,
-  Button,
   IconButton,
   ThemeProvider,
   CssBaseline,
@@ -14,6 +13,7 @@ import {
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import WbSunnyRoundedIcon from '@mui/icons-material/WbSunnyRounded';
 import LanguageIcon from '@mui/icons-material/Language';
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
@@ -33,14 +33,24 @@ export default function Navbar({ user, setUser }) {
     de: {nativeName: 'Deutsch'}
   }
 
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+  const [anchorLanguage, setAnchorLanguage] = useState();
+  const [anchorAccount, setAnchorAccount] = useState();
+  const openLanguage = Boolean(anchorLanguage);
+  const openAccount = Boolean(anchorAccount);
 
   const handleClickLanguage = (event) => {
-    setAnchorEl(event.currentTarget);
+    setAnchorLanguage(event.currentTarget);
   };
   const handleCloseLanguage = () => {
-    setAnchorEl(null);
+    setAnchorLanguage(null);
+  };
+
+  const handleClickAccount = (event) => {
+    setAnchorAccount(event.currentTarget);
+  };
+
+  const handleCloseAccount = () => {
+    setAnchorAccount(null);
   };
 
   const handleClickLogout = () => {
@@ -65,46 +75,65 @@ export default function Navbar({ user, setUser }) {
             edge="start"
             color="inherit"
             aria-label="menu"
-            sx={{ mr: 2 }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div" sx={{ mr: 2, flexGrow: 1 }}>
             <Link to="/">Inclusum</Link>
           </Typography>
           <LanguageIcon 
-          sx={{mr: 1, ml: 1, cursor: "pointer"}}
+          sx={{mr: 2, cursor: "pointer"}}
           onClick={handleClickLanguage}
           />
           <Menu
-            anchorEl={anchorEl}
+            anchorEl={anchorLanguage}
             onClose={handleCloseLanguage}
-            open={open}
+            open={openLanguage}
           >
             {Object.keys(languages).map(lng => (
               <MenuItem key={lng} onClick={() => i18n.changeLanguage(lng)}>{languages[lng].nativeName}</MenuItem>
             ))}
           </Menu>
           
-          {themeToggle? <WbSunnyRoundedIcon sx={{mr: 1, cursor: "pointer"}} onClick={handleClickTheme}/> : <DarkModeRoundedIcon sx={{mr: 1, cursor: "pointer"}} onClick={handleClickTheme}/>}
+          {themeToggle? <WbSunnyRoundedIcon sx={{mr: 2, cursor: "pointer"}} onClick={handleClickTheme}/> : <DarkModeRoundedIcon sx={{mr: 2, cursor: "pointer"}} onClick={handleClickTheme}/>}
           {token !== null && (
             <>
-              <span style={{ padding: "10px" }}>
+              <Typography sx={{mr: 2}}>
               {t('navbar.greeting')}, {decodedToken?.name}
-              </span>
-              <Button color="inherit" onClick={handleClickLogout}>
-              {t('navbar.logout')}
-              </Button>
+              </Typography>
+              <AccountCircleIcon sx={{cursor: "pointer"}}
+              onClick={handleClickAccount}/>
+              <Menu
+              anchorEl={anchorAccount}
+              onClose={handleCloseAccount}
+              open={openAccount}>
+                <MenuItem>
+                  <Typography color="inherit" onClick={handleClickLogout}>
+                  {t('navbar.logout')}
+                  </Typography>
+                </MenuItem>
+              </Menu>
             </>
           )}
           {token === null && (
             <>
-              <Button color="inherit" onClick={() => navigate("/login")}>
-              {t('navbar.login')}
-              </Button>
-              <Button color="inherit" onClick={() => navigate("/signup")}>
-              {t('navbar.signup')}
-              </Button>
+              <AccountCircleIcon sx={{cursor: "pointer"}}
+              onClick={handleClickAccount}/>
+              <Menu
+              anchorEl={anchorAccount}
+              onClose={handleCloseAccount}
+              open={openAccount}>
+                <MenuItem>
+                  <Typography color="inherit" onClick={() => navigate("/login")}>
+                    {t('navbar.login')}
+                  </Typography>
+                </MenuItem>
+                <MenuItem>
+                  <Typography color="inherit" onClick={() => navigate("/signup")}>
+                    {t('navbar.signup')}
+                  </Typography>
+                </MenuItem>
+              </Menu>
             </>
           )}
         </Toolbar>
