@@ -82,7 +82,7 @@ export default function Navbar({ user, setUser }) {
             open={open}
           >
             {Object.keys(languages).map(lng => (
-              <MenuItem onClick={() => i18n.changeLanguage(lng)}>{languages[lng].nativeName}</MenuItem>
+              <MenuItem key={lng} onClick={() => i18n.changeLanguage(lng)}>{languages[lng].nativeName}</MenuItem>
             ))}
           </Menu>
           
