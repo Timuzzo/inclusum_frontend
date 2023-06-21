@@ -9,16 +9,22 @@ import {
   IconButton,
   Fab,
   Dialog,
-  DialogTitle
+  DialogTitle,
 } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
 import CloseIcon from '@mui/icons-material/Close';
 import UserPost from "./UserPost";
 import CreatePost from "./CreatePost";
+import axios from "axios";
+import { DataContext } from "../context/DataContext";
 
 export default function Dashboard() { 
   const [open, setOpen] = useState(false)
+  const [avatar, setAvatar] = useState(null);
+
+  const { decodedToken } = useContext(DataContext); 
+  const { theme } = useContext(ThemeContext);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -28,10 +34,24 @@ export default function Dashboard() {
     setOpen(false);
   };
 
-  const { theme } = useContext(ThemeContext);
-
+  const handleSubmitImage = async (e) => {
+    console.log('fire handleSubmitImage')
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append("picture", avatar, avatar?.name);
+      formData.append("user_id", decodedToken._id);
+      await axios.post("http://localhost:8080/avatar/uploadavatar", formData)
+    } catch (error) {
+      //  setError(error);
+      console.error(error)
+    }
+  }
+  
   return (
     <>
+    <ThemeProvider theme={theme}>
+    <CssBaseline />
     <UserPost/>
     <Dialog open={open} fullScreen>
     <DialogTitle sx={{ m: 0, p: 2 }}>
@@ -49,9 +69,7 @@ export default function Dashboard() {
     </DialogTitle>
       <CreatePost/>
     </Dialog>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <AppBar position="fixed" color="primary" sx={{ top: 'auto', bottom: 0, backgroundColor: "#3476AD"}}>
+      <AppBar position="fixed" color="primary" sx={{ top: 'auto', bottom: 0, backgroundColor: "#3476AD"}}>
         <Toolbar>
           <Fab color="secondary" aria-label="add" 
           sx={{position: 'absolute',
@@ -63,7 +81,16 @@ export default function Dashboard() {
           onClick={handleClickOpen}>
             <CreateRoundedIcon />
           </Fab>
-          <Box sx={{ flexGrow: 1 }} />
+          <Box 
+          sx={{ flexGrow: 1 }}
+          />
+  <form onSubmit={handleSubmitImage}>
+    <input type="file" onChange={(e) => setAvatar(e.target.files[0])}>
+  </input>
+  <button type="submit">
+    Submit
+  </button>
+  </form>
           <IconButton color="inherit" >
             <SearchIcon />
           </IconButton>
