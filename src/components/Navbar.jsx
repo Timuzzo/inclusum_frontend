@@ -55,6 +55,8 @@ export default function Navbar({ user, setUser }) {
 
   const handleClickLogout = () => {
     localStorage.removeItem("token");
+    setAnchorAccount(false)
+    navigate('/login')
     logout();
   };
 
@@ -110,6 +112,16 @@ export default function Navbar({ user, setUser }) {
                 <MenuItem>
                   <Typography color="inherit" onClick={handleClickLogout}>
                   {t('navbar.logout')}
+                  </Typography>
+                </MenuItem>
+                <MenuItem>
+                  <Typography color="inherit" onClick={() => navigate("/myaccount")}>
+                  {t('navbar.myaccount')}
+                  </Typography>
+                </MenuItem>
+                <MenuItem>
+                  <Typography color="inherit" onClick={() => navigate("/")}>
+                  {t('navbar.dashboard')}
                   </Typography>
                 </MenuItem>
               </Menu>
