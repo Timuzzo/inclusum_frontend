@@ -5,6 +5,7 @@ import Signup from "./components/Signup";
 import Login from "./components/Login";
 import Navbar from "./components/Navbar";
 import Dashboard from "./components/Dashboard";
+import MyAccount from "./components/MyAccount";
 import { AuthContext } from "./context/AuthContext";
 
 function App() {
@@ -24,6 +25,10 @@ function App() {
         <Route
           path="/signup"
           element={!token ? <Signup /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/myaccount"
+          element={token ? <MyAccount/> : <Navigate to="/login" />}
         />
       </Routes>
     </>
