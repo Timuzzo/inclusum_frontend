@@ -60,7 +60,7 @@ export default function Navbar() {
   const handleClickLogout = () => {
     localStorage.removeItem("token");
     setAnchorAccount(false);
-    setFlag(false);
+    setFlag(!flag);
     navigate("/login");
     logout();
   };
