@@ -1,38 +1,132 @@
-import {useState, useContext, createContext} from 'react';
-import {AuthContext} from '../context/AuthContext'
-import {useJwt} from 'react-jwt';
-
+import { useState, useContext, createContext, useEffect } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { useJwt } from "react-jwt";
 
 export const DataContext = createContext();
 
-export default function DataContextProvider(props){
-    const [posts, setPosts] = useState([]);
-    const [loading, setLoading] = useState(false);
+export default function DataContextProvider(props) {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [avatarImg, setAvatarImg] = useState(null);
+  const [allUsers, setAllUsers] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [flag, setFlag] = useState(false);
 
-    const { token } = useContext(AuthContext);
-    const { login } = useContext(AuthContext);
-    
-    const { decodedToken } = useJwt(token);
+  const { token, login } = useContext(AuthContext);
 
-    const getUserPosts = async () => {
-        try {
-            const res = await fetch("http://localhost:8080/posts", {
-                headers: {
-                Authorization: `Bearer ${token}`,
-                },
-            });
-            const data = await res.json();
-            setPosts(data);
-            setLoading(false);
-        } catch (error) {
-            console.log(error);
-            setLoading(false);
-        }
+  const { decodedToken } = useJwt(token);
+
+  const getUserPosts = async () => {
+    try {
+      const res = await fetch("http://localhost:8080/posts", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      setPosts(data);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const getAvatarImage = async () => {
+    try {
+      const res = await fetch("http://localhost:8080/avatar/getavatar", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      setAvatarImg(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getCurrentUser = () => {
+    const singleUser = allUsers?.data.find(
+      (user) => user?._id === decodedToken?._id
+    );
+    console.log("singleUserObject", singleUser);
+    setCurrentUser(singleUser);
+  };
+
+  const getAllUsers = async () => {
+    console.log("get all users");
+    try {
+      const res = await fetch(`http://localhost:8080/user/getallusers`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      setAllUsers(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const findAndUpdateUser = async () => {
+    console.log("findAndUpdateUser");
+    const user = avatarImg?.avatar.find(
+      (userAvatar) => userAvatar?.user_id === decodedToken?._id
+    );
+    const databody = {
+      avatar: user?.url,
+      _id: user?.user_id,
     };
+    const data = await fetch("http://localhost:8080/user/updateuser", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(databody),
+    });
+  };
 
-    return(
-        <DataContext.Provider value={{login, loading, posts, setPosts, setLoading, getUserPosts, decodedToken, token }}>
-            {props.children}
-        </DataContext.Provider>
-    )
+  useEffect(() => {
+    getAllUsers();
+  }, []);
+
+  useEffect(() => {
+    getAvatarImage();
+  }, [token, currentUser]);
+
+  useEffect(() => {
+    getCurrentUser();
+  }, [allUsers]);
+
+  useEffect(() => {
+    findAndUpdateUser();
+  }, [avatarImg]);
+
+  console.log("decodedToken", decodedToken?._id);
+  console.log("all users", allUsers);
+  console.log("current user", currentUser);
+  console.log("setFlag", flag);
+
+  return (
+    <DataContext.Provider
+      value={{
+        login,
+        loading,
+        posts,
+        setPosts,
+        setLoading,
+        getUserPosts,
+        decodedToken,
+        token,
+        allUsers,
+        currentUser,
+        setFlag,
+        flag,
+      }}
+    >
+      {props.children}
+    </DataContext.Provider>
+  );
 }
