@@ -64,7 +64,7 @@ export default function UserPost() {
                           color="success"
                         />
                       }
-                      title={post.title}
+                      title={currentUser?.username}
                       subheader="June 20, 2023"
                     />
                     <CardMedia
@@ -74,6 +74,7 @@ export default function UserPost() {
                       alt="image"
                     />
                     <CardContent>
+                      <Typography variant="body1">{post.title}</Typography>
                       <Typography variant="body2">{post.text}</Typography>
                     </CardContent>
                     <CardActions>
