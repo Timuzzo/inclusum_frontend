@@ -11,21 +11,24 @@ i18next
     resources: {
       en: {
         translation: {
-          dashboard: {
+          create_post: {
             elevators: 'Elevators',
             toilets: 'Toilets',
             sliding_revolving_doors: 'Sliding/revolving doors',
             escalators: 'Escalators',
             displays: 'Displays',
             others: 'Others',
-            loading: 'Loading',
-            no_posts_found: 'No posts found',
             create_malfunction_info: 'Create malfunction info',
             category: 'Category',
             text: 'Text',
             create: 'Create',
             please_select_category: 'Please select a category',
             please_describe_the_issue: 'Please describe the issue'
+          },
+          user_post: {
+            loading: 'Loading',
+            posted: 'posted:',
+            no_posts_found: 'No malfunction info',
           },
           login: {
             login:'Login',
@@ -56,21 +59,24 @@ i18next
       },
       de: {
         translation: {
-          dashboard: {
+          create_post: {
             elevators: 'Fahrstühle',
             toilets: 'Toiletten',
             sliding_revolving_doors: 'Dreh-/Schiebetüren',
             escalators: 'Rolltreppen',
             displays: 'Anzeigen',
             others: 'Sonstige',
-            loading: 'Lädt',
-            no_posts_found: 'Keine Störungsmeldungen',
             create_malfunction_info: 'Störungsmeldung erstellen',
             category: 'Kategorie',
             text: 'Text',
             create: 'Erstellen',
             please_select_category: 'Bitte wählen Sie eine Kategorie',
             please_describe_the_issue: 'Bitte beschreiben Sie die Störungsmeldung',
+          },
+          user_post: {
+            loading: 'Lädt',
+            posted: 'gepostet:',
+            no_posts_found: 'Keine Störungsmeldungen',
           },
           login: {
             login:'Anmelden',

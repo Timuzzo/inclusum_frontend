@@ -23,11 +23,15 @@ export default function CreatePost() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const databody = {
-      title: title,
-      text: text,
-      user_id: decodedToken._id,
-    };
+  const d = new Date()
+  const actualDate = `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`
+
+  const databody = {
+    title: title,
+    text: text,
+    timestamp: actualDate,
+    user_id: decodedToken._id,
+  };
 
     await fetch("http://localhost:8080/posts", {
       method: "POST",
@@ -45,22 +49,22 @@ export default function CreatePost() {
 
   const disruptions = [
     {
-      value: t("dashboard.elevators"),
+      value: t("create_post.elevators"),
     },
     {
-      value: t("dashboard.toilets"),
+      value: t("create_post.toilets"),
     },
     {
-      value: t("dashboard.sliding_revolving_doors"),
+      value: t("create_post.sliding_revolving_doors"),
     },
     {
-      value: t("dashboard.escalators"),
+      value: t("create_post.escalators"),
     },
     {
-      value: t("dashboard.displays"),
+      value: t("create_post.displays"),
     },
     {
-      value: t("dashboard.others"),
+      value: t("create_post.others"),
     },
   ];
 
@@ -81,14 +85,14 @@ export default function CreatePost() {
           }}
         >
           <Typography component="h1" variant="h5">
-            {t("dashboard.create_malfunction_info")}
+            {t("create_post.create_malfunction_info")}
           </Typography>
           <TextField
             fullWidth
             id="category"
-            label={t("dashboard.category")}
+            label={t("create_post.category")}
             select
-            helperText={t("dashboard.please_select_category")}
+            helperText={t("create_post.please_select_category")}
             onChange={(e) => setTitle(e.target.value)}
             value={title}
           >
@@ -101,10 +105,10 @@ export default function CreatePost() {
           <TextField
             fullWidth
             id="text"
-            label={t("dashboard.text")}
+            label={t("create_post.text")}
             multiline
             rows={10}
-            helperText={t("dashboard.please_describe_the_issue")}
+            helperText={t("create_post.please_describe_the_issue")}
             onChange={(e) => setText(e.target.value)}
             value={text}
           />
@@ -116,7 +120,7 @@ export default function CreatePost() {
             sx={{ mt: 3, mb: 2, width: "50%" }}
           >
             <Typography fontFamily="Poppins">
-              {t("dashboard.create")}
+              {t("create_post.create")}
             </Typography>
           </Button>
         </Box>
