@@ -38,6 +38,8 @@ i18next
             logout: 'Log out',
             login:'Login',
             signup: 'Signup',
+            myaccount: 'My account',
+            dashboard: 'My dashboard'
           },
           signup: {
             signup: 'Signup',
@@ -47,6 +49,9 @@ i18next
             city: 'City',
             existing_account: 'Already have an account? Log in',
           },
+          myaccount: {
+            upload: 'Upload'
+          }
         }
       },
       de: {
@@ -78,6 +83,8 @@ i18next
             logout: 'Ausloggen',
             login:'Anmelden',
             signup: 'Registrieren',
+            myaccount: 'Mein Profil',
+            dashboard: 'Mein Dashboard',
           },
           signup: {
             signup: 'Registrieren',
@@ -87,6 +94,9 @@ i18next
             city: 'Stadt',
             existing_account: 'Haben Sie bereits einen Account? Anmelden',
           },
+          myaccount: {
+            upload: 'Hochladen'
+          }
         }
       }
     }
