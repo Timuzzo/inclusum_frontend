@@ -124,9 +124,12 @@ export default function Navbar() {
                 <Typography sx={{ mr: 2 }}>
                   {t("navbar.greeting")}, {currentUser?.username}
                 </Typography>
-                <Avatar sx={{ cursor: "pointer" }} onClick={handleClickAccount}>
-                  <img src={currentUser?.avatar} />
-                </Avatar>
+                {currentUser?.avatar !== "" ? 
+                (
+                <Avatar sx={{ cursor: "pointer" }} onClick={handleClickAccount} aria-label="avatar" src={currentUser?.avatar}/>
+                ) 
+                : 
+                <AccountCircleIcon sx={{ cursor: "pointer" }} onClick={handleClickAccount}/>}
                 <Menu
                   anchorEl={anchorAccount}
                   onClose={handleCloseAccount}

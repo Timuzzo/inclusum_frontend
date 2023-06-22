@@ -1,6 +1,6 @@
 import { ThemeContext } from "../context/ThemeContext";
 import { DataContext } from "../context/DataContext";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -13,6 +13,7 @@ import {
   ThemeProvider,
   CssBaseline,
   Badge,
+  Box
 } from "@mui/material/";
 import IconButton from "@mui/material/IconButton";
 import ThumbUpAltRoundedIcon from "@mui/icons-material/ThumbUpAltRounded";
@@ -22,9 +23,19 @@ import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlin
 import { useTranslation } from "react-i18next";
 
 export default function UserPost() {
+  const [counterLike, setCounterLike] = useState(0)
+  const [counterDislike, setCounterDislike] = useState(0)
+
+  const handleCounterLike = () => {
+    setCounterLike(counterLike + 1)
+  }
+
+  const handleCounterDislike = () => {
+    setCounterDislike(counterDislike + 1)
+  }
+
   const { theme } = useContext(ThemeContext);
-  const { loading, posts, getUserPosts, token, currentUser } =
-    useContext(DataContext);
+  const { loading, posts, getUserPosts, token, currentUser} = useContext(DataContext);
 
   const { t } = useTranslation();
 
@@ -42,7 +53,7 @@ export default function UserPost() {
         <CssBaseline />
         <Container maxWidth="xs" sx={{ mb: "150px" }}>
           {loading ? ( // Show loading message if loading is true
-            <Typography>{t("dashboard.loading")}...</Typography>
+            <Typography>{t("user_post.loading")}...</Typography>
           ) : (
             <>
               {posts.length ? (
@@ -52,20 +63,21 @@ export default function UserPost() {
                     key={post._id}
                   >
                     <CardHeader
-                      avatar={
-                        <Avatar aria-label="avatar">
-                          {/* <AccountCircleIcon/> */}
-                          <img src={currentUser?.avatar} />
-                        </Avatar>
-                      }
-                      action={
+                      avatar={currentUser?.avatar !== "" ? <Avatar src={currentUser?.avatar}/> : <AccountCircleIcon fontSize="large"/>}
+                      action={counterLike >= 5 &&  counterLike > counterDislike ? 
                         <CheckCircleOutlineRoundedIcon
                           aria-label="verified"
                           color="success"
+                          fontSize="large"
+                        />
+                      :
+                      <CheckCircleOutlineRoundedIcon
+                          aria-label="verified"
+                          fontSize="large"
                         />
                       }
-                      title={post.title}
-                      subheader="June 20, 2023"
+                      title={currentUser?.username}
+                      subheader={`${t("user_post.posted")} ${post.timestamp}`}
                     />
                     <CardMedia
                       component="img"
@@ -74,16 +86,17 @@ export default function UserPost() {
                       alt="image"
                     />
                     <CardContent>
+                      <Typography variant="h6">{post.title}</Typography>
                       <Typography variant="body2">{post.text}</Typography>
                     </CardContent>
                     <CardActions>
-                      <Badge badgeContent={4} color="secondary">
-                        <IconButton aria-label="like">
+                      <Badge badgeContent={counterLike} color="secondary">
+                        <IconButton aria-label="like" onClick={handleCounterLike}>
                           <ThumbUpAltRoundedIcon />
                         </IconButton>
                       </Badge>
-                      <Badge badgeContent={10} color="secondary">
-                        <IconButton aria-label="dislike">
+                      <Badge badgeContent={counterDislike} color="secondary">
+                        <IconButton aria-label="dislike" onClick={handleCounterDislike}>
                           <ThumbDownAltRoundedIcon />
                         </IconButton>
                       </Badge>
@@ -91,9 +104,17 @@ export default function UserPost() {
                   </Card>
                 ))
               ) : (
-                <Typography style={{ color: "red" }}>
-                  {t("dashboard.no_posts_found")}
-                </Typography>
+                <Box
+                sx={{
+                marginTop: 25,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center"
+                }}>
+                <Typography variant="h5" style={{ color: "red" }}>
+                  {t("user_post.no_posts_found")}
+                </Typography></Box>
               )}
             </>
           )}
