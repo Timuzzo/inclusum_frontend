@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import Signup from "./components/Signup";
@@ -10,6 +10,7 @@ import { AuthContext } from "./context/AuthContext";
 
 function App() {
   const { token } = useContext(AuthContext);
+
   return (
     <>
       <Navbar />
@@ -28,7 +29,7 @@ function App() {
         />
         <Route
           path="/myaccount"
-          element={token ? <MyAccount/> : <Navigate to="/login" />}
+          element={token ? <MyAccount /> : <Navigate to="/login" />}
         />
       </Routes>
     </>
