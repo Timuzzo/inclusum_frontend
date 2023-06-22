@@ -53,6 +53,9 @@ i18next
             existing_account: 'Already have an account? Log in',
           },
           myaccount: {
+            profile: 'profile',
+            changeavatar: 'Change avatar',
+            chooseavatar: 'Choose picture',
             upload: 'Upload'
           }
         }
@@ -101,6 +104,9 @@ i18next
             existing_account: 'Haben Sie bereits einen Account? Anmelden',
           },
           myaccount: {
+            profile: 'Profil',
+            changeavatar: 'Avatar ändern',
+            chooseavatar: 'Bild auswählen',
             upload: 'Hochladen'
           }
         }

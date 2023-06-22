@@ -126,13 +126,10 @@ export default function Navbar() {
                 </Typography>
                 {currentUser?.avatar !== "" ? 
                 (
-                <Avatar sx={{ cursor: "pointer" }} onClick={handleClickAccount} aria-label="avatar">
-                  <img src={currentUser?.avatar}/>
-                </Avatar>
+                <Avatar sx={{ cursor: "pointer" }} onClick={handleClickAccount} aria-label="avatar" src={currentUser?.avatar}/>
                 ) 
                 : 
                 <AccountCircleIcon sx={{ cursor: "pointer" }} onClick={handleClickAccount}/>}
-                
                 <Menu
                   anchorEl={anchorAccount}
                   onClose={handleCloseAccount}
