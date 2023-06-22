@@ -1,6 +1,6 @@
 import { ThemeContext } from "../context/ThemeContext";
 import { DataContext } from "../context/DataContext";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -23,6 +23,17 @@ import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlin
 import { useTranslation } from "react-i18next";
 
 export default function UserPost() {
+  const [counterLike, setCounterLike] = useState(0)
+  const [counterDislike, setCounterDislike] = useState(0)
+
+  const handleCounterLike = () => {
+    setCounterLike(counterLike + 1)
+  }
+
+  const handleCounterDislike = () => {
+    setCounterDislike(counterDislike + 1)
+  }
+
   const { theme } = useContext(ThemeContext);
   const { loading, posts, getUserPosts, token, currentUser} = useContext(DataContext);
 
@@ -52,11 +63,17 @@ export default function UserPost() {
                     key={post._id}
                   >
                     <CardHeader
-                      avatar={currentUser?.avatar !== "" ? <Avatar><img src={currentUser?.avatar}/></Avatar> : <AccountCircleIcon fontSize="large"/>}
-                      action={
+                      avatar={currentUser?.avatar !== "" ? <Avatar src={currentUser?.avatar}/> : <AccountCircleIcon fontSize="large"/>}
+                      action={counterLike >= 5 &&  counterLike > counterDislike ? 
                         <CheckCircleOutlineRoundedIcon
                           aria-label="verified"
                           color="success"
+                          fontSize="large"
+                        />
+                      :
+                      <CheckCircleOutlineRoundedIcon
+                          aria-label="verified"
+                          fontSize="large"
                         />
                       }
                       title={currentUser?.username}
@@ -73,13 +90,13 @@ export default function UserPost() {
                       <Typography variant="body2">{post.text}</Typography>
                     </CardContent>
                     <CardActions>
-                      <Badge badgeContent={4} color="secondary">
-                        <IconButton aria-label="like">
+                      <Badge badgeContent={counterLike} color="secondary">
+                        <IconButton aria-label="like" onClick={handleCounterLike}>
                           <ThumbUpAltRoundedIcon />
                         </IconButton>
                       </Badge>
-                      <Badge badgeContent={10} color="secondary">
-                        <IconButton aria-label="dislike">
+                      <Badge badgeContent={counterDislike} color="secondary">
+                        <IconButton aria-label="dislike" onClick={handleCounterDislike}>
                           <ThumbDownAltRoundedIcon />
                         </IconButton>
                       </Badge>
