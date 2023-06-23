@@ -23,6 +23,7 @@ i18next
             text: 'Text',
             create: 'Create',
             chooseimage: 'Choose image',
+            createdsuccess: 'Created successfully',
             please_select_category: 'Please select a category',
             please_describe_the_issue: 'Please describe the issue'
           },
@@ -57,7 +58,8 @@ i18next
             profile: 'profile',
             changeavatar: 'Change avatar',
             chooseavatar: 'Choose picture',
-            upload: 'Upload'
+            upload: 'Upload',
+            uploadsuccess: 'Upload successfully',
           }
         }
       },
@@ -75,6 +77,7 @@ i18next
             text: 'Text',
             create: 'Erstellen',
             chooseimage: 'Bild auswählen',
+            createdsuccess: 'Erfolgreich erstellt',
             please_select_category: 'Bitte wählen Sie eine Kategorie',
             please_describe_the_issue: 'Bitte beschreiben Sie die Störungsmeldung',
           },
@@ -109,7 +112,8 @@ i18next
             profile: 'Profil',
             changeavatar: 'Avatar ändern',
             chooseavatar: 'Bild auswählen',
-            upload: 'Hochladen'
+            upload: 'Hochladen',
+            uploadsuccess: 'Das Bild wurde hochgeladen',
           }
         }
       }
