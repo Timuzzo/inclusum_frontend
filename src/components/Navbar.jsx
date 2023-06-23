@@ -66,7 +66,12 @@ export default function Navbar() {
   };
 
   const handleClickTheme = () => {
-    themeToggle ? setThemeToggle(false) : setThemeToggle(true);
+    if (themeToggle) {
+      localStorage.removeItem("darkmode");
+      setThemeToggle(false)
+    } else {
+      setThemeToggle(true)
+    }
   };
 
   useEffect(() => {}, [flag]);

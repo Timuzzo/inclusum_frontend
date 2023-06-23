@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import { createTheme } from "@mui/material";
 
 export const ThemeContext = createContext();
@@ -23,6 +23,20 @@ export default function ThemeContextProvider (props) {
             ].join(' ,'),
         }}
     );
+
+useEffect(() => {
+    const darkmode = localStorage.getItem("darkmode");
+    if (darkmode) {
+    setThemeToggle(darkmode);
+    }
+}, []);
+
+useEffect(() => {
+    if (themeToggle) {
+    localStorage.setItem("darkmode", themeToggle);
+    }
+}, [themeToggle]);
+
     return (
         <ThemeContext.Provider value={{theme, themeToggle, setThemeToggle}}>
             {props.children}
