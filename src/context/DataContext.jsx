@@ -8,6 +8,7 @@ export default function DataContextProvider(props) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [avatarImg, setAvatarImg] = useState(null);
+  const [postImg, setPostImg] = useState(null);
   const [allUsers, setAllUsers] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const [flag, setFlag] = useState(false);
@@ -53,13 +54,11 @@ export default function DataContextProvider(props) {
     const singleUser = allUsers?.data.find(
       (user) => user?._id === decodedToken?._id
     );
-    console.log("singleUserObject", singleUser);
     setCurrentUser(singleUser);
   };
 
   // getAllUsers
   const getAllUsers = async () => {
-    console.log("get all users");
     try {
       const res = await fetch(`http://localhost:8080/user/getallusers`, {
         headers: {
@@ -75,7 +74,6 @@ export default function DataContextProvider(props) {
 
   // findAndUpdateUser
   const findAndUpdateUser = async () => {
-    console.log("findAndUpdateUser");
     const user = avatarImg?.avatar.find(
       (userAvatar) => userAvatar?.user_id === decodedToken?._id
     );
@@ -85,10 +83,10 @@ export default function DataContextProvider(props) {
     };
     const data = await fetch("http://localhost:8080/user/updateuser", {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       body: JSON.stringify(databody),
     });
   };
@@ -109,11 +107,6 @@ export default function DataContextProvider(props) {
     findAndUpdateUser();
   }, [avatarImg]);
 
-  console.log("decodedToken", decodedToken?._id);
-  console.log("all users", allUsers);
-  console.log("current user", currentUser);
-  console.log("setFlag", flag);
-
   return (
     <DataContext.Provider
       value={{
@@ -129,6 +122,9 @@ export default function DataContextProvider(props) {
         currentUser,
         setFlag,
         flag,
+        findAndUpdateUser,
+        postImg,
+        setPostImg,
       }}
     >
       {props.children}

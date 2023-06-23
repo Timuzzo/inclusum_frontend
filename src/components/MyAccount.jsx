@@ -21,13 +21,12 @@ export default function MyAccount () {
 const [avatar, setAvatar] = useState(null);
 // const [alert, setAlert] = useState(false)
 
-const { decodedToken, currentUser } = useContext(DataContext);
+const { decodedToken, currentUser, findAndUpdateUser } = useContext(DataContext);
 const { theme } = useContext(ThemeContext);
 
 const {t} = useTranslation()
 
 const handleSubmitImage = async (e) => {
-    console.log('fire handleSubmitImage')
     e.preventDefault();
     try {
         const formData = new FormData();
@@ -38,6 +37,7 @@ const handleSubmitImage = async (e) => {
         //  setError(error);
         console.error(error)
     }
+    findAndUpdateUser()
     }
 
     // const alertTrigger = () => {

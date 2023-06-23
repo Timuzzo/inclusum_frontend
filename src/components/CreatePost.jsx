@@ -1,6 +1,7 @@
 import { DataContext } from "../context/DataContext";
 import { ThemeContext } from "../context/ThemeContext";
 import { useState, useContext } from "react";
+import axios from "axios";
 import {
   Button,
   CssBaseline,
@@ -12,38 +13,46 @@ import {
   MenuItem,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateRounded';
 
 export default function CreatePost() {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
 
-  const { decodedToken, token, currentUser } = useContext(DataContext);
+  const { decodedToken, token, postImg, setPostImg, setFlag, flag } = useContext(DataContext);
   const { theme } = useContext(ThemeContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-  const d = new Date()
-  const actualDate = `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`
-
-  const databody = {
-    title: title,
-    text: text,
-    timestamp: actualDate,
-    user_id: decodedToken._id,
-  };
-
-    await fetch("http://localhost:8080/posts", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(databody),
-    });
+    console.log('handleSubmit');
+    const d = new Date()
+    const actualDate = `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`
+    try {
+        const formData = new FormData();
+        formData.append("image", postImg);
+        formData.append("user_id", decodedToken._id);
+        formData.append("title", title);
+        formData.append("text", text);
+        formData.append("timestamp", actualDate);
+        await axios.post("http://localhost:8080/posts", formData, 
+        {headers: {
+          'Authorization': `Bearer ${token}`,
+        }})
+    } catch (error) {
+        console.error(error)
+    }
     setTitle("");
     setText("");
-  };
+    setPostImg(null);
+    setFlag(!flag);
+    }
+
+  const fileData = () => {
+    if (postImg)
+    return (
+    <Typography variant="h5">{postImg.name}</Typography>
+    );
+    }
 
   const { t } = useTranslation();
 
@@ -112,6 +121,35 @@ export default function CreatePost() {
             onChange={(e) => setText(e.target.value)}
             value={text}
           />
+          <Box 
+          component="form" 
+          noValidate
+          >
+          <label htmlFor="upload-photo">
+              <input  style={{ display: 'none' }} 
+              id="upload-photo"  
+              name="upload-photo"  
+              type="file"
+              onChange={(e) => setPostImg(e.target.files[0])}
+              />
+              <Box sx={{p: 1,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+          }}>
+            {postImg ? fileData() : <Typography variant="h5">placeholder image name</Typography>}
+              <Button 
+                  component="span"
+                  variant="contained"
+                  color="secondary"
+                  size="large"
+                  sx={{ mt: 2, mb: 2, width: "75%" }}>
+                  <AddPhotoAlternateRoundedIcon sx={{ mr: 1}}/>
+                  <Typography fontFamily="Poppins">Choose pic</Typography>
+              </Button>
+              </Box>
+          </label>
+          </Box>
           <Button
             type="submit"
             variant="contained"
