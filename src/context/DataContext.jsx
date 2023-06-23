@@ -103,9 +103,10 @@ export default function DataContextProvider(props) {
     getCurrentUser();
   }, [allUsers]);
 
-  useEffect(() => {
-    findAndUpdateUser();
-  }, [avatarImg]);
+  // Why do we need this one? The function is trigerred when we are changing the avatar on MyAccount page.
+  // useEffect(() => {
+  //   findAndUpdateUser();
+  // }, [avatarImg]);
 
   return (
     <DataContext.Provider

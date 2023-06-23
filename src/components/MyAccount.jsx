@@ -17,11 +17,10 @@ import {
 import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateRounded';
 
 export default function MyAccount () {
-
+const [alert, setAlert] = useState(false)
 const [avatar, setAvatar] = useState(null);
-// const [alert, setAlert] = useState(false)
 
-const { decodedToken, currentUser, findAndUpdateUser } = useContext(DataContext);
+const { decodedToken, currentUser, findAndUpdateUser} = useContext(DataContext);
 const { theme } = useContext(ThemeContext);
 
 const {t} = useTranslation()
@@ -38,26 +37,10 @@ const handleSubmitImage = async (e) => {
         console.error(error)
     }
     findAndUpdateUser()
+    if(avatar) {
+        setAlert(true) 
     }
-
-    // const alertTrigger = () => {
-    // if (alert) {
-    // return (
-    // <Alert severity="success" variant="outlined" color="secondary">
-    //     <AlertTitle>Upload successfully</AlertTitle>
-    // </Alert>) 
-    // } else {
-    // <Alert severity="error" variant="outlined">
-    //     <AlertTitle>Something went wrong</AlertTitle>
-    // </Alert>
-    // };
-    // }
-
-    const fileData = () => {
-    if (avatar)
-    return (
-    <Typography variant="h5">{avatar.name}</Typography>
-    );
+    setAvatar(null)
     }
 
 return (
@@ -86,15 +69,17 @@ return (
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        border: "2px solid #0f6B63",
     }}>
-        {avatar ? fileData() : <Typography variant="h5">{t('myaccount.changeavatar')}</Typography>}
+        {avatar ? 
+        <Typography sx={{overflow: "hidden", maxWidth: "100%"}} variant="h5">{avatar.name}</Typography> 
+        : 
+        <Typography variant="h5">{t('myaccount.changeavatar')}</Typography>}
         <Button 
             component="span"
             variant="contained"
             color="secondary"
             size="large"
-            sx={{ mt: 2, mb: 2, width: "75%" }}>
+            sx={{ mt: 2, width: "75%" }}>
             <AddPhotoAlternateRoundedIcon sx={{ mr: 1}}/>
             <Typography fontFamily="Poppins">{t('myaccount.chooseavatar')}</Typography>
         </Button>
@@ -106,6 +91,13 @@ return (
             sx={{ mt: 2, mb: 2, width: "75%" }}>
             <Typography fontFamily="Poppins">{t('myaccount.upload')}</Typography>
         </Button>
+        {alert? 
+        <Alert severity="success" variant="outlined" color="secondary">
+            <AlertTitle>{t('myaccount.uploadsuccess')}</AlertTitle>
+        </Alert> 
+        :
+        <></>
+        }
         </Box>
     </label>
     </Box>

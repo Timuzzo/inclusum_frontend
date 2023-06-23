@@ -11,11 +11,14 @@ import {
   Container,
   Typography,
   MenuItem,
+  Alert,
+  AlertTitle
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateRounded';
 
 export default function CreatePost() {
+  const [alert, setAlert] = useState(false)
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
 
@@ -45,6 +48,7 @@ export default function CreatePost() {
     setText("");
     setPostImg(null);
     setFlag(!flag);
+    setAlert(true)
     }
 
   const fileData = () => {
@@ -96,6 +100,13 @@ export default function CreatePost() {
           <Typography component="h1" variant="h5">
             {t("create_post.create_malfunction_info")}
           </Typography>
+          {alert ? 
+          <Alert severity="success" variant="outlined" color="secondary">
+              <AlertTitle>{t('create_post.createdsuccess')}</AlertTitle>
+          </Alert> 
+          :
+          <></>
+          }
           <TextField
             fullWidth
             id="category"
@@ -136,33 +147,32 @@ export default function CreatePost() {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-          }}>
-            {postImg ? fileData() : <></>}
+              }}>
+              {postImg ? fileData() : <></>}
               <Button 
                 component="span"
                 variant="contained"
                 color="secondary"
                 size="large"
                 fullWidth
-                sx={{ mt: 2, width: "100%"}}>
+                sx={{mt: 2, width: "250px"}}>
                 <AddPhotoAlternateRoundedIcon sx={{ mr: 1}}/>
                 <Typography fontFamily="Poppins">{t("create_post.chooseimage")}</Typography>
               </Button>
-              <Button
+              </Box>
+            </label>
+            </Box>
+            <Button
                 type="submit"
                 variant="contained"
                 color="secondary"
                 size="large"
-                sx={{mt: 2, width: "100%"}}
+                sx={{mb: 2, width: "250px"}}
                 >
                 <Typography fontFamily="Poppins">
                   {t("create_post.create")}
                 </Typography>
-              </Button>
-              </Box>
-          </label>
-          </Box>
-          
+            </Button>
         </Box>
       </Container>
     </ThemeProvider>
