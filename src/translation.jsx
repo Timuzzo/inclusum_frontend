@@ -22,6 +22,7 @@ i18next
             category: 'Category',
             text: 'Text',
             create: 'Create',
+            chooseimage: 'Choose image',
             please_select_category: 'Please select a category',
             please_describe_the_issue: 'Please describe the issue'
           },
@@ -73,6 +74,7 @@ i18next
             category: 'Kategorie',
             text: 'Text',
             create: 'Erstellen',
+            chooseimage: 'Bild auswählen',
             please_select_category: 'Bitte wählen Sie eine Kategorie',
             please_describe_the_issue: 'Bitte beschreiben Sie die Störungsmeldung',
           },
