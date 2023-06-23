@@ -137,30 +137,32 @@ export default function CreatePost() {
               flexDirection: "column",
               alignItems: "center",
           }}>
-            {postImg ? fileData() : <Typography variant="h5">placeholder image name</Typography>}
+            {postImg ? fileData() : <></>}
               <Button 
-                  component="span"
-                  variant="contained"
-                  color="secondary"
-                  size="large"
-                  sx={{ mt: 2, mb: 2, width: "75%" }}>
-                  <AddPhotoAlternateRoundedIcon sx={{ mr: 1}}/>
-                  <Typography fontFamily="Poppins">Choose pic</Typography>
+                component="span"
+                variant="contained"
+                color="secondary"
+                size="large"
+                fullWidth
+                sx={{ mt: 2, width: "100%"}}>
+                <AddPhotoAlternateRoundedIcon sx={{ mr: 1}}/>
+                <Typography fontFamily="Poppins">{t("create_post.chooseimage")}</Typography>
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                color="secondary"
+                size="large"
+                sx={{mt: 2, width: "100%"}}
+                >
+                <Typography fontFamily="Poppins">
+                  {t("create_post.create")}
+                </Typography>
               </Button>
               </Box>
           </label>
           </Box>
-          <Button
-            type="submit"
-            variant="contained"
-            color="secondary"
-            size="large"
-            sx={{ mt: 3, mb: 2, width: "50%" }}
-          >
-            <Typography fontFamily="Poppins">
-              {t("create_post.create")}
-            </Typography>
-          </Button>
+          
         </Box>
       </Container>
     </ThemeProvider>
