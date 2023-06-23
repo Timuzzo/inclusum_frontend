@@ -16,6 +16,7 @@ export default function DataContextProvider(props) {
 
   const { decodedToken } = useJwt(token);
 
+  // getUserPosts
   const getUserPosts = async () => {
     try {
       const res = await fetch("http://localhost:8080/posts", {
@@ -32,6 +33,7 @@ export default function DataContextProvider(props) {
     }
   };
 
+  // getAvatarImage
   const getAvatarImage = async () => {
     try {
       const res = await fetch("http://localhost:8080/avatar/getavatar", {
@@ -46,6 +48,7 @@ export default function DataContextProvider(props) {
     }
   };
 
+  // getCurrentUser
   const getCurrentUser = () => {
     const singleUser = allUsers?.data.find(
       (user) => user?._id === decodedToken?._id
@@ -54,6 +57,7 @@ export default function DataContextProvider(props) {
     setCurrentUser(singleUser);
   };
 
+  // getAllUsers
   const getAllUsers = async () => {
     console.log("get all users");
     try {
@@ -69,6 +73,7 @@ export default function DataContextProvider(props) {
     }
   };
 
+  // findAndUpdateUser
   const findAndUpdateUser = async () => {
     console.log("findAndUpdateUser");
     const user = avatarImg?.avatar.find(
@@ -90,7 +95,7 @@ export default function DataContextProvider(props) {
 
   useEffect(() => {
     getAllUsers();
-  }, []);
+  }, [flag]);
 
   useEffect(() => {
     getAvatarImage();

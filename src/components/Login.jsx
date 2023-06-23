@@ -26,7 +26,7 @@ export default function Login() {
 
   const { login } = useContext(AuthContext);
   const { theme, themeToggle } = useContext(ThemeContext);
-  const { flag, setFlag } = useContext(DataContext);
+  const { setFlag, flag } = useContext(DataContext);
 
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -60,7 +60,7 @@ export default function Login() {
       setIsLoading(false);
       login(data.token);
     }
-    setFlag(true);
+    setFlag(!flag);
     setEmail("");
     setPassword("");
   };
