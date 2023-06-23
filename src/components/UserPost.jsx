@@ -20,12 +20,16 @@ import ThumbUpAltRoundedIcon from "@mui/icons-material/ThumbUpAltRounded";
 import ThumbDownAltRoundedIcon from "@mui/icons-material/ThumbDownAltRounded";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
+import PlaceIcon from '@mui/icons-material/Place';
 import { useTranslation } from "react-i18next";
 
 export default function UserPost() {
   const [counterLike, setCounterLike] = useState(0)
   const [counterDislike, setCounterDislike] = useState(0)
-
+  
+  const { theme } = useContext(ThemeContext);
+  const { loading, posts, getUserPosts, token, currentUser} = useContext(DataContext);
+  const { t } = useTranslation();
   const handleCounterLike = () => {
     setCounterLike(counterLike + 1)
   }
@@ -34,10 +38,6 @@ export default function UserPost() {
     setCounterDislike(counterDislike + 1)
   }
 
-  const { theme } = useContext(ThemeContext);
-  const { loading, posts, getUserPosts, token, currentUser} = useContext(DataContext);
-
-  const { t } = useTranslation();
 
   useEffect(() => {}, [posts]);
 
@@ -79,12 +79,20 @@ export default function UserPost() {
                       title={currentUser?.username}
                       subheader={`${t("user_post.posted")} ${post.timestamp}`}
                     />
-                    <CardMedia
+                    <CardContent sx={{display: "flex", alignItems: "baseline"}}>
+                      <PlaceIcon/>
+                      <Typography>{currentUser?.city}</Typography>
+                    </CardContent>
+                    {post.imageURL ? <CardMedia
                       component="img"
-                      height="150"
-                      image="https://placehold.co/150x150"
-                      alt="image"
-                    />
+                      position="cover"
+                      height="auto"
+                      width="320"
+                      image={post?.imageURL}
+                      alt="image"/>
+                      :
+                      <></>
+                    }
                     <CardContent>
                       <Typography variant="h6">{post.title}</Typography>
                       <Typography variant="body2">{post.text}</Typography>
