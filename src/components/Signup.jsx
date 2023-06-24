@@ -10,7 +10,9 @@ import {
   ThemeProvider,
   Container,
   Typography,
-  Backdrop
+  Backdrop, 
+  Alert,
+  AlertTitle
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { ThemeContext } from "../context/ThemeContext";
@@ -67,12 +69,35 @@ export default function Signup() {
       setIsLoading(false);
       login(data.token);
     }
-
     setEmail("");
     setCity("");
     setPassword("");
     setUsername("");
   };
+
+  const errorHandling = () => {
+    if (error === "Email already in use, please provide different one.") {
+      return (
+      <Alert severity="error" variant="outlined">
+        <AlertTitle>{t("signup.existing_email")}</AlertTitle>
+      </Alert>)
+    } else if (error === "Please fill in all fields.") {
+      return (
+      <Alert severity="error" variant="outlined">
+        <AlertTitle>{t("signup.missing_field")}</AlertTitle>
+      </Alert>) 
+    } else if (error === "Wrong format, please check your email address.") {
+      return (
+      <Alert severity="error" variant="outlined">
+        <AlertTitle>{t("signup.invalid_email")}</AlertTitle>
+      </Alert>)
+    } else if (error === "Make sure to use at least 8 characters, one upper case, one lower, one number and one symbol") {
+      return (
+      <Alert severity="error" variant="outlined">
+        <AlertTitle>{t("signup.strong_password")}</AlertTitle>
+      </Alert>)
+    }
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -86,7 +111,8 @@ export default function Signup() {
         {isLoading ? 
         <Backdrop
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
-          open = "true"
+          open = {true}
+          invisible = {true}
         >
           <CircularIndeterminate/>
         </Backdrop> 
@@ -94,7 +120,6 @@ export default function Signup() {
         <></>}
         <Box
           sx={{
-            marginTop: 8,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -103,9 +128,10 @@ export default function Signup() {
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <AccountCircleIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" sx={{ mb: 1}}>
             {t('signup.signup')}
           </Typography>
+          {error? errorHandling() : <></>}
           <Box component="form" noValidate sx={{ mt: 1 }}>
             {themeToggle ? (
               <TextField

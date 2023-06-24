@@ -37,6 +37,9 @@ i18next
             email: 'Email address',
             password: 'Password',
             no_existing_account: `Don't have an account? Sign Up`,
+            missing_field: 'Please fill all fields.',
+            incorrect_email: 'Incorrect email',
+            incorrect_password: 'Incorrect password',
           },
           navbar: {
             greeting: 'Hello',
@@ -53,6 +56,10 @@ i18next
             username: 'Username',
             city: 'City',
             existing_account: 'Already have an account? Log in',
+            existing_email: 'Email is already in use',
+            missing_field: 'Please fill in all fields.',
+            invalid_email: 'Wrong email format',
+            strong_password: 'Make sure to use at least 8 characters, one upper case, one lower, one number and one symbol',
           },
           myaccount: {
             profile: 'profile',
@@ -78,8 +85,8 @@ i18next
             create: 'Erstellen',
             chooseimage: 'Bild auswählen',
             createdsuccess: 'Erfolgreich erstellt',
-            please_select_category: 'Bitte wählen Sie eine Kategorie',
-            please_describe_the_issue: 'Bitte beschreiben Sie die Störungsmeldung',
+            please_select_category: 'Bitte wählen Sie eine Kategorie.',
+            please_describe_the_issue: 'Bitte beschreiben Sie die Störungsmeldung.',
           },
           user_post: {
             loading: 'Lädt',
@@ -91,6 +98,9 @@ i18next
             email: 'E-Mail',
             password: 'Passwort',
             no_existing_account: `Haben Sie keinen Account? Registrieren`,
+            missing_field: 'Bitte füllen Sie alle Felder aus.',
+            incorrect_email: 'Falsche E-Mail',
+            incorrect_password: 'Falsches Passwort',
           },
           navbar: {
             greeting: 'Hallo',
@@ -107,13 +117,17 @@ i18next
             username: 'Nutzername',
             city: 'Stadt',
             existing_account: 'Haben Sie bereits einen Account? Anmelden',
+            existing_email: 'Email ist bereits registriert.',
+            missing_field: 'Bitte füllen Sie alle Felder aus.',
+            invalid_email: 'Falsches Email-Format',
+            strong_password: 'Passwort sollte mindestens 8 Zeichen lang sein, aus einer Groß- und Kleinbuchstabe und eine Ziffer sowie einem Sonderzeichen bestehen.',
           },
           myaccount: {
             profile: 'Profil',
             changeavatar: 'Avatar ändern',
             chooseavatar: 'Bild auswählen',
             upload: 'Hochladen',
-            uploadsuccess: 'Das Bild wurde hochgeladen',
+            uploadsuccess: 'Das Bild wurde hochgeladen.',
           }
         }
       }

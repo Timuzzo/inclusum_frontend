@@ -110,7 +110,6 @@ export default function Navbar() {
                 </MenuItem>
               ))}
             </Menu>
-
             {themeToggle ? (
               <WbSunnyRoundedIcon
                 sx={{ mr: 2, cursor: "pointer" }}
@@ -128,9 +127,7 @@ export default function Navbar() {
                   {t("navbar.greeting")}, {currentUser?.username}
                 </Typography>
                 {currentUser?.avatar !== "" ? 
-                (
                 <Avatar sx={{ cursor: "pointer" }} onClick={handleClickAccount} aria-label="avatar" src={currentUser?.avatar}/>
-                ) 
                 : 
                 <AccountCircleIcon sx={{ cursor: "pointer" }} onClick={handleClickAccount}/>}
                 <Menu
@@ -138,21 +135,18 @@ export default function Navbar() {
                   onClose={handleCloseAccount}
                   open={openAccount}
                 >
-                  <MenuItem>
-                    <Typography color="inherit" onClick={handleClickLogout}>
+                  <MenuItem onClick={handleClickLogout}>
+                    <Typography color="inherit" >
                       {t("navbar.logout")}
                     </Typography>
                   </MenuItem>
-                  <MenuItem>
-                    <Typography
-                      color="inherit"
-                      onClick={() => navigate("/myaccount")}
-                    >
+                  <MenuItem onClick={() => navigate("/myaccount")}>
+                    <Typography color="inherit">
                       {t("navbar.myaccount")}
                     </Typography>
                   </MenuItem>
-                  <MenuItem>
-                    <Typography color="inherit" onClick={() => navigate("/")}>
+                  <MenuItem onClick={() => navigate("/")}>
+                    <Typography color="inherit" >
                       {t("navbar.dashboard")}
                     </Typography>
                   </MenuItem>
@@ -170,19 +164,13 @@ export default function Navbar() {
                   onClose={handleCloseAccount}
                   open={openAccount}
                 >
-                  <MenuItem>
-                    <Typography
-                      color="inherit"
-                      onClick={() => navigate("/login")}
-                    >
+                  <MenuItem onClick={() => navigate("/login")}>
+                    <Typography color="inherit">
                       {t("navbar.login")}
                     </Typography>
                   </MenuItem>
-                  <MenuItem>
-                    <Typography
-                      color="inherit"
-                      onClick={() => navigate("/signup")}
-                    >
+                  <MenuItem onClick={() => navigate("/signup")}>
+                    <Typography color="inherit">
                       {t("navbar.signup")}
                     </Typography>
                   </MenuItem>
