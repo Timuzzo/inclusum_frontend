@@ -81,7 +81,7 @@ export default function DataContextProvider(props) {
       avatar: user?.url,
       _id: user?.user_id,
     };
-    const data = await fetch("http://localhost:8080/user/updateuser", {
+    await fetch("http://localhost:8080/user/updateuser", {
       method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -104,9 +104,9 @@ export default function DataContextProvider(props) {
   }, [allUsers]);
 
   // Why do we need this one? The function is trigerred when we are changing the avatar on MyAccount page.
-  // useEffect(() => {
-  //   findAndUpdateUser();
-  // }, [avatarImg]);
+  useEffect(() => {
+    findAndUpdateUser();
+  }, [avatarImg]);
 
   return (
     <DataContext.Provider

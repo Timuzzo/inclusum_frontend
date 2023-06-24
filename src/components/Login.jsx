@@ -10,6 +10,7 @@ import {
   ThemeProvider,
   Container,
   Typography,
+  Backdrop
 } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import { ThemeContext } from "../context/ThemeContext";
@@ -67,12 +68,24 @@ export default function Login() {
 
   return (
     <ThemeProvider theme={theme}>
-      {isLoading ? <CircularIndeterminate /> : <></>}
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
+      <CssBaseline />
+      <Container component="main" maxWidth="xs" 
+      sx={{ display: "flex", 
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center", 
+      minHeight: '100vh' }}>
+      {isLoading ? 
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
+        open = "true"
+      >
+        <CircularIndeterminate/>
+      </Backdrop> 
+      : 
+      <></>}
         <Box
           sx={{
-            marginTop: 8,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
