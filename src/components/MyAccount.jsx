@@ -17,7 +17,8 @@ import {
 import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateRounded';
 
 export default function MyAccount () {
-const [alert, setAlert] = useState(false)
+const [msg, setMsg] = useState(false)
+const [error, setError] = useState(null);
 const [avatar, setAvatar] = useState(null);
 
 const { decodedToken, currentUser, findAndUpdateUser} = useContext(DataContext);
@@ -31,17 +32,24 @@ const handleSubmitImage = async (e) => {
         const formData = new FormData();
         formData.append("picture", avatar, avatar?.name);
         formData.append("user_id", decodedToken._id);
-        await axios.post("http://localhost:8080/avatar/uploadavatar", formData)
+        const res = await axios.post("http://localhost:8080/avatar/uploadavatar", formData)
+        setMsg(res.data.msg)
     } catch (error) {
-        //  setError(error);
+        setError(error);
         console.error(error)
     }
     findAndUpdateUser()
-    if(avatar) {
-        setAlert(true) 
-    }
     setAvatar(null)
     }
+
+    // const errorHandling = () => {
+    // if (error === "invalid format") {
+    //     return (
+    //     <Alert severity="error" variant="outlined">
+    //     <AlertTitle>Invalid format</AlertTitle>
+    //     </Alert>)
+    // }
+    // }
 
 return (
     <>
@@ -71,9 +79,18 @@ return (
         alignItems: "center",
     }}>
         {avatar ? 
-        <Typography sx={{overflow: "hidden", maxWidth: "100%"}} variant="h5">{avatar.name}</Typography> 
+        <Typography sx={{overflow: "hidden", maxWidth: "100%", mb: 1}} variant="h5">{avatar.name}</Typography> 
         : 
-        <Typography variant="h5">{t('myaccount.changeavatar')}</Typography>}
+        <Typography sx={{mb: 1}}variant="h5">{t('myaccount.changeavatar')}</Typography>
+        }
+        {msg === 'image successfully saved'? 
+        <Alert severity="success" variant="outlined" color="secondary">
+            <AlertTitle>{t('myaccount.uploadsuccess')}</AlertTitle>
+        </Alert> 
+        :
+        <></>
+        }
+        {/* {error ? errorHandling() : <></>} */}
         <Button 
             component="span"
             variant="contained"
@@ -91,13 +108,6 @@ return (
             sx={{ mt: 2, mb: 2, width: "75%" }}>
             <Typography fontFamily="Poppins">{t('myaccount.upload')}</Typography>
         </Button>
-        {alert? 
-        <Alert severity="success" variant="outlined" color="secondary">
-            <AlertTitle>{t('myaccount.uploadsuccess')}</AlertTitle>
-        </Alert> 
-        :
-        <></>
-        }
         </Box>
     </label>
     </Box>
