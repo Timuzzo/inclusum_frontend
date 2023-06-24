@@ -10,6 +10,7 @@ import {
   ThemeProvider,
   Container,
   Typography,
+  Backdrop
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { ThemeContext } from "../context/ThemeContext";
@@ -17,7 +18,7 @@ import { AuthContext } from "../context/AuthContext";
 import CircularIndeterminate from "./Spinner";
 import { useTranslation } from "react-i18next";
 
-export default function Signup({ setUser }) {
+export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
@@ -75,9 +76,22 @@ export default function Signup({ setUser }) {
 
   return (
     <ThemeProvider theme={theme}>
-      {isLoading ? <CircularIndeterminate /> : <></>}
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="xs"
+      sx={{ display: "flex", 
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center", 
+      minHeight: '100vh' }}>
         <CssBaseline />
+        {isLoading ? 
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
+          open = "true"
+        >
+          <CircularIndeterminate/>
+        </Backdrop> 
+        : 
+        <></>}
         <Box
           sx={{
             marginTop: 8,

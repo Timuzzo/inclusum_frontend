@@ -20,13 +20,11 @@ import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { ThemeContext } from "../context/ThemeContext";
 import { DataContext } from "../context/DataContext";
-import { useJwt } from "react-jwt";
 import { useTranslation } from "react-i18next";
 
 export default function Navbar() {
   const { logout, token } = useContext(AuthContext);
   const { theme, themeToggle, setThemeToggle } = useContext(ThemeContext);
-  const { decodedToken } = useJwt(token);
   const { currentUser, setFlag, flag } = useContext(DataContext);
   const navigate = useNavigate();
 
