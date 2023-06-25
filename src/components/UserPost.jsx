@@ -28,7 +28,7 @@ export default function UserPost() {
   const [counterDislike, setCounterDislike] = useState(0);
 
   const { theme } = useContext(ThemeContext);
-  const { loading, posts, getUserPosts, token, currentUser } =
+  const { loading, posts, getUserPosts, token, currentUser, flag } =
     useContext(DataContext);
   const { t } = useTranslation();
   const handleCounterLike = () => {
@@ -39,13 +39,13 @@ export default function UserPost() {
     setCounterDislike(counterDislike + 1);
   };
 
-  useEffect(() => {}, [posts]);
+  //useEffect(() => {}, [posts]);
 
   useEffect(() => {
     if (token) {
       getUserPosts();
     }
-  }, [token]);
+  }, [token, flag]);
 
   return (
     <>
