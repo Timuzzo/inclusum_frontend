@@ -17,7 +17,7 @@ import {
 import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateRounded';
 
 export default function MyAccount () {
-const [msg, setMsg] = useState(false)
+const [msg, setMsg] = useState(null)
 const [error, setError] = useState(null);
 const [avatar, setAvatar] = useState(null);
 
@@ -28,6 +28,8 @@ const {t} = useTranslation()
 
 const handleSubmitImage = async (e) => {
     e.preventDefault();
+    setError(null)
+    setMsg(null)
     try {
         const formData = new FormData();
         formData.append("picture", avatar, avatar?.name);
@@ -35,21 +37,21 @@ const handleSubmitImage = async (e) => {
         const res = await axios.post("http://localhost:8080/avatar/uploadavatar", formData)
         setMsg(res.data.msg)
     } catch (error) {
-        setError(error);
+        setError(error.message);
         console.error(error)
     }
     findAndUpdateUser()
     setAvatar(null)
     }
 
-    // const errorHandling = () => {
-    // if (error === "invalid format") {
-    //     return (
-    //     <Alert severity="error" variant="outlined">
-    //     <AlertTitle>Invalid format</AlertTitle>
-    //     </Alert>)
-    // }
-    // }
+    const errorHandling = () => {
+    if (error === "Request failed with status code 500") {
+        return (
+        <Alert severity="error" variant="outlined">
+        <AlertTitle>{t('myaccount.uploadfailure')}</AlertTitle>
+        </Alert>)
+    }
+    }
 
 return (
     <>
@@ -85,12 +87,12 @@ return (
         }
         {msg === 'image successfully saved'? 
         <Alert severity="success" variant="outlined" color="secondary">
-            <AlertTitle>{t('myaccount.uploadsuccess')}</AlertTitle>
+            <AlertTitle>{t('myaccount.updatesuccess')}</AlertTitle>
         </Alert> 
         :
         <></>
         }
-        {/* {error ? errorHandling() : <></>} */}
+        {error ? errorHandling() : <></>}
         <Button 
             component="span"
             variant="contained"

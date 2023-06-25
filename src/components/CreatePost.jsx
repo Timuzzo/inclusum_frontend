@@ -18,16 +18,18 @@ import { useTranslation } from "react-i18next";
 import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateRounded';
 
 export default function CreatePost() {
-  const [alert, setAlert] = useState(false)
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
+  const [msg, setMsg] = useState(null)
+  const [error, setError] = useState(null);
 
   const { decodedToken, token, postImg, setPostImg, setFlag, flag } = useContext(DataContext);
   const { theme } = useContext(ThemeContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('handleSubmit');
+    setError(null)
+    setMsg(null)
     const d = new Date()
     const actualDate = `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`
     try {
@@ -37,18 +39,19 @@ export default function CreatePost() {
         formData.append("title", title);
         formData.append("text", text);
         formData.append("timestamp", actualDate);
-        await axios.post("http://localhost:8080/posts", formData, 
+        const res = await axios.post("http://localhost:8080/posts", formData, 
         {headers: {
           'Authorization': `Bearer ${token}`,
         }})
+        setMsg(res.data.msg)
     } catch (error) {
+        setError(error.response.data.error)
         console.error(error)
     }
     setTitle("");
     setText("");
     setPostImg(null);
     setFlag(!flag);
-    setAlert(true)
     }
 
   const fileData = () => {
@@ -81,6 +84,15 @@ export default function CreatePost() {
     },
   ];
 
+  const errorHandling = () => {
+    if (error === "Please fill in all fields") {
+        return (
+        <Alert severity="error" variant="outlined">
+        <AlertTitle>{t("create_post.please_fill_in_all_fields")}</AlertTitle>
+        </Alert>)
+    }
+    }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -100,9 +112,10 @@ export default function CreatePost() {
           <Typography component="h1" variant="h5">
             {t("create_post.create_malfunction_info")}
           </Typography>
-          {alert ? 
+          {error? errorHandling() : <></>}
+          {msg === 'post successfully created'? 
           <Alert severity="success" variant="outlined" color="secondary">
-              <AlertTitle>{t('create_post.createdsuccess')}</AlertTitle>
+              <AlertTitle>{t("create_post.post_created_successfully")}</AlertTitle>
           </Alert> 
           :
           <></>
@@ -133,7 +146,6 @@ export default function CreatePost() {
             value={text}
           />
           <Box 
-          component="form" 
           noValidate
           >
           <label htmlFor="upload-photo">

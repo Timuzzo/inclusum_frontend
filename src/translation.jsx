@@ -25,7 +25,9 @@ i18next
             chooseimage: 'Choose image',
             createdsuccess: 'Created successfully',
             please_select_category: 'Please select a category',
-            please_describe_the_issue: 'Please describe the issue'
+            please_describe_the_issue: 'Please describe the issue',
+            please_fill_in_all_fields: 'Please fill in all fields',
+            post_created_successfully: 'Malfunction info was created successfully',
           },
           user_post: {
             loading: 'Loading',
@@ -66,7 +68,8 @@ i18next
             changeavatar: 'Change avatar',
             chooseavatar: 'Choose picture',
             upload: 'Upload',
-            uploadsuccess: 'Upload successfully',
+            updatesuccess: 'Updated successfully',
+            uploadfailure: 'Upload failed, please choose .jpg, .jpeg or .png format',
           }
         }
       },
@@ -87,6 +90,8 @@ i18next
             createdsuccess: 'Erfolgreich erstellt',
             please_select_category: 'Bitte wählen Sie eine Kategorie.',
             please_describe_the_issue: 'Bitte beschreiben Sie die Störungsmeldung.',
+            please_fill_in_all_fields: 'Bitte füllen Sie alle Felder aus',
+            post_created_successfully: 'Störungsmeldung wurde erfolgreich erstellt',
           },
           user_post: {
             loading: 'Lädt',
@@ -127,7 +132,8 @@ i18next
             changeavatar: 'Avatar ändern',
             chooseavatar: 'Bild auswählen',
             upload: 'Hochladen',
-            uploadsuccess: 'Das Bild wurde hochgeladen.',
+            updatesuccess: 'Das Bild wurde aktualisiert.',
+            uploadfailure: 'Hochladen fehlgeschlagen, bitte laden Sie die Datei im .jpg, .jpeg oder .png Format hoch',
           }
         }
       }
