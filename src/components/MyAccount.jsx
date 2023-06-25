@@ -17,47 +17,40 @@ import {
 import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateRounded';
 
 export default function MyAccount () {
-
+const [msg, setMsg] = useState(null)
+const [error, setError] = useState(null);
 const [avatar, setAvatar] = useState(null);
-// const [alert, setAlert] = useState(false)
 
-const { decodedToken, currentUser, findAndUpdateUser } = useContext(DataContext);
+const { decodedToken, currentUser, findAndUpdateUser} = useContext(DataContext);
 const { theme } = useContext(ThemeContext);
 
 const {t} = useTranslation()
 
 const handleSubmitImage = async (e) => {
     e.preventDefault();
+    setError(null)
+    setMsg(null)
     try {
         const formData = new FormData();
         formData.append("picture", avatar, avatar?.name);
         formData.append("user_id", decodedToken._id);
-        await axios.post("http://localhost:8080/avatar/uploadavatar", formData)
+        const res = await axios.post("http://localhost:8080/avatar/uploadavatar", formData)
+        setMsg(res.data.msg)
     } catch (error) {
-        //  setError(error);
+        setError(error.message);
         console.error(error)
     }
     findAndUpdateUser()
+    setAvatar(null)
     }
 
-    // const alertTrigger = () => {
-    // if (alert) {
-    // return (
-    // <Alert severity="success" variant="outlined" color="secondary">
-    //     <AlertTitle>Upload successfully</AlertTitle>
-    // </Alert>) 
-    // } else {
-    // <Alert severity="error" variant="outlined">
-    //     <AlertTitle>Something went wrong</AlertTitle>
-    // </Alert>
-    // };
-    // }
-
-    const fileData = () => {
-    if (avatar)
-    return (
-    <Typography variant="h5">{avatar.name}</Typography>
-    );
+    const errorHandling = () => {
+    if (error === "Request failed with status code 500") {
+        return (
+        <Alert severity="error" variant="outlined">
+        <AlertTitle>{t('myaccount.uploadfailure')}</AlertTitle>
+        </Alert>)
+    }
     }
 
 return (
@@ -86,15 +79,26 @@ return (
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        border: "2px solid #0f6B63",
     }}>
-        {avatar ? fileData() : <Typography variant="h5">{t('myaccount.changeavatar')}</Typography>}
+        {avatar ? 
+        <Typography sx={{overflow: "hidden", maxWidth: "100%", mb: 1}} variant="h5">{avatar.name}</Typography> 
+        : 
+        <Typography sx={{mb: 1}}variant="h5">{t('myaccount.changeavatar')}</Typography>
+        }
+        {msg === 'image successfully saved'? 
+        <Alert severity="success" variant="outlined" color="secondary">
+            <AlertTitle>{t('myaccount.updatesuccess')}</AlertTitle>
+        </Alert> 
+        :
+        <></>
+        }
+        {error ? errorHandling() : <></>}
         <Button 
             component="span"
             variant="contained"
             color="secondary"
             size="large"
-            sx={{ mt: 2, mb: 2, width: "75%" }}>
+            sx={{ mt: 2, width: "75%" }}>
             <AddPhotoAlternateRoundedIcon sx={{ mr: 1}}/>
             <Typography fontFamily="Poppins">{t('myaccount.chooseavatar')}</Typography>
         </Button>

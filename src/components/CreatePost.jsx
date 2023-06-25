@@ -11,6 +11,8 @@ import {
   Container,
   Typography,
   MenuItem,
+  Alert,
+  AlertTitle
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateRounded';
@@ -18,13 +20,16 @@ import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateR
 export default function CreatePost() {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
+  const [msg, setMsg] = useState(null)
+  const [error, setError] = useState(null);
 
   const { decodedToken, token, postImg, setPostImg, setFlag, flag } = useContext(DataContext);
   const { theme } = useContext(ThemeContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('handleSubmit');
+    setError(null)
+    setMsg(null)
     const d = new Date()
     const actualDate = `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`
     try {
@@ -34,11 +39,13 @@ export default function CreatePost() {
         formData.append("title", title);
         formData.append("text", text);
         formData.append("timestamp", actualDate);
-        await axios.post("http://localhost:8080/posts", formData, 
+        const res = await axios.post("http://localhost:8080/posts", formData, 
         {headers: {
           'Authorization': `Bearer ${token}`,
         }})
+        setMsg(res.data.msg)
     } catch (error) {
+        setError(error.response.data.error)
         console.error(error)
     }
     setTitle("");
@@ -77,6 +84,15 @@ export default function CreatePost() {
     },
   ];
 
+  const errorHandling = () => {
+    if (error === "Please fill in all fields") {
+        return (
+        <Alert severity="error" variant="outlined">
+        <AlertTitle>{t("create_post.please_fill_in_all_fields")}</AlertTitle>
+        </Alert>)
+    }
+    }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -96,6 +112,14 @@ export default function CreatePost() {
           <Typography component="h1" variant="h5">
             {t("create_post.create_malfunction_info")}
           </Typography>
+          {error? errorHandling() : <></>}
+          {msg === 'post successfully created'? 
+          <Alert severity="success" variant="outlined" color="secondary">
+              <AlertTitle>{t("create_post.post_created_successfully")}</AlertTitle>
+          </Alert> 
+          :
+          <></>
+          }
           <TextField
             fullWidth
             id="category"
@@ -122,7 +146,6 @@ export default function CreatePost() {
             value={text}
           />
           <Box 
-          component="form" 
           noValidate
           >
           <label htmlFor="upload-photo">
@@ -136,31 +159,32 @@ export default function CreatePost() {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-          }}>
-            {postImg ? fileData() : <Typography variant="h5">placeholder image name</Typography>}
+              }}>
+              {postImg ? fileData() : <></>}
               <Button 
-                  component="span"
-                  variant="contained"
-                  color="secondary"
-                  size="large"
-                  sx={{ mt: 2, mb: 2, width: "75%" }}>
-                  <AddPhotoAlternateRoundedIcon sx={{ mr: 1}}/>
-                  <Typography fontFamily="Poppins">Choose pic</Typography>
+                component="span"
+                variant="contained"
+                color="secondary"
+                size="large"
+                fullWidth
+                sx={{mt: 2, width: "250px"}}>
+                <AddPhotoAlternateRoundedIcon sx={{ mr: 1}}/>
+                <Typography fontFamily="Poppins">{t("create_post.chooseimage")}</Typography>
               </Button>
               </Box>
-          </label>
-          </Box>
-          <Button
-            type="submit"
-            variant="contained"
-            color="secondary"
-            size="large"
-            sx={{ mt: 3, mb: 2, width: "50%" }}
-          >
-            <Typography fontFamily="Poppins">
-              {t("create_post.create")}
-            </Typography>
-          </Button>
+            </label>
+            </Box>
+            <Button
+                type="submit"
+                variant="contained"
+                color="secondary"
+                size="large"
+                sx={{mb: 2, width: "250px"}}
+                >
+                <Typography fontFamily="Poppins">
+                  {t("create_post.create")}
+                </Typography>
+            </Button>
         </Box>
       </Container>
     </ThemeProvider>
