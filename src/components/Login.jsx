@@ -10,6 +10,9 @@ import {
   ThemeProvider,
   Container,
   Typography,
+  Backdrop,
+  Alert,
+  AlertTitle
 } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import { ThemeContext } from "../context/ThemeContext";
@@ -65,14 +68,45 @@ export default function Login() {
     setPassword("");
   };
 
+  const errorHandling = () => {
+    if (error === "Please fill all fields") {
+      return (
+      <Alert severity="error" variant="outlined">
+        <AlertTitle>{t("login.missing_field")}</AlertTitle>
+      </Alert>)
+    } else if (error === "Incorrect email") {
+      return (
+      <Alert severity="error" variant="outlined">
+        <AlertTitle>{t("login.incorrect_email")}</AlertTitle>
+      </Alert>) 
+    } else if (error === "Incorrect password")
+      return (
+      <Alert severity="error" variant="outlined">
+        <AlertTitle>{t("login.incorrect_password")}</AlertTitle>
+      </Alert>) 
+  }
+
   return (
     <ThemeProvider theme={theme}>
-      {isLoading ? <CircularIndeterminate /> : <></>}
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
+      <CssBaseline />
+      <Container component="main" maxWidth="xs" 
+      sx={{ display: "flex", 
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center", 
+      minHeight: '100vh' }}>
+      {isLoading ? 
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
+        open = {true}
+        invisible = {true}
+      >
+        <CircularIndeterminate/>
+      </Backdrop> 
+      : 
+      <></>}
         <Box
           sx={{
-            marginTop: 8,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -81,9 +115,10 @@ export default function Login() {
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LoginIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" sx={{ mb: 1}}>
             {t("login.login")}
           </Typography>
+          {error? errorHandling() : <></>}
           <Box component="form" noValidate sx={{ mt: 1 }}>
             {themeToggle ? (
               <TextField

@@ -79,9 +79,9 @@ export default function UserPost() {
                       title={currentUser?.username}
                       subheader={`${t("user_post.posted")} ${post.timestamp}`}
                     />
-                    <CardContent sx={{display: "flex", alignItems: "baseline"}}>
-                      <PlaceIcon/>
-                      <Typography>{currentUser?.city}</Typography>
+                    <CardContent sx={{display: "flex", alignItems: "center", gap: "5px", p: "0 16px 0 16px"}}>
+                      <PlaceIcon fontSize="small"/>
+                      <Typography fontSize="14px">{currentUser?.city}</Typography>
                     </CardContent>
                     {post.imageURL ? <CardMedia
                       component="img"
@@ -89,7 +89,8 @@ export default function UserPost() {
                       height="auto"
                       width="320"
                       image={post?.imageURL}
-                      alt="image"/>
+                      alt="image"
+                      sx={{pt: 1}}/>
                       :
                       <></>
                     }
@@ -97,7 +98,7 @@ export default function UserPost() {
                       <Typography variant="h6">{post.title}</Typography>
                       <Typography variant="body2">{post.text}</Typography>
                     </CardContent>
-                    <CardActions>
+                    <CardActions sx={{p: 1}}>
                       <Badge badgeContent={counterLike} color="secondary">
                         <IconButton aria-label="like" onClick={handleCounterLike}>
                           <ThumbUpAltRoundedIcon />
