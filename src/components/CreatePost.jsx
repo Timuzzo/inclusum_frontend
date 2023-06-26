@@ -1,5 +1,6 @@
 import { DataContext } from "../context/DataContext";
 import { ThemeContext } from "../context/ThemeContext";
+import { ControlContext } from "../context/ControlContext";
 import { useState, useContext } from "react";
 import axios from "axios";
 import {
@@ -12,54 +13,61 @@ import {
   Typography,
   MenuItem,
   Alert,
-  AlertTitle
+  AlertTitle,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateRounded';
+import AddPhotoAlternateRoundedIcon from "@mui/icons-material/AddPhotoAlternateRounded";
 
 export default function CreatePost() {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
-  const [msg, setMsg] = useState(null)
+  const [msg, setMsg] = useState(null);
   const [error, setError] = useState(null);
 
-  const { decodedToken, token, postImg, setPostImg, setFlag, flag } = useContext(DataContext);
+  const { decodedToken, token, postImg, setPostImg, setFlag, flag } =
+    useContext(DataContext);
   const { theme } = useContext(ThemeContext);
+  const { handleClickClose } = useContext(ControlContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null)
-    setMsg(null)
-    const d = new Date()
-    const actualDate = `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`
+    setError(null);
+    setMsg(null);
+    const d = new Date();
+    const actualDate = `${d.getDate()}.${
+      d.getMonth() + 1
+    }.${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
     try {
-        const formData = new FormData();
-        formData.append("image", postImg);
-        formData.append("user_id", decodedToken._id);
-        formData.append("title", title);
-        formData.append("text", text);
-        formData.append("timestamp", actualDate);
-        const res = await axios.post("http://localhost:8080/posts", formData, 
-        {headers: {
-          'Authorization': `Bearer ${token}`,
-        }})
-        setMsg(res.data.msg)
+      const formData = new FormData();
+      formData.append("image", postImg);
+      formData.append("user_id", decodedToken._id);
+      formData.append("title", title);
+      formData.append("text", text);
+      formData.append("timestamp", actualDate);
+      const res = await axios.post("http://localhost:8080/posts", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setMsg(res.data.msg);
     } catch (error) {
-        setError(error.response.data.error)
-        console.error(error)
+      setError(error.response.data.error);
+      console.error(error);
     }
+    setFlag(!flag);
+    setPostImg(null);
     setTitle("");
     setText("");
-    setPostImg(null);
-    setFlag(!flag);
+    if (!error) {
+      setTimeout(() => {
+        handleClickClose();
+      }, 2000);
     }
+  };
 
   const fileData = () => {
-    if (postImg)
-    return (
-    <Typography variant="h5">{postImg.name}</Typography>
-    );
-    }
+    if (postImg) return <Typography variant="h5">{postImg.name}</Typography>;
+  };
 
   const { t } = useTranslation();
 
@@ -86,12 +94,13 @@ export default function CreatePost() {
 
   const errorHandling = () => {
     if (error === "Please fill in all fields") {
-        return (
+      return (
         <Alert severity="error" variant="outlined">
-        <AlertTitle>{t("create_post.please_fill_in_all_fields")}</AlertTitle>
-        </Alert>)
+          <AlertTitle>{t("create_post.please_fill_in_all_fields")}</AlertTitle>
+        </Alert>
+      );
     }
-    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -112,14 +121,16 @@ export default function CreatePost() {
           <Typography component="h1" variant="h5">
             {t("create_post.create_malfunction_info")}
           </Typography>
-          {error? errorHandling() : <></>}
-          {msg === 'post successfully created'? 
-          <Alert severity="success" variant="outlined" color="secondary">
-              <AlertTitle>{t("create_post.post_created_successfully")}</AlertTitle>
-          </Alert> 
-          :
-          <></>
-          }
+          {error ? errorHandling() : <></>}
+          {msg === "post successfully created" ? (
+            <Alert severity="success" variant="outlined" color="secondary">
+              <AlertTitle>
+                {t("create_post.post_created_successfully")}
+              </AlertTitle>
+            </Alert>
+          ) : (
+            <></>
+          )}
           <TextField
             fullWidth
             id="category"
@@ -145,46 +156,51 @@ export default function CreatePost() {
             onChange={(e) => setText(e.target.value)}
             value={text}
           />
-          <Box 
-          noValidate
-          >
-          <label htmlFor="upload-photo">
-              <input  style={{ display: 'none' }} 
-              id="upload-photo"  
-              name="upload-photo"  
-              type="file"
-              onChange={(e) => setPostImg(e.target.files[0])}
+          <Box noValidate>
+            <label htmlFor="upload-photo">
+              <input
+                style={{ display: "none" }}
+                id="upload-photo"
+                name="upload-photo"
+                type="file"
+                onChange={(e) => setPostImg(e.target.files[0])}
               />
-              <Box sx={{p: 1,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              }}>
-              {postImg ? fileData() : <></>}
-              <Button 
-                component="span"
-                variant="contained"
-                color="secondary"
-                size="large"
-                fullWidth
-                sx={{mt: 2, width: "250px"}}>
-                <AddPhotoAlternateRoundedIcon sx={{ mr: 1}}/>
-                <Typography fontFamily="Poppins">{t("create_post.chooseimage")}</Typography>
-              </Button>
+              <Box
+                sx={{
+                  p: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                {postImg ? fileData() : <></>}
+                <Button
+                  component="span"
+                  variant="contained"
+                  color="secondary"
+                  size="large"
+                  fullWidth
+                  sx={{ mt: 2, width: "250px" }}
+                >
+                  <AddPhotoAlternateRoundedIcon sx={{ mr: 1 }} />
+                  <Typography fontFamily="Poppins">
+                    {t("create_post.chooseimage")}
+                  </Typography>
+                </Button>
               </Box>
             </label>
-            </Box>
-            <Button
-                type="submit"
-                variant="contained"
-                color="secondary"
-                size="large"
-                sx={{mb: 2, width: "250px"}}
-                >
-                <Typography fontFamily="Poppins">
-                  {t("create_post.create")}
-                </Typography>
-            </Button>
+          </Box>
+          <Button
+            type="submit"
+            variant="contained"
+            color="secondary"
+            size="large"
+            sx={{ mb: 2, width: "250px" }}
+          >
+            <Typography fontFamily="Poppins">
+              {t("create_post.create")}
+            </Typography>
+          </Button>
         </Box>
       </Container>
     </ThemeProvider>
