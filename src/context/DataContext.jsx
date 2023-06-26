@@ -83,10 +83,10 @@ export default function DataContextProvider(props) {
     };
     await fetch("http://localhost:8080/user/updateuser", {
       method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(databody),
     });
   };

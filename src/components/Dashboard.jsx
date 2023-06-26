@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import { ThemeContext } from "../context/ThemeContext";
 import {
   CssBaseline,
@@ -16,19 +16,12 @@ import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
 import CloseIcon from "@mui/icons-material/Close";
 import UserPost from "./UserPost";
 import CreatePost from "./CreatePost";
+import { ControlContext } from "../context/ControlContext";
 
 export default function Dashboard() {
-  const [open, setOpen] = useState(false);
-
+  const { handleClickOpen, handleClickClose, open, setOpen } =
+    useContext(ControlContext);
   const { theme } = useContext(ThemeContext);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   return (
     <>
@@ -39,7 +32,7 @@ export default function Dashboard() {
           <DialogTitle sx={{ m: 0, p: 2 }}>
             <IconButton
               aria-label="close"
-              onClick={handleClose}
+              onClick={handleClickClose}
               sx={{
                 position: "absolute",
                 right: 8,
