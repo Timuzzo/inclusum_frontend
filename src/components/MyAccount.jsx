@@ -62,7 +62,7 @@ return (
     src={currentUser?.avatar}
     sx={{ width: 100, height: 100, alignSelf: "center" }}
     />
-    <Typography variant="h4" sx={{alignSelf: "center" }}>{currentUser?.username} {t('myaccount.profile')}</Typography>
+    <Typography variant="h4" sx={{alignSelf: "center" }}>{t('myaccount.greeting')}, {currentUser?.username}</Typography>
     <Box 
     component="form" 
     onSubmit={handleSubmitImage} 
