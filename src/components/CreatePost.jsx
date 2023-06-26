@@ -1,5 +1,6 @@
 import { DataContext } from "../context/DataContext";
 import { ThemeContext } from "../context/ThemeContext";
+import { ControlContext } from "../context/ControlContext";
 import { useState, useContext } from "react";
 import axios from "axios";
 import {
@@ -26,6 +27,7 @@ export default function CreatePost() {
   const { decodedToken, token, postImg, setPostImg, setFlag, flag } =
     useContext(DataContext);
   const { theme } = useContext(ThemeContext);
+  const { handleClickClose } = useContext(ControlContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,6 +58,11 @@ export default function CreatePost() {
     setPostImg(null);
     setTitle("");
     setText("");
+    if (!error) {
+      setTimeout(() => {
+        handleClickClose();
+      }, 2000);
+    }
   };
 
   const fileData = () => {
