@@ -15,7 +15,6 @@ import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 import WbSunnyRoundedIcon from "@mui/icons-material/WbSunnyRounded";
 import LanguageIcon from "@mui/icons-material/Language";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { ThemeContext } from "../context/ThemeContext";
@@ -77,25 +76,18 @@ export default function Navbar() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static" sx={{ backgroundColor: "#3476AD" }}>
-          <Toolbar>
+          <Toolbar sx={{ display: "flex", alignItems: "center", justifyContent: "space-between"}}>
             <IconButton
               size="large"
               edge="start"
               color="inherit"
               aria-label="menu"
             >
-              <MenuIcon />
+            <Link to="/" sx={{ cursor: "pointer"}} ><img src="/02_inclusum_white.png" alt="logo" style={{width: "100px"}}/></Link>
             </IconButton>
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{ mr: 2, flexGrow: 1 }}
-            >
-              <Link to="/">Inclusum</Link>
-            </Typography>
-            <LanguageIcon
+            <Box sx={{ display: "flex", alignItems: "center"}}>
+              <LanguageIcon
               sx={{ mr: 2, cursor: "pointer" }}
               onClick={handleClickLanguage}
             />
@@ -123,9 +115,6 @@ export default function Navbar() {
             )}
             {token !== null && (
               <>
-                <Typography sx={{ mr: 2 }}>
-                  {t("navbar.greeting")}, {currentUser?.username}
-                </Typography>
                 {currentUser?.avatar !== "" ? 
                 <Avatar sx={{ cursor: "pointer" }} onClick={handleClickAccount} aria-label="avatar" src={currentUser?.avatar}/>
                 : 
@@ -177,9 +166,9 @@ export default function Navbar() {
                 </Menu>
               </>
             )}
+            </Box>
           </Toolbar>
         </AppBar>
-      </Box>
     </ThemeProvider>
   );
 }
