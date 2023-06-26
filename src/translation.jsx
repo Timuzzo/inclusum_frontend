@@ -44,7 +44,7 @@ i18next
             incorrect_password: 'Incorrect password',
           },
           navbar: {
-            greeting: 'Hello',
+            
             logout: 'Log out',
             login:'Login',
             signup: 'Signup',
@@ -64,6 +64,7 @@ i18next
             strong_password: 'Make sure to use at least 8 characters, one upper case, one lower, one number and one symbol',
           },
           myaccount: {
+            greeting: 'Hello',
             profile: 'profile',
             changeavatar: 'Change avatar',
             chooseavatar: 'Choose picture',
@@ -108,7 +109,6 @@ i18next
             incorrect_password: 'Falsches Passwort',
           },
           navbar: {
-            greeting: 'Hallo',
             logout: 'Ausloggen',
             login:'Anmelden',
             signup: 'Registrieren',
@@ -128,6 +128,7 @@ i18next
             strong_password: 'Passwort sollte mindestens 8 Zeichen lang sein, aus einer Groß- und Kleinbuchstabe und eine Ziffer sowie einem Sonderzeichen bestehen.',
           },
           myaccount: {
+            greeting: 'Hallo',
             profile: 'Profil',
             changeavatar: 'Avatar ändern',
             chooseavatar: 'Bild auswählen',
