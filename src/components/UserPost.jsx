@@ -121,11 +121,10 @@ export default function UserPost() {
                       <Dialog open={open}>
                       <CardMedia onClick={handleImgOpen}
                         component="img"
-                        maxHeight="100vh"
                         width="auto"
                         image={post?.imageURL}
                         alt="image"
-                        sx={{objectFit: "cover", cursor: "pointer" }}
+                        sx={{objectFit: "cover", cursor: "pointer", maxHeight: "100vh"}}
                       />
                       </Dialog>
                       </>
