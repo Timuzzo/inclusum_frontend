@@ -36,6 +36,10 @@ function App() {
           path="/myaccount"
           element={token ? <MyAccount /> : <Navigate to="/login" />}
         />
+        <Route
+          path="*"
+          element={<Navigate to="/"/>}
+        />
       </Routes>
     </>
   );

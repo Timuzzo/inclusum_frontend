@@ -17,6 +17,8 @@ export default function DataContextProvider(props) {
 
   const { decodedToken } = useJwt(token);
 
+  console.log(".split error, our token", decodedToken)
+
   // getUserPosts
   const getUserPosts = async () => {
     try {
@@ -50,27 +52,38 @@ export default function DataContextProvider(props) {
   };
 
   // getCurrentUser
-  const getCurrentUser = () => {
-    const singleUser = allUsers?.data.find(
-      (user) => user?._id === decodedToken?._id
-    );
-    setCurrentUser(singleUser);
-  };
+  // const getCurrentUser = () => {
+  //   const singleUser = allUsers?.data.find(
+  //     (user) => user?._id === decodedToken?._id
+  //   );
+  //   setCurrentUser(singleUser);
+  // };
+
+  const getCurrentUser = async () => {
+    try {
+      const data = await fetch(`http://localhost:8080/user/${decodedToken?._id}`)
+      const user = await data.json()
+      setCurrentUser(user.data)
+      console.log("our current user", user)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   // getAllUsers
-  const getAllUsers = async () => {
-    try {
-      const res = await fetch(`http://localhost:8080/user/getallusers`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await res.json();
-      setAllUsers(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const getAllUsers = async () => {
+  //   try {
+  //     const res = await fetch(`http://localhost:8080/user/getallusers`, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     const data = await res.json();
+  //     setAllUsers(data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   // findAndUpdateUser
   const findAndUpdateUser = async () => {
@@ -91,20 +104,21 @@ export default function DataContextProvider(props) {
     });
   };
 
-  useEffect(() => {
-    getAllUsers();
-  }, [flag]);
+  // useEffect(() => {
+  //   getAllUsers();
+  // }, [flag]);
 
   useEffect(() => {
     getAvatarImage();
   }, [token, currentUser]);
 
   useEffect(() => {
+    if(decodedToken)
     getCurrentUser();
-  }, [allUsers]);
+  }, [flag, decodedToken]);
 
-  // Why do we need this one? The function is trigerred when we are changing the avatar on MyAccount page.
   useEffect(() => {
+    if(avatarImg)
     findAndUpdateUser();
   }, [avatarImg]);
 
