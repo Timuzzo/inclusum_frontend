@@ -134,7 +134,7 @@ export default function Navbar() {
                       {t("navbar.myaccount")}
                     </Typography>
                   </MenuItem>
-                  <MenuItem onClick={() => navigate("/")}>
+                  <MenuItem onClick={() => navigate("/dashboard")}>
                     <Typography color="inherit" >
                       {t("navbar.dashboard")}
                     </Typography>

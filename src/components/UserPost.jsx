@@ -14,6 +14,7 @@ import {
   CssBaseline,
   Badge,
   Box,
+  Dialog,
 } from "@mui/material/";
 import IconButton from "@mui/material/IconButton";
 import ThumbUpAltRoundedIcon from "@mui/icons-material/ThumbUpAltRounded";
@@ -26,7 +27,8 @@ import { useTranslation } from "react-i18next";
 export default function UserPost() {
   const [counterLike, setCounterLike] = useState(0);
   const [counterDislike, setCounterDislike] = useState(0);
-
+  const [open, setOpen] = useState(false);
+  
   const { theme } = useContext(ThemeContext);
   const { loading, posts, getUserPosts, token, currentUser, flag } =
     useContext(DataContext);
@@ -39,7 +41,13 @@ export default function UserPost() {
     setCounterDislike(counterDislike + 1);
   };
 
-  //useEffect(() => {}, [posts]);
+  const handleImgOpen = () => {
+    if(open) 
+      setOpen(false);
+    if(!open)
+      setOpen(true)
+  }
+
 
   useEffect(() => {
     if (token) {
@@ -101,15 +109,28 @@ export default function UserPost() {
                       </Typography>
                     </CardContent>
                     {post.imageURL ? (
-                      <CardMedia
+                      <>
+                      <CardMedia onClick={handleImgOpen}
                         component="img"
-                        position="cover"
-                        height="auto"
-                        width="320"
+                        height="300"
+                        width="300"
                         image={post?.imageURL}
                         alt="image"
-                        sx={{ pt: 1 }}
+                        sx={{ pt: 1, objectFit: "cover", cursor: "pointer" }}
                       />
+                      <Dialog open={open}>
+                      <CardMedia onClick={handleImgOpen}
+                        component="img"
+                        maxHeight="100vh"
+                        width="auto"
+                        image={post?.imageURL}
+                        alt="image"
+                        sx={{objectFit: "cover", cursor: "pointer" }}
+                      />
+                      </Dialog>
+                      </>
+                      
+                      
                     ) : (
                       <></>
                     )}
