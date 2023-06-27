@@ -3,7 +3,6 @@ import {
     Box,
     ThemeProvider,
     Container,
-    Typography,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { ThemeContext } from "../context/ThemeContext";
@@ -13,6 +12,8 @@ import "../Typewriter.css"
 
 export default function Landingpage () {
 const { theme } = useContext(ThemeContext);
+const {t} = useTranslation()
+
     return (
         <ThemeProvider theme={theme}>
         <CssBaseline/>
@@ -29,12 +30,11 @@ const { theme } = useContext(ThemeContext);
             alt="logo"
             src="/02_inclusum.png"
             />
-            <Typewriter
+            <Typewriter 
             options={{
-            strings: "Community app to make cities more inclusive",
+            strings: t("landingpage.slogan"),
             delay: 80,
-            autoStart: true,
-            }}/>
+            autoStart: true}}/>
         </Container>
         </ThemeProvider>
     )

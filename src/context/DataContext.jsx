@@ -9,7 +9,6 @@ export default function DataContextProvider(props) {
   const [loading, setLoading] = useState(false);
   const [avatarImg, setAvatarImg] = useState(null);
   const [postImg, setPostImg] = useState(null);
-  const [allUsers, setAllUsers] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const [flag, setFlag] = useState(false);
 
@@ -51,14 +50,6 @@ export default function DataContextProvider(props) {
     }
   };
 
-  // getCurrentUser
-  // const getCurrentUser = () => {
-  //   const singleUser = allUsers?.data.find(
-  //     (user) => user?._id === decodedToken?._id
-  //   );
-  //   setCurrentUser(singleUser);
-  // };
-
   const getCurrentUser = async () => {
     try {
       const data = await fetch(`http://localhost:8080/user/${decodedToken?._id}`)
@@ -69,21 +60,6 @@ export default function DataContextProvider(props) {
       console.error(error)
     }
   }
-
-  // getAllUsers
-  // const getAllUsers = async () => {
-  //   try {
-  //     const res = await fetch(`http://localhost:8080/user/getallusers`, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     const data = await res.json();
-  //     setAllUsers(data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   // findAndUpdateUser
   const findAndUpdateUser = async () => {
@@ -103,10 +79,6 @@ export default function DataContextProvider(props) {
       body: JSON.stringify(databody),
     });
   };
-
-  // useEffect(() => {
-  //   getAllUsers();
-  // }, [flag]);
 
   useEffect(() => {
     getAvatarImage();
@@ -133,7 +105,6 @@ export default function DataContextProvider(props) {
         getUserPosts,
         decodedToken,
         token,
-        allUsers,
         currentUser,
         setFlag,
         flag,

@@ -71,6 +71,9 @@ i18next
             upload: 'Upload',
             updatesuccess: 'Updated successfully',
             uploadfailure: 'Upload failed, please choose .jpg, .jpeg or .png format',
+          },
+          landingpage: {
+            slogan: 'Social app to make cities more inclusive',
           }
         }
       },
@@ -135,6 +138,9 @@ i18next
             upload: 'Hochladen',
             updatesuccess: 'Das Bild wurde aktualisiert.',
             uploadfailure: 'Hochladen fehlgeschlagen, bitte laden Sie die Datei im .jpg, .jpeg oder .png Format hoch',
+          },
+          landingpage: {
+            slogan: 'Social-App für mehr Inklusion in der Stadt',
           }
         }
       }

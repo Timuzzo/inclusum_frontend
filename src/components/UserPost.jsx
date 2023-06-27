@@ -28,32 +28,41 @@ export default function UserPost() {
   const [counterLike, setCounterLike] = useState(0);
   const [counterDislike, setCounterDislike] = useState(0);
   const [open, setOpen] = useState(false);
-  
+  const [loading, setLoading] = useState(true);
+  const [currentImage, setCurrentImage] = useState(null);
+
   const { theme } = useContext(ThemeContext);
-  const { loading, posts, getUserPosts, token, currentUser, flag } =
-    useContext(DataContext);
+  const { posts, getUserPosts, token, currentUser, flag } = useContext(DataContext);
+
   const { t } = useTranslation();
-  const handleCounterLike = () => {
-    setCounterLike(counterLike + 1);
-  };
 
-  const handleCounterDislike = () => {
-    setCounterDislike(counterDislike + 1);
-  };
+    const handleCounterLike = () => {
+      setCounterLike(counterLike + 1);
+    };
+    
+    const handleCounterDislike = () => {
+      setCounterDislike(counterDislike + 1);
+    };
 
-  const handleImgOpen = () => {
+    const handleImgOpen = (event) => {
     if(open) 
-      setOpen(false);
+    setOpen(false);
+    setCurrentImage(event.target.src)
     if(!open)
-      setOpen(true)
+    setOpen(true)
+    setCurrentImage(event.target.src)
   }
-
 
   useEffect(() => {
     if (token) {
       getUserPosts();
     }
+    setLoading(false)
   }, [token, flag]);
+
+  if(loading) {
+    return null
+  }
 
   return (
     <>
@@ -118,18 +127,7 @@ export default function UserPost() {
                         alt="image"
                         sx={{ pt: 1, objectFit: "cover", cursor: "pointer" }}
                       />
-                      <Dialog open={open}>
-                      <CardMedia onClick={handleImgOpen}
-                        component="img"
-                        width="auto"
-                        image={post?.imageURL}
-                        alt="image"
-                        sx={{objectFit: "cover", cursor: "pointer", maxHeight: "100vh"}}
-                      />
-                      </Dialog>
                       </>
-                      
-                      
                     ) : (
                       <></>
                     )}
@@ -174,6 +172,9 @@ export default function UserPost() {
               )}
             </>
           )}
+        <Dialog open={open}>
+          <img src={currentImage} onClick={handleImgOpen} style={{ cursor: "pointer" }}/>
+        </Dialog>
         </Container>
       </ThemeProvider>
     </>
