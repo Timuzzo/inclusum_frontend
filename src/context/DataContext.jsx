@@ -9,13 +9,14 @@ export default function DataContextProvider(props) {
   const [loading, setLoading] = useState(false);
   const [avatarImg, setAvatarImg] = useState(null);
   const [postImg, setPostImg] = useState(null);
-  const [allUsers, setAllUsers] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const [flag, setFlag] = useState(false);
 
   const { token, login } = useContext(AuthContext);
 
   const { decodedToken } = useJwt(token);
+
+  console.log(".split error, our token", decodedToken)
 
   // getUserPosts
   const getUserPosts = async () => {
@@ -49,28 +50,16 @@ export default function DataContextProvider(props) {
     }
   };
 
-  // getCurrentUser
-  const getCurrentUser = () => {
-    const singleUser = allUsers?.data.find(
-      (user) => user?._id === decodedToken?._id
-    );
-    setCurrentUser(singleUser);
-  };
-
-  // getAllUsers
-  const getAllUsers = async () => {
+  const getCurrentUser = async () => {
     try {
-      const res = await fetch(`http://localhost:8080/user/getallusers`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await res.json();
-      setAllUsers(data);
+      const data = await fetch(`http://localhost:8080/user/${decodedToken?._id}`)
+      const user = await data.json()
+      setCurrentUser(user.data)
+      console.log("our current user", user)
     } catch (error) {
-      console.log(error);
+      console.error(error)
     }
-  };
+  }
 
   // findAndUpdateUser
   const findAndUpdateUser = async () => {
@@ -92,19 +81,16 @@ export default function DataContextProvider(props) {
   };
 
   useEffect(() => {
-    getAllUsers();
-  }, [flag]);
-
-  useEffect(() => {
     getAvatarImage();
   }, [token, currentUser]);
 
   useEffect(() => {
+    if(decodedToken)
     getCurrentUser();
-  }, [allUsers]);
+  }, [flag, decodedToken]);
 
-  // Why do we need this one? The function is trigerred when we are changing the avatar on MyAccount page.
   useEffect(() => {
+    if(avatarImg)
     findAndUpdateUser();
   }, [avatarImg]);
 
@@ -119,7 +105,6 @@ export default function DataContextProvider(props) {
         getUserPosts,
         decodedToken,
         token,
-        allUsers,
         currentUser,
         setFlag,
         flag,

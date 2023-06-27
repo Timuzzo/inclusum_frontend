@@ -5,6 +5,7 @@ export const ThemeContext = createContext();
 
 export default function ThemeContextProvider (props) {
     const [themeToggle, setThemeToggle] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     const theme = createTheme({ 
         palette: {
@@ -29,6 +30,7 @@ useEffect(() => {
     if (darkmode) {
     setThemeToggle(darkmode);
     }
+    setLoading(false)
 }, []);
 
 useEffect(() => {
@@ -36,6 +38,10 @@ useEffect(() => {
     localStorage.setItem("darkmode", themeToggle);
     }
 }, [themeToggle]);
+
+if(loading) {
+    return null
+}
 
     return (
         <ThemeContext.Provider value={{theme, themeToggle, setThemeToggle}}>

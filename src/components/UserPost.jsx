@@ -14,6 +14,7 @@ import {
   CssBaseline,
   Badge,
   Box,
+  Dialog,
 } from "@mui/material/";
 import IconButton from "@mui/material/IconButton";
 import ThumbUpAltRoundedIcon from "@mui/icons-material/ThumbUpAltRounded";
@@ -26,26 +27,42 @@ import { useTranslation } from "react-i18next";
 export default function UserPost() {
   const [counterLike, setCounterLike] = useState(0);
   const [counterDislike, setCounterDislike] = useState(0);
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [currentImage, setCurrentImage] = useState(null);
 
   const { theme } = useContext(ThemeContext);
-  const { loading, posts, getUserPosts, token, currentUser, flag } =
-    useContext(DataContext);
+  const { posts, getUserPosts, token, currentUser, flag } = useContext(DataContext);
+
   const { t } = useTranslation();
-  const handleCounterLike = () => {
-    setCounterLike(counterLike + 1);
-  };
 
-  const handleCounterDislike = () => {
-    setCounterDislike(counterDislike + 1);
-  };
+    const handleCounterLike = () => {
+      setCounterLike(counterLike + 1);
+    };
+    
+    const handleCounterDislike = () => {
+      setCounterDislike(counterDislike + 1);
+    };
 
-  //useEffect(() => {}, [posts]);
+    const handleImgOpen = (event) => {
+    if(open) 
+    setOpen(false);
+    setCurrentImage(event.target.src)
+    if(!open)
+    setOpen(true)
+    setCurrentImage(event.target.src)
+  }
 
   useEffect(() => {
     if (token) {
       getUserPosts();
     }
+    setLoading(false)
   }, [token, flag]);
+
+  if(loading) {
+    return null
+  }
 
   return (
     <>
@@ -101,15 +118,16 @@ export default function UserPost() {
                       </Typography>
                     </CardContent>
                     {post.imageURL ? (
-                      <CardMedia
+                      <>
+                      <CardMedia onClick={handleImgOpen}
                         component="img"
-                        position="cover"
-                        height="auto"
-                        width="320"
+                        height="300"
+                        width="300"
                         image={post?.imageURL}
                         alt="image"
-                        sx={{ pt: 1 }}
+                        sx={{ pt: 1, objectFit: "cover", cursor: "pointer" }}
                       />
+                      </>
                     ) : (
                       <></>
                     )}
@@ -154,6 +172,9 @@ export default function UserPost() {
               )}
             </>
           )}
+        <Dialog open={open}>
+          <img src={currentImage} onClick={handleImgOpen} style={{ cursor: "pointer" }}/>
+        </Dialog>
         </Container>
       </ThemeProvider>
     </>
