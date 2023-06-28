@@ -36,7 +36,6 @@ export default function Signup() {
   
 
   const handleSubmit = async (e) => {
-    console.log("firing handleSubmit");
     e.preventDefault();
 
     setIsLoading(true);
