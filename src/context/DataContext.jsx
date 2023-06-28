@@ -84,12 +84,6 @@ export default function DataContextProvider(props) {
   const getCurrentUser = async () => {
     try {
       const data = await fetch(
-        `http://localhost:8080/user/${decodedToken?._id}`
-      );
-      const user = await data.json();
-      setCurrentUser(user.data);
-      console.log("our current user", user);
-      const data = await fetch(
         `https://inclusum.onrender.com/user/${decodedToken?._id}`
       );
       const user = await data.json();
