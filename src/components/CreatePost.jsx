@@ -44,7 +44,7 @@ export default function CreatePost() {
       formData.append("title", title);
       formData.append("text", text);
       formData.append("timestamp", actualDate);
-      const res = await axios.post("http://localhost:8080/posts", formData, {
+      const res = await axios.post("https://inclusum.onrender.com/posts", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
