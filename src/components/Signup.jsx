@@ -105,7 +105,7 @@ export default function Signup() {
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center", 
-      minHeight: '100vh' }}>
+      minHeight: '90vh' }}>
         <CssBaseline />
         {isLoading ? 
         <Backdrop
