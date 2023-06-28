@@ -34,9 +34,34 @@ export default function CreatePost() {
     setError(null);
     setMsg(null);
     const d = new Date();
-    const actualDate = `${d.getDate()}.${
-      d.getMonth() + 1
-    }.${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
+    const month = () => {
+      if(d.getMonth() < 10) {
+        console.log("return with 0")
+        return (`0${d.getMonth() + 1}`)
+      } else {
+        console.log("return without 0")
+        return d.getMonth() + 1
+      }
+    }
+    const hour = () => {
+      if(d.getHours() < 10) {
+        console.log("return with 0")
+        return (`0${d.getHours()}`)
+      } else {
+        console.log("return without 0")
+        return d.getHours()
+      }
+    }
+    const min = () => {
+      if(d.getMinutes() < 10) {
+        console.log("return with 0")
+        return (`0${d.getMinutes()}`)
+      } else {
+        console.log("return without 0")
+        return d.getMinutes()
+      }
+    }
+    const actualDate = `${d.getDate()}.${month()}.${d.getFullYear()} ${hour()}:${min()}`;
     try {
       const formData = new FormData();
       formData.append("image", postImg);
