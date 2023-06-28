@@ -51,7 +51,7 @@ export default function Signup() {
       points: 0,
     };
 
-    const response = await fetch("http://localhost:8080/user/signup", {
+    const response = await fetch("https://inclusum.onrender.com/user/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(databody),
