@@ -94,7 +94,7 @@ export default function Login() {
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center", 
-      minHeight: '100vh' }}>
+      minHeight: '70vh' }}>
       {isLoading ? 
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
@@ -121,6 +121,7 @@ export default function Login() {
           {error? errorHandling() : <></>}
           <Box component="form" noValidate sx={{ mt: 1 }}>
             {themeToggle ? (
+              <>
               <TextField
                 margin="normal"
                 required
@@ -136,7 +137,24 @@ export default function Login() {
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
               />
+              <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label={t("login.password")}
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              inputProps={{
+                style: { WebkitBoxShadow: "0 0 0 100px #121212 inset" },
+              }}
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              />
+              </>
             ) : (
+              <>
               <TextField
                 margin="normal"
                 required
@@ -147,8 +165,7 @@ export default function Login() {
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
               />
-            )}
-            <TextField
+              <TextField
               margin="normal"
               required
               fullWidth
@@ -160,6 +177,8 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
               value={password}
             />
+            </>
+            )}
           </Box>
           <Button
             type="submit"

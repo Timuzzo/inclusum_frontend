@@ -16,8 +16,6 @@ export default function DataContextProvider(props) {
 
   const { decodedToken } = useJwt(token);
 
-  console.log(".split error, our token", decodedToken)
-
   // getUserPosts
   const getUserPosts = async () => {
     try {
@@ -55,7 +53,6 @@ export default function DataContextProvider(props) {
       const data = await fetch(`https://inclusum.onrender.com/user/${decodedToken?._id}`)
       const user = await data.json()
       setCurrentUser(user.data)
-      console.log("our current user", user)
     } catch (error) {
       console.error(error)
     }
@@ -81,6 +78,7 @@ export default function DataContextProvider(props) {
   };
 
   useEffect(() => {
+    if(!avatarImg)
     getAvatarImage();
   }, [token, currentUser]);
 
