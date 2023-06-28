@@ -16,6 +16,7 @@ import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
 import CloseIcon from "@mui/icons-material/Close";
 import UserPost from "./UserPost";
 import CreatePost from "./CreatePost";
+import DBPost from "./DBPost";
 import { ControlContext } from "../context/ControlContext";
 
 export default function Dashboard() {
@@ -28,6 +29,7 @@ export default function Dashboard() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <UserPost />
+        <DBPost />
         <Dialog open={open} fullScreen>
           <DialogTitle sx={{ m: 0, p: 2 }}>
             <IconButton
