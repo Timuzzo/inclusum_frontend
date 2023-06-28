@@ -94,7 +94,7 @@ export default function Login() {
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center", 
-      minHeight: '100vh' }}>
+      minHeight: '70vh' }}>
       {isLoading ? 
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
