@@ -11,10 +11,13 @@ export default function DataContextProvider(props) {
   const [postImg, setPostImg] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const [flag, setFlag] = useState(false);
+  const [dbFacilitiesData, setDbFacilitiesData] = useState([]);
 
   const { token, login } = useContext(AuthContext);
 
   const { decodedToken } = useJwt(token);
+
+  console.log(".split error, our token", decodedToken);
 
   // getUserPosts
   const getUserPosts = async () => {
@@ -33,14 +36,44 @@ export default function DataContextProvider(props) {
     }
   };
 
+  // get Deutsche Bahn inactive facility data
+
+  const getDbFacilitiesData = async () => {
+    console.log("hit DB API-Endpoint for Facilities");
+    try {
+      const res = await fetch(
+        "https://apis.deutschebahn.com/db-api-marketplace/apis/fasta/v2/facilities",
+        {
+          headers: {
+            Accept: "application/json",
+            "DB-Client-Id": process.env.REACT_APP_ID,
+            "DB-Api-Key": process.env.REACT_APP_KEY,
+          },
+        }
+      );
+      const data = await res.json();
+      const inactiveResults = data?.filter(
+        (result) => result.state === "INACTIVE"
+      );
+      setDbFacilitiesData(inactiveResults);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
   // getAvatarImage
   const getAvatarImage = async () => {
     try {
-      const res = await fetch("https://inclusum.onrender.com/avatar/getavatar", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(
+        "https://inclusum.onrender.com/avatar/getavatar",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const data = await res.json();
       setAvatarImg(data);
     } catch (error) {
@@ -50,13 +83,15 @@ export default function DataContextProvider(props) {
 
   const getCurrentUser = async () => {
     try {
-      const data = await fetch(`https://inclusum.onrender.com/user/${decodedToken?._id}`)
-      const user = await data.json()
-      setCurrentUser(user.data)
+      const data = await fetch(
+        `https://inclusum.onrender.com/user/${decodedToken?._id}`
+      );
+      const user = await data.json();
+      setCurrentUser(user.data);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   // findAndUpdateUser
   const findAndUpdateUser = async () => {
@@ -78,19 +113,26 @@ export default function DataContextProvider(props) {
   };
 
   useEffect(() => {
-    if(!avatarImg)
-    getAvatarImage();
+    getDbFacilitiesData();
+  }, []);
+
+  useEffect(() => {
+    getDbFacilitiesData();
+  }, []);
+
+  useEffect(() => {
+    if (!avatarImg) getAvatarImage();
   }, [token, currentUser]);
 
   useEffect(() => {
-    if(decodedToken)
-    getCurrentUser();
+    if (decodedToken) getCurrentUser();
   }, [flag, decodedToken]);
 
   useEffect(() => {
-    if(avatarImg)
-    findAndUpdateUser();
+    if (avatarImg) findAndUpdateUser();
   }, [avatarImg]);
+
+  console.log("Facilities Data from Deutsche Bahn", dbFacilitiesData);
 
   return (
     <DataContext.Provider
@@ -109,6 +151,7 @@ export default function DataContextProvider(props) {
         findAndUpdateUser,
         postImg,
         setPostImg,
+        dbFacilitiesData,
       }}
     >
       {props.children}
