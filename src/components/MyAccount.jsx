@@ -34,7 +34,7 @@ const handleSubmitImage = async (e) => {
         const formData = new FormData();
         formData.append("picture", avatar, avatar?.name);
         formData.append("user_id", decodedToken._id);
-        const res = await axios.post("http://localhost:8080/avatar/uploadavatar", formData)
+        const res = await axios.post("https://inclusum.onrender.com/avatar/uploadavatar", formData)
         setMsg(res.data.msg)
     } catch (error) {
         setError(error.message);

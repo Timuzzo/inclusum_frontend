@@ -36,7 +36,6 @@ export default function Signup() {
   
 
   const handleSubmit = async (e) => {
-    console.log("firing handleSubmit");
     e.preventDefault();
 
     setIsLoading(true);
@@ -51,7 +50,7 @@ export default function Signup() {
       points: 0,
     };
 
-    const response = await fetch("http://localhost:8080/user/signup", {
+    const response = await fetch("https://inclusum.onrender.com/user/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(databody),
@@ -106,7 +105,7 @@ export default function Signup() {
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center", 
-      minHeight: '100vh' }}>
+      minHeight: '90vh' }}>
         <CssBaseline />
         {isLoading ? 
         <Backdrop
@@ -134,6 +133,7 @@ export default function Signup() {
           {error? errorHandling() : <></>}
           <Box component="form" noValidate sx={{ mt: 1 }}>
             {themeToggle ? (
+              <>
               <TextField
                 margin="normal"
                 required
@@ -149,7 +149,54 @@ export default function Signup() {
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
               />
+              <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label={t('signup.password')}
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              inputProps={{
+                style: { WebkitBoxShadow: "0 0 0 100px #121212 inset" },
+              }}
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="username"
+              label={t('signup.username')}
+              name="username"
+              autoComplete="username"
+              autoFocus
+              inputProps={{
+                style: { WebkitBoxShadow: "0 0 0 100px #121212 inset" },
+              }}
+              onChange={(e) => setUsername(e.target.value)}
+              value={username}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="city"
+              label={t('signup.city')}
+              name="city"
+              autoComplete="city"
+              autoFocus
+              inputProps={{
+                style: { WebkitBoxShadow: "0 0 0 100px #121212 inset" },
+              }}
+              onChange={(e) => setCity(e.target.value)}
+              value={city}
+            />
+            </>
             ) : (
+              <>
               <TextField
                 margin="normal"
                 required
@@ -162,7 +209,6 @@ export default function Signup() {
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
               />
-            )}
             <TextField
               margin="normal"
               required
@@ -198,7 +244,9 @@ export default function Signup() {
               autoFocus
               onChange={(e) => setCity(e.target.value)}
               value={city}
-            />
+              />
+              </>
+          )}
           </Box>
           <Button
             type="submit"

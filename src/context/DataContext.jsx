@@ -22,7 +22,7 @@ export default function DataContextProvider(props) {
   // getUserPosts
   const getUserPosts = async () => {
     try {
-      const res = await fetch("http://localhost:8080/posts", {
+      const res = await fetch("https://inclusum.onrender.com/posts", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -66,11 +66,14 @@ export default function DataContextProvider(props) {
   // getAvatarImage
   const getAvatarImage = async () => {
     try {
-      const res = await fetch("http://localhost:8080/avatar/getavatar", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(
+        "https://inclusum.onrender.com/avatar/getavatar",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const data = await res.json();
       setAvatarImg(data);
     } catch (error) {
@@ -86,6 +89,11 @@ export default function DataContextProvider(props) {
       const user = await data.json();
       setCurrentUser(user.data);
       console.log("our current user", user);
+      const data = await fetch(
+        `https://inclusum.onrender.com/user/${decodedToken?._id}`
+      );
+      const user = await data.json();
+      setCurrentUser(user.data);
     } catch (error) {
       console.error(error);
     }
@@ -100,7 +108,7 @@ export default function DataContextProvider(props) {
       avatar: user?.url,
       _id: user?.user_id,
     };
-    await fetch("http://localhost:8080/user/updateuser", {
+    await fetch("https://inclusum.onrender.com/user/updateuser", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -115,7 +123,11 @@ export default function DataContextProvider(props) {
   }, []);
 
   useEffect(() => {
-    getAvatarImage();
+    getDbFacilitiesData();
+  }, []);
+
+  useEffect(() => {
+    if (!avatarImg) getAvatarImage();
   }, [token, currentUser]);
 
   useEffect(() => {
