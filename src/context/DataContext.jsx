@@ -21,7 +21,7 @@ export default function DataContextProvider(props) {
   // getUserPosts
   const getUserPosts = async () => {
     try {
-      const res = await fetch("http://localhost:8080/posts", {
+      const res = await fetch("https://inclusum.onrender.com/posts", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -38,7 +38,7 @@ export default function DataContextProvider(props) {
   // getAvatarImage
   const getAvatarImage = async () => {
     try {
-      const res = await fetch("http://localhost:8080/avatar/getavatar", {
+      const res = await fetch("https://inclusum.onrender.com/avatar/getavatar", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -52,7 +52,7 @@ export default function DataContextProvider(props) {
 
   const getCurrentUser = async () => {
     try {
-      const data = await fetch(`http://localhost:8080/user/${decodedToken?._id}`)
+      const data = await fetch(`https://inclusum.onrender.com/user/${decodedToken?._id}`)
       const user = await data.json()
       setCurrentUser(user.data)
       console.log("our current user", user)
@@ -70,7 +70,7 @@ export default function DataContextProvider(props) {
       avatar: user?.url,
       _id: user?.user_id,
     };
-    await fetch("http://localhost:8080/user/updateuser", {
+    await fetch("https://inclusum.onrender.com/user/updateuser", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

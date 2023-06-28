@@ -36,11 +36,13 @@ export default function UserPost() {
 
   const { t } = useTranslation();
 
-    const handleCounterLike = () => {
+    const handleCounterLike = (e) => {
+      console.log(e.target)
       setCounterLike(counterLike + 1);
     };
     
-    const handleCounterDislike = () => {
+    const handleCounterDislike = (e) => {
+      console.log(e.target)
       setCounterDislike(counterDislike + 1);
     };
 
