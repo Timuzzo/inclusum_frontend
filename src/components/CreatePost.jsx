@@ -14,15 +14,18 @@ import {
   MenuItem,
   Alert,
   AlertTitle,
+  Backdrop,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import AddPhotoAlternateRoundedIcon from "@mui/icons-material/AddPhotoAlternateRounded";
+import CircularIndeterminate from "./Spinner";
 
 export default function CreatePost() {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [msg, setMsg] = useState(null);
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { decodedToken, token, postImg, setPostImg, setFlag, flag } =
     useContext(DataContext);
@@ -31,33 +34,28 @@ export default function CreatePost() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true)
     setError(null);
     setMsg(null);
     const d = new Date();
     const month = () => {
       if(d.getMonth() < 10) {
-        console.log("return with 0")
         return (`0${d.getMonth() + 1}`)
       } else {
-        console.log("return without 0")
         return d.getMonth() + 1
       }
     }
     const hour = () => {
       if(d.getHours() < 10) {
-        console.log("return with 0")
         return (`0${d.getHours()}`)
       } else {
-        console.log("return without 0")
         return d.getHours()
       }
     }
     const min = () => {
       if(d.getMinutes() < 10) {
-        console.log("return with 0")
         return (`0${d.getMinutes()}`)
       } else {
-        console.log("return without 0")
         return d.getMinutes()
       }
     }
@@ -83,12 +81,14 @@ export default function CreatePost() {
     setPostImg(null);
     setTitle("");
     setText("");
-    if (!error) {
-      setTimeout(() => {
-        handleClickClose();
-      }, 2000);
-    }
+    setIsLoading(false)
   };
+
+  if (msg) {
+    setTimeout(() => {
+      handleClickClose();
+    }, 2000);
+  }
 
   const fileData = () => {
     if (postImg) return <Typography variant="h5">{postImg.name}</Typography>;
@@ -131,6 +131,16 @@ export default function CreatePost() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container component="main" maxWidth="xs">
+      {isLoading ? 
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
+        open = {true}
+        invisible = {true}
+      >
+        <CircularIndeterminate/>
+      </Backdrop> 
+      : 
+      <></>}
         <Box
           component="form"
           noValidate
