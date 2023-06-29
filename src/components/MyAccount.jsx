@@ -12,14 +12,17 @@ import {
     Typography,
     Avatar,
     Alert,
-    AlertTitle
+    AlertTitle,
+    Backdrop,
 } from "@mui/material";
 import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateRounded';
+import CircularIndeterminate from "./Spinner";
 
 export default function MyAccount () {
 const [msg, setMsg] = useState(null)
 const [error, setError] = useState(null);
 const [avatar, setAvatar] = useState(null);
+const [isLoading, setIsLoading] = useState(false);
 
 const { decodedToken, currentUser, findAndUpdateUser} = useContext(DataContext);
 const { theme } = useContext(ThemeContext);
@@ -28,6 +31,7 @@ const {t} = useTranslation()
 
 const handleSubmitImage = async (e) => {
     e.preventDefault();
+    setIsLoading(true)
     setError(null)
     setMsg(null)
     try {
@@ -42,6 +46,7 @@ const handleSubmitImage = async (e) => {
     }
     findAndUpdateUser()
     setAvatar(null)
+    setIsLoading(false)
     }
 
     const errorHandling = () => {
@@ -58,6 +63,16 @@ return (
     <ThemeProvider theme={theme}>
     <CssBaseline/>
     <Container component="main" maxWidth="xs" sx={{mt: 3, display: "flex", flexDirection: "column", gap: "30px"}}>
+    {isLoading ? 
+    <Backdrop
+    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
+    open = {true}
+    invisible = {true}
+    >
+    <CircularIndeterminate/>
+    </Backdrop> 
+    : 
+    <></>}
     <Avatar 
     src={currentUser?.avatar}
     sx={{ width: 100, height: 100, alignSelf: "center" }}

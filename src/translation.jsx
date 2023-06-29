@@ -44,7 +44,6 @@ i18next
             incorrect_password: 'Incorrect password',
           },
           navbar: {
-            
             logout: 'Log out',
             login:'Login',
             signup: 'Signup',
@@ -74,7 +73,11 @@ i18next
           },
           landingpage: {
             slogan: 'Social app to make cities more inclusive',
-          }
+          },
+          dashboard: {
+            user_post: 'User info',
+            db_post: 'DB info'
+          },
         }
       },
       de: {
@@ -141,7 +144,11 @@ i18next
           },
           landingpage: {
             slogan: 'Social-App für mehr Inklusion in der Stadt',
-          }
+          }, 
+          dashboard: {
+            user_post: 'Nutzer-Meldungen',
+            db_post: 'DB-Meldungen'
+          },
         }
       }
     }
