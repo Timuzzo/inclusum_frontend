@@ -13,12 +13,11 @@ export default function DataContextProvider(props) {
   const [flag, setFlag] = useState(false);
   const [dbFacilitiesData, setDbFacilitiesData] = useState([]);
   const [allDBTrainStations, setAllDBTrainStations] = useState([]);
+  const [cityPosts, setCityPosts] = useState([]);
 
   const { token, login } = useContext(AuthContext);
 
   const { decodedToken } = useJwt(token);
-
-  console.log(".split error, our token", decodedToken);
 
   // getUserPosts
   const getUserPosts = async () => {
@@ -30,48 +29,6 @@ export default function DataContextProvider(props) {
       });
       const data = await res.json();
       setPosts(data);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
-  // get all Deutsche Bahn train stations from MongoDB
-  const getAllDBTrainStations = async () => {
-    try {
-      const res = await fetch(
-        "https://inclusum.onrender.com/station/alltrainstations"
-      );
-      const data = await res.json();
-      setAllDBTrainStations(data?.data);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
-  // get Deutsche Bahn inactive facility data
-
-  const getDbFacilitiesData = async () => {
-    console.log("hit DB API-Endpoint for Facilities");
-    try {
-      const res = await fetch(
-        "https://apis.deutschebahn.com/db-api-marketplace/apis/fasta/v2/facilities",
-        {
-          headers: {
-            Accept: "application/json",
-            "DB-Client-Id": process.env.REACT_APP_ID,
-            "DB-Api-Key": process.env.REACT_APP_KEY,
-          },
-        }
-      );
-      const data = await res.json();
-      const inactiveResults = data?.filter(
-        (result) => result.state === "INACTIVE"
-      );
-      setDbFacilitiesData(inactiveResults);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -109,6 +66,23 @@ export default function DataContextProvider(props) {
     }
   };
 
+  const getCityPosts = async () => {
+    try {
+      const data = await fetch(
+        `https://inclusum.onrender.com/posts/${currentUser?.city}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const cityPost = await data.json();
+      setCityPosts(cityPost);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   // findAndUpdateUser
   const findAndUpdateUser = async () => {
     const user = avatarImg?.avatar.find(
@@ -128,9 +102,65 @@ export default function DataContextProvider(props) {
     });
   };
 
+  // get all Deutsche Bahn train stations from MongoDB
+  const getAllDBTrainStations = async () => {
+    try {
+      const res = await fetch(
+        "https://inclusum.onrender.com/station/alltrainstations"
+      );
+      const data = await res.json();
+      setAllDBTrainStations(data?.data);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  // get Deutsche Bahn inactive facility data
+
+  const getDbFacilitiesData = async () => {
+    try {
+      const res = await fetch(
+        "https://apis.deutschebahn.com/db-api-marketplace/apis/fasta/v2/facilities",
+        {
+          headers: {
+            Accept: "application/json",
+            "DB-Client-Id": process.env.REACT_APP_ID,
+            "DB-Api-Key": process.env.REACT_APP_KEY,
+          },
+        }
+      );
+      const data = await res.json();
+      const inactiveResults = data?.filter(
+        (result) => result.state === "INACTIVE"
+      );
+      setDbFacilitiesData(inactiveResults);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  //merge dbFacilitiesData with train Station data from MongoDB
+
+  const mergedDBDataArray = dbFacilitiesData.map((facility) => {
+    const haveEqualStationNumber = (stationNumber) =>
+      stationNumber.stationNumber === facility.stationnumber;
+    const stationNameWithEqualNumber = allDBTrainStations.find(
+      haveEqualStationNumber
+    );
+    return Object.assign({}, facility, stationNameWithEqualNumber);
+  });
+
   useEffect(() => {
     getAllDBTrainStations();
   }, []);
+
+  useEffect(() => {
+    if (currentUser) getCityPosts();
+  }, [currentUser]);
 
   useEffect(() => {
     getDbFacilitiesData();
@@ -147,9 +177,6 @@ export default function DataContextProvider(props) {
   useEffect(() => {
     if (avatarImg) findAndUpdateUser();
   }, [avatarImg]);
-
-  console.log("Facilities Data from Deutsche Bahn", dbFacilitiesData);
-  console.log("train stations from MongoDB", allDBTrainStations);
 
   return (
     <DataContext.Provider
@@ -168,7 +195,8 @@ export default function DataContextProvider(props) {
         findAndUpdateUser,
         postImg,
         setPostImg,
-        dbFacilitiesData,
+        mergedDBDataArray,
+        cityPosts,
       }}
     >
       {props.children}

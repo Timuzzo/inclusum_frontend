@@ -27,7 +27,7 @@ export default function DBPost() {
   const [loading, setLoading] = useState(true);
 
   const { theme } = useContext(ThemeContext);
-  const { dbFacilitiesData } = useContext(DataContext);
+  const { mergedDBDataArray } = useContext(DataContext);
 
   const { t } = useTranslation();
 
@@ -39,7 +39,7 @@ export default function DBPost() {
     setCounterDislike(counterDislike + 1);
   };
 
-  console.log("dbFacilitiesData on DB Post", dbFacilitiesData);
+  console.log("mergedDBDataArray on DB Post", mergedDBDataArray);
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -49,8 +49,8 @@ export default function DBPost() {
     <Typography>{t("user_post.loading")}...</Typography>
     ) : ( */}
           <>
-            {dbFacilitiesData?.length ? (
-              dbFacilitiesData.map((post) => (
+            {mergedDBDataArray?.length ? (
+              mergedDBDataArray.map((post) => (
                 <Card
                   sx={{ mt: 2, border: "2px solid #0f6B63" }}
                   key={post?.equipmentnumber}
@@ -84,7 +84,7 @@ export default function DBPost() {
                     }}
                   >
                     <PlaceIcon fontSize="small" />
-                    <Typography fontSize="14px">City</Typography>
+                    <Typography fontSize="14px">{post?.stationName}</Typography>
                   </CardContent>
                   <CardContent>
                     <Typography variant="h6">{post.type}</Typography>
