@@ -14,9 +14,11 @@ import {
   MenuItem,
   Alert,
   AlertTitle,
+  Backdrop,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import AddPhotoAlternateRoundedIcon from "@mui/icons-material/AddPhotoAlternateRounded";
+import CircularIndeterminate from "./Spinner";
 
 export default function CreatePost() {
   const [title, setTitle] = useState("");
@@ -129,6 +131,16 @@ export default function CreatePost() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container component="main" maxWidth="xs">
+      {isLoading ? 
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
+        open = {true}
+        invisible = {true}
+      >
+        <CircularIndeterminate/>
+      </Backdrop> 
+      : 
+      <></>}
         <Box
           component="form"
           noValidate
