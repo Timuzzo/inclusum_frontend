@@ -12,6 +12,7 @@ export default function DataContextProvider(props) {
   const [currentUser, setCurrentUser] = useState(null);
   const [flag, setFlag] = useState(false);
   const [dbFacilitiesData, setDbFacilitiesData] = useState([]);
+  const [allDBTrainStations, setAllDBTrainStations] = useState([]);
 
   const { token, login } = useContext(AuthContext);
 
@@ -29,6 +30,21 @@ export default function DataContextProvider(props) {
       });
       const data = await res.json();
       setPosts(data);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  // get all Deutsche Bahn train stations from MongoDB
+  const getAllDBTrainStations = async () => {
+    try {
+      const res = await fetch(
+        "https://inclusum.onrender.com/station/alltrainstations"
+      );
+      const data = await res.json();
+      setAllDBTrainStations(data?.data);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -113,7 +129,7 @@ export default function DataContextProvider(props) {
   };
 
   useEffect(() => {
-    getDbFacilitiesData();
+    getAllDBTrainStations();
   }, []);
 
   useEffect(() => {
@@ -133,6 +149,7 @@ export default function DataContextProvider(props) {
   }, [avatarImg]);
 
   console.log("Facilities Data from Deutsche Bahn", dbFacilitiesData);
+  console.log("train stations from MongoDB", allDBTrainStations);
 
   return (
     <DataContext.Provider
