@@ -32,8 +32,7 @@ export default function UserPost() {
   const [currentImage, setCurrentImage] = useState(null);
 
   const { theme } = useContext(ThemeContext);
-  const { posts, getUserPosts, token, currentUser, flag, cityPosts } =
-    useContext(DataContext);
+  const { getUserPosts, token, flag, cityPosts } = useContext(DataContext);
 
   const { t } = useTranslation();
 
@@ -82,8 +81,8 @@ export default function UserPost() {
                   >
                     <CardHeader
                       avatar={
-                        currentUser?.avatar !== "" ? (
-                          <Avatar src={currentUser?.avatar} />
+                        post?.avatar !== "" ? (
+                          <Avatar src={post?.avatar} />
                         ) : (
                           <AccountCircleIcon fontSize="large" />
                         )
@@ -102,7 +101,7 @@ export default function UserPost() {
                           />
                         )
                       }
-                      title={currentUser?.username}
+                      title={post?.username}
                       subheader={`${t("user_post.posted")} ${post.timestamp}`}
                     />
                     <CardContent
@@ -114,9 +113,7 @@ export default function UserPost() {
                       }}
                     >
                       <PlaceIcon fontSize="small" />
-                      <Typography fontSize="14px">
-                        {currentUser?.city}
-                      </Typography>
+                      <Typography fontSize="14px">{post?.city}</Typography>
                     </CardContent>
                     {post.imageURL ? (
                       <>
