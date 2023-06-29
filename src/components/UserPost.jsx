@@ -32,38 +32,36 @@ export default function UserPost() {
   const [currentImage, setCurrentImage] = useState(null);
 
   const { theme } = useContext(ThemeContext);
-  const { posts, getUserPosts, token, currentUser, flag } = useContext(DataContext);
+  const { getUserPosts, token, flag, cityPosts } = useContext(DataContext);
 
   const { t } = useTranslation();
 
-    const handleCounterLike = (e) => {
-      console.log(e.target)
-      setCounterLike(counterLike + 1);
-    };
-    
-    const handleCounterDislike = (e) => {
-      console.log(e.target)
-      setCounterDislike(counterDislike + 1);
-    };
+  const handleCounterLike = (e) => {
+    console.log(e.target);
+    setCounterLike(counterLike + 1);
+  };
 
-    const handleImgOpen = (event) => {
-    if(open) 
-    setOpen(false);
-    setCurrentImage(event.target.src)
-    if(!open)
-    setOpen(true)
-    setCurrentImage(event.target.src)
-  }
+  const handleCounterDislike = (e) => {
+    console.log(e.target);
+    setCounterDislike(counterDislike + 1);
+  };
+
+  const handleImgOpen = (event) => {
+    if (open) setOpen(false);
+    setCurrentImage(event.target.src);
+    if (!open) setOpen(true);
+    setCurrentImage(event.target.src);
+  };
 
   useEffect(() => {
     if (token) {
       getUserPosts();
     }
-    setLoading(false)
+    setLoading(false);
   }, [token, flag]);
 
-  if(loading) {
-    return null
+  if (loading) {
+    return null;
   }
 
   return (
@@ -75,16 +73,16 @@ export default function UserPost() {
             <Typography>{t("user_post.loading")}...</Typography>
           ) : (
             <>
-              {posts.length ? (
-                posts.map((post) => (
+              {cityPosts.length ? (
+                cityPosts.map((post) => (
                   <Card
                     sx={{ mt: 2, border: "2px solid #0f6B63" }}
                     key={post._id}
                   >
                     <CardHeader
                       avatar={
-                        currentUser?.avatar !== "" ? (
-                          <Avatar src={currentUser?.avatar} />
+                        post?.avatar !== "" ? (
+                          <Avatar src={post?.avatar} />
                         ) : (
                           <AccountCircleIcon fontSize="large" />
                         )
@@ -103,7 +101,7 @@ export default function UserPost() {
                           />
                         )
                       }
-                      title={currentUser?.username}
+                      title={post?.username}
                       subheader={`${t("user_post.posted")} ${post.timestamp}`}
                     />
                     <CardContent
@@ -115,20 +113,19 @@ export default function UserPost() {
                       }}
                     >
                       <PlaceIcon fontSize="small" />
-                      <Typography fontSize="14px">
-                        {currentUser?.city}
-                      </Typography>
+                      <Typography fontSize="14px">{post?.city}</Typography>
                     </CardContent>
                     {post.imageURL ? (
                       <>
-                      <CardMedia onClick={handleImgOpen}
-                        component="img"
-                        height="300"
-                        width="300"
-                        image={post?.imageURL}
-                        alt="image"
-                        sx={{ pt: 1, objectFit: "cover", cursor: "pointer" }}
-                      />
+                        <CardMedia
+                          onClick={handleImgOpen}
+                          component="img"
+                          height="300"
+                          width="300"
+                          image={post?.imageURL}
+                          alt="image"
+                          sx={{ pt: 1, objectFit: "cover", cursor: "pointer" }}
+                        />
                       </>
                     ) : (
                       <></>
@@ -174,9 +171,13 @@ export default function UserPost() {
               )}
             </>
           )}
-        <Dialog open={open}>
-          <img src={currentImage} onClick={handleImgOpen} style={{ cursor: "pointer" }}/>
-        </Dialog>
+          <Dialog open={open}>
+            <img
+              src={currentImage}
+              onClick={handleImgOpen}
+              style={{ cursor: "pointer" }}
+            />
+          </Dialog>
         </Container>
       </ThemeProvider>
     </>
