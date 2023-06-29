@@ -22,7 +22,7 @@ export default function DataContextProvider(props) {
   // getUserPosts
   const getUserPosts = async () => {
     try {
-      const res = await fetch("http://localhost:8080/posts", {
+      const res = await fetch("https://inclusum.onrender.com/posts", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -68,9 +68,8 @@ export default function DataContextProvider(props) {
 
   const getCityPosts = async () => {
     try {
-      console.log("HEREEE", currentUser);
       const data = await fetch(
-        `http://localhost:8080/posts/${currentUser?.city}`,
+        `https://inclusum.onrender.com/posts/${currentUser?.city}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -78,14 +77,11 @@ export default function DataContextProvider(props) {
         }
       );
       const cityPost = await data.json();
-      console.log("AAAAAAA", cityPost);
       setCityPosts(cityPost);
     } catch (error) {
       console.error(error);
     }
   };
-
-  console.log("cityPosts", cityPosts);
 
   // findAndUpdateUser
   const findAndUpdateUser = async () => {
@@ -124,7 +120,6 @@ export default function DataContextProvider(props) {
   // get Deutsche Bahn inactive facility data
 
   const getDbFacilitiesData = async () => {
-    console.log("hit DB API-Endpoint for Facilities");
     try {
       const res = await fetch(
         "https://apis.deutschebahn.com/db-api-marketplace/apis/fasta/v2/facilities",
