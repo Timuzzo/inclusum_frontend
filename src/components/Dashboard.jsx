@@ -15,7 +15,6 @@ import {
   Container,
   Typography
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
 import CloseIcon from "@mui/icons-material/Close";
 import UserPost from "./UserPost";
@@ -101,9 +100,6 @@ export default function Dashboard() {
               <CreateRoundedIcon />
             </Fab>
             <Box sx={{ flexGrow: 1 }} />
-            <IconButton color="inherit">
-              <SearchIcon />
-            </IconButton>
           </Toolbar>
         </AppBar>
       </ThemeProvider>
