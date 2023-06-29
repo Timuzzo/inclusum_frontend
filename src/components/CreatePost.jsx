@@ -27,38 +27,45 @@ export default function CreatePost() {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { decodedToken, token, postImg, setPostImg, setFlag, flag } =
-    useContext(DataContext);
+  const {
+    decodedToken,
+    token,
+    postImg,
+    setPostImg,
+    setFlag,
+    flag,
+    currentUser,
+  } = useContext(DataContext);
   const { theme } = useContext(ThemeContext);
   const { handleClickClose } = useContext(ControlContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true)
+    setIsLoading(true);
     setError(null);
     setMsg(null);
     const d = new Date();
     const month = () => {
-      if(d.getMonth() < 10) {
-        return (`0${d.getMonth() + 1}`)
+      if (d.getMonth() < 10) {
+        return `0${d.getMonth() + 1}`;
       } else {
-        return d.getMonth() + 1
+        return d.getMonth() + 1;
       }
-    }
+    };
     const hour = () => {
-      if(d.getHours() < 10) {
-        return (`0${d.getHours()}`)
+      if (d.getHours() < 10) {
+        return `0${d.getHours()}`;
       } else {
-        return d.getHours()
+        return d.getHours();
       }
-    }
+    };
     const min = () => {
-      if(d.getMinutes() < 10) {
-        return (`0${d.getMinutes()}`)
+      if (d.getMinutes() < 10) {
+        return `0${d.getMinutes()}`;
       } else {
-        return d.getMinutes()
+        return d.getMinutes();
       }
-    }
+    };
     const actualDate = `${d.getDate()}.${month()}.${d.getFullYear()} ${hour()}:${min()}`;
     try {
       const formData = new FormData();
@@ -67,7 +74,8 @@ export default function CreatePost() {
       formData.append("title", title);
       formData.append("text", text);
       formData.append("timestamp", actualDate);
-      const res = await axios.post("https://inclusum.onrender.com/posts", formData, {
+      formData.append("city", currentUser.city);
+      const res = await axios.post("http://localhost:8080/posts", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -81,7 +89,7 @@ export default function CreatePost() {
     setPostImg(null);
     setTitle("");
     setText("");
-    setIsLoading(false)
+    setIsLoading(false);
   };
 
   if (msg) {
@@ -131,16 +139,17 @@ export default function CreatePost() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container component="main" maxWidth="xs">
-      {isLoading ? 
-      <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
-        open = {true}
-        invisible = {true}
-      >
-        <CircularIndeterminate/>
-      </Backdrop> 
-      : 
-      <></>}
+        {isLoading ? (
+          <Backdrop
+            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={true}
+            invisible={true}
+          >
+            <CircularIndeterminate />
+          </Backdrop>
+        ) : (
+          <></>
+        )}
         <Box
           component="form"
           noValidate

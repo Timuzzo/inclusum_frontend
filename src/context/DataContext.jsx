@@ -13,6 +13,7 @@ export default function DataContextProvider(props) {
   const [flag, setFlag] = useState(false);
   const [dbFacilitiesData, setDbFacilitiesData] = useState([]);
   const [allDBTrainStations, setAllDBTrainStations] = useState([]);
+  const [cityPosts, setCityPosts] = useState([]);
 
   const { token, login } = useContext(AuthContext);
 
@@ -21,7 +22,7 @@ export default function DataContextProvider(props) {
   // getUserPosts
   const getUserPosts = async () => {
     try {
-      const res = await fetch("https://inclusum.onrender.com/posts", {
+      const res = await fetch("http://localhost:8080/posts", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -64,6 +65,27 @@ export default function DataContextProvider(props) {
       console.error(error);
     }
   };
+
+  const getCityPosts = async () => {
+    try {
+      console.log("HEREEE", currentUser);
+      const data = await fetch(
+        `http://localhost:8080/posts/${currentUser?.city}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const cityPost = await data.json();
+      console.log("AAAAAAA", cityPost);
+      setCityPosts(cityPost);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  console.log("cityPosts", cityPosts);
 
   // findAndUpdateUser
   const findAndUpdateUser = async () => {
@@ -142,6 +164,10 @@ export default function DataContextProvider(props) {
   }, []);
 
   useEffect(() => {
+    if (currentUser) getCityPosts();
+  }, [currentUser]);
+
+  useEffect(() => {
     getDbFacilitiesData();
   }, []);
 
@@ -175,6 +201,7 @@ export default function DataContextProvider(props) {
         postImg,
         setPostImg,
         mergedDBDataArray,
+        cityPosts,
       }}
     >
       {props.children}
