@@ -27,9 +27,12 @@ export default function DBPost() {
   const [loading, setLoading] = useState(true);
 
   const { theme } = useContext(ThemeContext);
-  const { mergedDBDataArray } = useContext(DataContext);
+  const { mergedDBDataArray, currentUser } = useContext(DataContext);
 
   const { t } = useTranslation();
+  const filteredDBPosts = mergedDBDataArray?.filter((post) =>
+    post?.stationName.includes(currentUser.city)
+  );
 
   const handleCounterLike = () => {
     setCounterLike(counterLike + 1);
@@ -40,6 +43,7 @@ export default function DBPost() {
   };
 
   console.log("mergedDBDataArray on DB Post", mergedDBDataArray);
+  console.log("filteredDBPosts", filteredDBPosts);
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -49,8 +53,8 @@ export default function DBPost() {
     <Typography>{t("user_post.loading")}...</Typography>
     ) : ( */}
           <>
-            {mergedDBDataArray?.length ? (
-              mergedDBDataArray.map((post) => (
+            {filteredDBPosts.length ? (
+              filteredDBPosts.map((post) => (
                 <Card
                   sx={{ mt: 2, border: "2px solid #0f6B63" }}
                   key={post?.equipmentnumber}
