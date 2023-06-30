@@ -14,7 +14,6 @@ export default function DataContextProvider(props) {
   const [dbFacilitiesData, setDbFacilitiesData] = useState([]);
   const [allDBTrainStations, setAllDBTrainStations] = useState([]);
   const [cityPosts, setCityPosts] = useState([]);
-  const [germanCities, setGermanCities] = useState({});
 
   const { token, login } = useContext(AuthContext);
 
@@ -22,6 +21,7 @@ export default function DataContextProvider(props) {
 
   // getUserPosts
   const getUserPosts = async () => {
+    setLoading(true)
     try {
       const res = await fetch("https://inclusum.onrender.com/posts", {
         headers: {
@@ -33,7 +33,6 @@ export default function DataContextProvider(props) {
       setLoading(false);
     } catch (error) {
       console.log(error);
-      setLoading(false);
     }
   };
 
@@ -69,6 +68,7 @@ export default function DataContextProvider(props) {
 
   // get posts based on current users city in profile
   const getCityPosts = async () => {
+    setLoading(true)
     try {
       const data = await fetch(
         `https://inclusum.onrender.com/posts/${currentUser?.city}`,
@@ -80,6 +80,7 @@ export default function DataContextProvider(props) {
       );
       const cityPost = await data.json();
       setCityPosts(cityPost);
+      setLoading(false)
     } catch (error) {
       console.error(error);
     }
@@ -106,6 +107,7 @@ export default function DataContextProvider(props) {
 
   // get all Deutsche Bahn train stations from MongoDB
   const getAllDBTrainStations = async () => {
+    setLoading(true)
     try {
       const res = await fetch(
         "https://inclusum.onrender.com/station/alltrainstations"
@@ -115,13 +117,13 @@ export default function DataContextProvider(props) {
       setLoading(false);
     } catch (error) {
       console.log(error);
-      setLoading(false);
     }
   };
 
   // get Deutsche Bahn inactive facility data
 
   const getDbFacilitiesData = async () => {
+    setLoading(true)
     try {
       const res = await fetch(
         "https://apis.deutschebahn.com/db-api-marketplace/apis/fasta/v2/facilities",
@@ -141,7 +143,6 @@ export default function DataContextProvider(props) {
       setLoading(false);
     } catch (error) {
       console.log(error);
-      setLoading(false);
     }
   };
 
@@ -155,28 +156,6 @@ export default function DataContextProvider(props) {
     );
     return Object.assign({}, facility, stationNameWithEqualNumber);
   });
-
-  // fetch all available German cities
-
-  const getGermanCities = async () => {
-    try {
-      const res = await fetch(
-        "https://gist.githubusercontent.com/Occator/43f453889148735abb69dd6cf49635ed/raw/9b1dd9d2544c26282ed53a31db8236bfd6d6cc45/german_cities.json  "
-      );
-
-      const data = await res.json();
-      console.log("data", data);
-      setGermanCities(data);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getGermanCities();
-  }, []);
 
   useEffect(() => {
     getAllDBTrainStations();
@@ -202,8 +181,6 @@ export default function DataContextProvider(props) {
     if (avatarImg) findAndUpdateUser();
   }, [avatarImg]);
 
-  console.log("german cities", germanCities);
-
   return (
     <DataContext.Provider
       value={{
@@ -223,6 +200,7 @@ export default function DataContextProvider(props) {
         setPostImg,
         mergedDBDataArray,
         cityPosts,
+        posts,
       }}
     >
       {props.children}

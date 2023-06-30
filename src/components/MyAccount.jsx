@@ -1,6 +1,6 @@
 import { ThemeContext } from "../context/ThemeContext";
 import { DataContext } from "../context/DataContext";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import {
@@ -8,23 +8,45 @@ import {
     Box,
     ThemeProvider,
     Button,
-    Container,
     Typography,
     Avatar,
     Alert,
     AlertTitle,
     Backdrop,
+    Card,
+    CardHeader,
+    CardMedia,
+    CardContent,
+    CardActions,
+    Container,
+    Badge,
+    Dialog,
+    MenuItem,
+    Menu
 } from "@mui/material";
 import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateRounded';
 import CircularIndeterminate from "./Spinner";
+import IconButton from "@mui/material/IconButton";
+import ThumbUpAltRoundedIcon from "@mui/icons-material/ThumbUpAltRounded";
+import ThumbDownAltRoundedIcon from "@mui/icons-material/ThumbDownAltRounded";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
+import PlaceIcon from "@mui/icons-material/Place";
+import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 
 export default function MyAccount () {
 const [msg, setMsg] = useState(null)
 const [error, setError] = useState(null);
 const [avatar, setAvatar] = useState(null);
 const [isLoading, setIsLoading] = useState(false);
+const [counterLike, setCounterLike] = useState(0);
+const [counterDislike, setCounterDislike] = useState(0);
+const [open, setOpen] = useState(false);
+const [currentImage, setCurrentImage] = useState(null);
+const [anchorEl, setAnchorEl] = useState();
+const openMenu = Boolean(anchorEl);
 
-const { decodedToken, currentUser, findAndUpdateUser} = useContext(DataContext);
+const { decodedToken, currentUser, findAndUpdateUser, posts, getUserPosts, token, flag} = useContext(DataContext);
 const { theme } = useContext(ThemeContext);
 
 const {t} = useTranslation()
@@ -58,11 +80,43 @@ const handleSubmitImage = async (e) => {
     }
     }
 
+const handleCounterLike = (e) => {
+    console.log(e.target);
+    setCounterLike(counterLike + 1);
+    };
+
+    const handleCounterDislike = (e) => {
+    console.log(e.target);
+    setCounterDislike(counterDislike + 1);
+    };
+
+    const handleImgOpen = (event) => {
+    if (open) setOpen(false);
+    setCurrentImage(event.target.src);
+    if (!open) setOpen(true);
+    setCurrentImage(event.target.src);
+    };
+
+const handleClickMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+    };
+
+const handleCloseMenu = () => {
+setAnchorEl(null);
+};
+
+useEffect(() => {
+    if (token) {
+        getUserPosts();
+    }
+    setIsLoading(false);
+    }, [token, flag]);
+
 return (
     <>
     <ThemeProvider theme={theme}>
     <CssBaseline/>
-    <Container component="main" maxWidth="xs" sx={{mt: 3, display: "flex", flexDirection: "column", gap: "30px"}}>
+    <Container component="main" maxWidth="xs" sx={{mt: 3, mb: 3, display: "flex", flexDirection: "column", gap: "30px"}}>
     {isLoading ? 
     <Backdrop
     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
@@ -128,6 +182,136 @@ return (
         </Box>
     </label>
     </Box>
+        <>
+        <Box sx={{alignSelf: "center"}}>
+            <Badge badgeContent={posts.length} color="secondary" style={{ fontSize: "15px" }}>
+                <Typography variant="h4" >{t('myaccount.myposts')}</Typography>
+            </Badge>
+        </Box>
+            {posts.length ? (
+            posts
+            .slice(0)
+            .reverse()
+            .map((post) => (
+                <Card
+                sx={{ border: "2px solid #0f6B63" }}
+                key={post._id}
+                >
+                <CardHeader
+                    avatar={
+                    post?.avatar !== "" ? (
+                        <Avatar src={post?.avatar} />
+                    ) : (
+                        <AccountCircleIcon fontSize="large" />
+                    )
+                    }
+                    action={
+                    <IconButton onClick={handleClickMenu}>
+                        <MoreVertRoundedIcon/>
+                    </IconButton>}
+                    title={post?.username}
+                    subheader={`${t("user_post.posted")} ${post.timestamp}`}
+                />
+                <Menu
+                anchorEl={anchorEl}
+                onClose={handleCloseMenu}
+                open={openMenu}
+                >
+                    <MenuItem>
+                    {t("myaccount.delete")}
+                    </MenuItem>
+                    <MenuItem>
+                    {t("myaccount.edit")}
+                    </MenuItem>
+                </Menu>
+                <CardContent
+                    sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    p: "0 16px 0 16px",
+                    }}
+                >
+                    <PlaceIcon fontSize="small" />
+                    <Typography fontSize="14px">{post?.city}</Typography>
+                </CardContent>
+                {post.imageURL ? (
+                    <>
+                    <CardMedia
+                        onClick={handleImgOpen}
+                        component="img"
+                        height="300"
+                        width="300"
+                        image={post?.imageURL}
+                        alt="image"
+                        sx={{ pt: 1, objectFit: "cover", cursor: "pointer" }}
+                    />
+                    </>
+                ) : (
+                    <></>
+                )}
+                <CardContent>
+                    <Typography variant="h6">{post.title}</Typography>
+                    <Typography variant="body2">{post.text}</Typography>
+                </CardContent>
+                <CardActions sx={{ p: 1, display: "flex", justifyContent: "space-between"}}>
+                    <Box sx={{display: "flex", gap: "10px"}}>
+                    <Badge badgeContent={counterLike} color="secondary">
+                    <IconButton
+                        aria-label="like"
+                        onClick={handleCounterLike}
+                    >
+                        <ThumbUpAltRoundedIcon />
+                    </IconButton>
+                    </Badge>
+                    <Badge badgeContent={counterDislike} color="secondary">
+                    <IconButton
+                        aria-label="dislike"
+                        onClick={handleCounterDislike}
+                    >
+                        <ThumbDownAltRoundedIcon />
+                    </IconButton>
+                    </Badge>
+                    </Box>
+                    {
+                    counterLike >= 5 && counterLike > counterDislike ? (
+                        <CheckCircleOutlineRoundedIcon
+                        aria-label="verified"
+                        color="success"
+                        fontSize="large"
+                        />
+                    ) : (
+                        <CheckCircleOutlineRoundedIcon
+                        aria-label="verified"
+                        fontSize="large"
+                        />
+                    )}
+                </CardActions>
+                </Card>
+            ))
+            ) : (
+            <Box
+                sx={{
+                marginTop: 25,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                }}
+            >
+                <Typography variant="h5" style={{ color: "red" }}>
+                {t("user_post.no_posts_found")}
+                </Typography>
+            </Box>
+            )}
+        </>
+        <Dialog open={open}>
+        <img
+            src={currentImage}
+            onClick={handleImgOpen}
+            style={{ cursor: "pointer" }}
+        />
+        </Dialog>
     </Container>
     </ThemeProvider>
     </>

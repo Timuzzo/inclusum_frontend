@@ -24,6 +24,8 @@ i18next
             create: 'Create',
             chooseimage: 'Choose image',
             createdsuccess: 'Created successfully',
+            city: "City",
+            please_select_the_city: 'Please select the city',
             please_select_category: 'Please select a category',
             please_describe_the_issue: 'Please describe the issue',
             please_fill_in_all_fields: 'Please fill in all fields',
@@ -70,6 +72,9 @@ i18next
             upload: 'Upload',
             updatesuccess: 'Updated successfully',
             uploadfailure: 'Upload failed, please choose .jpg, .jpeg or .png format',
+            myposts: 'My posts',
+            delete: 'Delete',
+            edit: 'Edit'
           },
           landingpage: {
             slogan: 'Social app to make cities more inclusive',
@@ -95,6 +100,8 @@ i18next
             create: 'Erstellen',
             chooseimage: 'Bild auswählen',
             createdsuccess: 'Erfolgreich erstellt',
+            city: "Stadt",
+            please_select_the_city: 'Bitte wählen Sie die Start aus',
             please_select_category: 'Bitte wählen Sie eine Kategorie.',
             please_describe_the_issue: 'Bitte beschreiben Sie die Störungsmeldung.',
             please_fill_in_all_fields: 'Bitte füllen Sie alle Felder aus',
@@ -141,6 +148,9 @@ i18next
             upload: 'Hochladen',
             updatesuccess: 'Das Bild wurde aktualisiert.',
             uploadfailure: 'Hochladen fehlgeschlagen, bitte laden Sie die Datei im .jpg, .jpeg oder .png Format hoch',
+            myposts: 'Meine Posts',
+            delete: 'Löschen',
+            edit: 'Bearbeiten'
           },
           landingpage: {
             slogan: 'Social-App für mehr Inklusion in der Stadt',

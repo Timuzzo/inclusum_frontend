@@ -12,7 +12,8 @@ import {
   Typography,
   Backdrop, 
   Alert,
-  AlertTitle
+  AlertTitle,
+  Autocomplete,
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { ThemeContext } from "../context/ThemeContext";
@@ -34,10 +35,11 @@ export default function Signup() {
   const navigate = useNavigate()
   const {t} = useTranslation()
   
+  const cities = require('../germanCityNames.json');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log(e.target.value)
     setIsLoading(true);
     setError(null);
 
@@ -97,6 +99,7 @@ export default function Signup() {
       </Alert>)
     }
   }
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -179,22 +182,23 @@ export default function Signup() {
               onChange={(e) => setUsername(e.target.value)}
               value={username}
             />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="city"
-              label={t('signup.city')}
-              name="city"
-              autoComplete="city"
-              autoFocus
-              inputProps={{
-                style: { WebkitBoxShadow: "0 0 0 100px #121212 inset" },
-              }}
-              onChange={(e) => setCity(e.target.value)}
-              value={city}
-            />
-            </>
+            <Autocomplete
+            disablePortal
+            id="city"
+            options={cities}
+            getOptionLabel={(option) => option.name || ""}
+            fullWidth
+            renderInput={(params, index) => 
+            <TextField 
+            {...params} 
+            required
+            label={t('signup.city')}
+            margin="normal"
+            onChange={(e) => setCity(e.target.value)}
+            value={city}
+            />}
+          />
+          </>
             ) : (
               <>
               <TextField
@@ -233,19 +237,22 @@ export default function Signup() {
               onChange={(e) => setUsername(e.target.value)}
               value={username}
             />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="city"
-              label={t('signup.city')}
-              name="city"
-              autoComplete="city"
-              autoFocus
-              onChange={(e) => setCity(e.target.value)}
-              value={city}
-              />
-              </>
+            <Autocomplete
+            disablePortal
+            id="city"
+            options={cities}
+            getOptionLabel={(option) => option.name || ""}
+            fullWidth
+            renderInput={(params, index) => 
+            <TextField 
+            {...params} 
+            required
+            label={t('signup.city')}
+            margin="normal"
+            onChange={(e) => setCity(e.target.value)}
+            value={city}
+            />}/>
+            </>
           )}
           </Box>
           <Button
