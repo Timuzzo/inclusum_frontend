@@ -197,6 +197,7 @@ export default function DataContextProvider(props) {
         setPostImg,
         mergedDBDataArray,
         cityPosts,
+        posts
       }}
     >
       {props.children}

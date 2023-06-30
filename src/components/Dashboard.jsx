@@ -78,6 +78,7 @@ export default function Dashboard() {
           </DialogTitle>
           <CreatePost />
         </Dialog>
+        {!toggle?
         <AppBar
           position="fixed"
           color="primary"
@@ -101,7 +102,9 @@ export default function Dashboard() {
             </Fab>
             <Box sx={{ flexGrow: 1 }} />
           </Toolbar>
-        </AppBar>
+        </AppBar> 
+        : 
+        <></>}
       </ThemeProvider>
     </>
   );
