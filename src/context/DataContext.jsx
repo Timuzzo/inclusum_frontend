@@ -21,6 +21,7 @@ export default function DataContextProvider(props) {
 
   // getUserPosts
   const getUserPosts = async () => {
+    setLoading(true)
     try {
       const res = await fetch("https://inclusum.onrender.com/posts", {
         headers: {
@@ -32,7 +33,6 @@ export default function DataContextProvider(props) {
       setLoading(false);
     } catch (error) {
       console.log(error);
-      setLoading(false);
     }
   };
 
@@ -68,6 +68,7 @@ export default function DataContextProvider(props) {
 
   // get posts based on current users city in profile
   const getCityPosts = async () => {
+    setLoading(true)
     try {
       const data = await fetch(
         `https://inclusum.onrender.com/posts/${currentUser?.city}`,
@@ -79,6 +80,7 @@ export default function DataContextProvider(props) {
       );
       const cityPost = await data.json();
       setCityPosts(cityPost);
+      setLoading(false)
     } catch (error) {
       console.error(error);
     }
@@ -105,6 +107,7 @@ export default function DataContextProvider(props) {
 
   // get all Deutsche Bahn train stations from MongoDB
   const getAllDBTrainStations = async () => {
+    setLoading(true)
     try {
       const res = await fetch(
         "https://inclusum.onrender.com/station/alltrainstations"
@@ -114,13 +117,13 @@ export default function DataContextProvider(props) {
       setLoading(false);
     } catch (error) {
       console.log(error);
-      setLoading(false);
     }
   };
 
   // get Deutsche Bahn inactive facility data
 
   const getDbFacilitiesData = async () => {
+    setLoading(true)
     try {
       const res = await fetch(
         "https://apis.deutschebahn.com/db-api-marketplace/apis/fasta/v2/facilities",
@@ -140,7 +143,6 @@ export default function DataContextProvider(props) {
       setLoading(false);
     } catch (error) {
       console.log(error);
-      setLoading(false);
     }
   };
 

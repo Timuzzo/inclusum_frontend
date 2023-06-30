@@ -13,25 +13,26 @@ import {
   CssBaseline,
   Badge,
   Box,
+  Backdrop,
 } from "@mui/material/";
 import IconButton from "@mui/material/IconButton";
 import ThumbUpAltRoundedIcon from "@mui/icons-material/ThumbUpAltRounded";
 import ThumbDownAltRoundedIcon from "@mui/icons-material/ThumbDownAltRounded";
 import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
 import PlaceIcon from "@mui/icons-material/Place";
+import CircularIndeterminate from "./Spinner";
 import { useTranslation } from "react-i18next";
 
 export default function DBPost() {
   const [counterLike, setCounterLike] = useState(0);
   const [counterDislike, setCounterDislike] = useState(0);
-  const [loading, setLoading] = useState(true);
 
   const { theme } = useContext(ThemeContext);
-  const { mergedDBDataArray, currentUser } = useContext(DataContext);
+  const { mergedDBDataArray, currentUser, loading } = useContext(DataContext);
 
   const { t } = useTranslation();
   const filteredDBPosts = mergedDBDataArray?.filter((post) =>
-    post?.stationName.includes(currentUser.city)
+    post?.stationName?.includes(currentUser.city)
   );
 
   const handleCounterLike = () => {
@@ -42,16 +43,22 @@ export default function DBPost() {
     setCounterDislike(counterDislike + 1);
   };
 
-  console.log("mergedDBDataArray on DB Post", mergedDBDataArray);
-  console.log("filteredDBPosts", filteredDBPosts);
   return (
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Container maxWidth="xs" sx={{ mb: 3}}>
-          {/* {loading ? ( // Show loading message if loading is true
-    <Typography>{t("user_post.loading")}...</Typography>
-    ) : ( */}
+        {loading ? (
+          <Backdrop
+            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={true}
+            invisible={true}
+          >
+            <CircularIndeterminate />
+          </Backdrop>
+        ) : (
+          <></>
+        )}
           <>
             {filteredDBPosts.length ? (
               filteredDBPosts.map((post) => (
@@ -137,7 +144,6 @@ export default function DBPost() {
               </Box>
             )}
           </>
-          {/* )} */}
         </Container>
       </ThemeProvider>
     </>

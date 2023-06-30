@@ -15,12 +15,14 @@ import {
   Badge,
   Box,
   Dialog,
+  Backdrop,
 } from "@mui/material/";
 import IconButton from "@mui/material/IconButton";
 import ThumbUpAltRoundedIcon from "@mui/icons-material/ThumbUpAltRounded";
 import ThumbDownAltRoundedIcon from "@mui/icons-material/ThumbDownAltRounded";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
+import CircularIndeterminate from "./Spinner";
 import PlaceIcon from "@mui/icons-material/Place";
 import { useTranslation } from "react-i18next";
 
@@ -28,11 +30,11 @@ export default function UserPost() {
   const [counterLike, setCounterLike] = useState(0);
   const [counterDislike, setCounterDislike] = useState(0);
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [currentImage, setCurrentImage] = useState(null);
 
   const { theme } = useContext(ThemeContext);
-  const { getUserPosts, token, flag, cityPosts } = useContext(DataContext);
+  const { getUserPosts, token, flag, cityPosts, loading } = useContext(DataContext);
 
   const { t } = useTranslation();
 
@@ -57,10 +59,10 @@ export default function UserPost() {
     if (token) {
       getUserPosts();
     }
-    setLoading(false);
+    setIsLoading(false);
   }, [token, flag]);
 
-  if (loading) {
+  if (isLoading) {
     return null;
   }
 
@@ -69,9 +71,17 @@ export default function UserPost() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Container maxWidth="xs" sx={{ mb: "150px" }}>
-          {loading ? ( // Show loading message if loading is true
-            <Typography>{t("user_post.loading")}...</Typography>
-          ) : (
+        {loading ? (
+          <Backdrop
+            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={true}
+            invisible={true}
+          >
+            <CircularIndeterminate />
+          </Backdrop>
+        ) : (
+          <></>
+        )}
             <>
               {cityPosts.length ? (
                 cityPosts
@@ -177,7 +187,6 @@ export default function UserPost() {
                 </Box>
               )}
             </>
-          )}
           <Dialog open={open}>
             <img
               src={currentImage}
