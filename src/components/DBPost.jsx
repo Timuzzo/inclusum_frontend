@@ -48,7 +48,7 @@ export default function DBPost() {
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Container maxWidth="xs" sx={{ mb: "150px" }}>
+        <Container maxWidth="xs" sx={{ mb: 3}}>
           {/* {loading ? ( // Show loading message if loading is true
     <Typography>{t("user_post.loading")}...</Typography>
     ) : ( */}
@@ -62,20 +62,6 @@ export default function DBPost() {
                   <CardHeader
                     avatar={
                       <Avatar src="https://marketingportal.extranet.deutschebahn.com/resource/blob/9692854/85e5d516abe712affc4c29b6dc7d0a3d/Bild_06-data.png" />
-                    }
-                    action={
-                      counterLike >= 5 && counterLike > counterDislike ? (
-                        <CheckCircleOutlineRoundedIcon
-                          aria-label="verified"
-                          color="success"
-                          fontSize="large"
-                        />
-                      ) : (
-                        <CheckCircleOutlineRoundedIcon
-                          aria-label="verified"
-                          fontSize="large"
-                        />
-                      )
                     }
                     title="Deutsche Bahn"
                   />
@@ -100,21 +86,39 @@ export default function DBPost() {
                       <Typography>No detailed information</Typography>
                     )}
                   </CardContent>
-                  <CardActions sx={{ p: 1 }}>
+                  <CardActions sx={{ p: 1, display: "flex", justifyContent: "space-between"}}>
+                    <Box sx={{display: "flex", gap: "10px"}}>
                     <Badge badgeContent={counterLike} color="secondary">
-                      <IconButton aria-label="like" onClick={handleCounterLike}>
+                    <IconButton
+                        aria-label="like"
+                        onClick={handleCounterLike}
+                    >
                         <ThumbUpAltRoundedIcon />
-                      </IconButton>
+                    </IconButton>
                     </Badge>
                     <Badge badgeContent={counterDislike} color="secondary">
-                      <IconButton
+                    <IconButton
                         aria-label="dislike"
                         onClick={handleCounterDislike}
-                      >
+                    >
                         <ThumbDownAltRoundedIcon />
-                      </IconButton>
+                    </IconButton>
                     </Badge>
-                  </CardActions>
+                    </Box>
+                    {
+                    counterLike >= 5 && counterLike > counterDislike ? (
+                        <CheckCircleOutlineRoundedIcon
+                        aria-label="verified"
+                        color="success"
+                        fontSize="large"
+                        />
+                    ) : (
+                        <CheckCircleOutlineRoundedIcon
+                        aria-label="verified"
+                        fontSize="large"
+                        />
+                    )}
+                </CardActions>
                 </Card>
               ))
             ) : (
