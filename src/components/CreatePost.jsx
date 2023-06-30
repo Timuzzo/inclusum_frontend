@@ -15,6 +15,7 @@ import {
   Alert,
   AlertTitle,
   Backdrop,
+  Autocomplete
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import AddPhotoAlternateRoundedIcon from "@mui/icons-material/AddPhotoAlternateRounded";
@@ -181,6 +182,13 @@ export default function CreatePost() {
           ) : (
             <></>
           )}
+          <Autocomplete
+            disablePortal
+            id="city"
+            // options={}
+            fullWidth
+            renderInput={(params) => <TextField {...params} label={t("create_post.city")} helperText={t("create_post.please_select_the_city")}/>}
+          />
           <TextField
             fullWidth
             id="category"
