@@ -24,6 +24,7 @@ import CircularIndeterminate from "./Spinner";
 export default function CreatePost() {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
+  const [city, setCity] = useState("");
   const [msg, setMsg] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -39,6 +40,10 @@ export default function CreatePost() {
   } = useContext(DataContext);
   const { theme } = useContext(ThemeContext);
   const { handleClickClose } = useContext(ControlContext);
+
+  const cities = require('../germanCityNames.json');
+
+  console.log(cities)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -75,7 +80,7 @@ export default function CreatePost() {
       formData.append("title", title);
       formData.append("text", text);
       formData.append("timestamp", actualDate);
-      formData.append("city", currentUser.city);
+      formData.append("city", city);
       formData.append("username", currentUser.username);
       formData.append("avatar", currentUser.avatar);
       const res = await axios.post(
@@ -185,9 +190,16 @@ export default function CreatePost() {
           <Autocomplete
             disablePortal
             id="city"
-            // options={}
+            options={cities}
+            getOptionLabel={(option) => option.name || ""}
             fullWidth
-            renderInput={(params) => <TextField {...params} label={t("create_post.city")} helperText={t("create_post.please_select_the_city")}/>}
+            renderInput={(params, index) => 
+            <TextField 
+            {...params} 
+            label={t("create_post.city")} 
+            helperText={t("create_post.please_select_the_city")}
+            onChange={(e) => setCity(e.target.value)}
+            />}
           />
           <TextField
             fullWidth

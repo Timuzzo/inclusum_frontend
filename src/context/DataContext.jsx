@@ -14,7 +14,6 @@ export default function DataContextProvider(props) {
   const [dbFacilitiesData, setDbFacilitiesData] = useState([]);
   const [allDBTrainStations, setAllDBTrainStations] = useState([]);
   const [cityPosts, setCityPosts] = useState([]);
-  const [germanCities, setGermanCities] = useState({});
 
   const { token, login } = useContext(AuthContext);
 
@@ -156,28 +155,6 @@ export default function DataContextProvider(props) {
     return Object.assign({}, facility, stationNameWithEqualNumber);
   });
 
-  // fetch all available German cities
-
-  const getGermanCities = async () => {
-    try {
-      const res = await fetch(
-        "https://gist.githubusercontent.com/Occator/43f453889148735abb69dd6cf49635ed/raw/9b1dd9d2544c26282ed53a31db8236bfd6d6cc45/german_cities.json  "
-      );
-
-      const data = await res.json();
-      console.log("data", data);
-      setGermanCities(data);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getGermanCities();
-  }, []);
-
   useEffect(() => {
     getAllDBTrainStations();
   }, []);
@@ -202,8 +179,6 @@ export default function DataContextProvider(props) {
     if (avatarImg) findAndUpdateUser();
   }, [avatarImg]);
 
-  console.log("german cities", germanCities);
-
   return (
     <DataContext.Provider
       value={{
@@ -223,7 +198,7 @@ export default function DataContextProvider(props) {
         setPostImg,
         mergedDBDataArray,
         cityPosts,
-        posts
+        posts,
       }}
     >
       {props.children}
