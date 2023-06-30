@@ -13,13 +13,15 @@ import {
   ToggleButtonGroup,
   ToggleButton,
   Container,
-  Typography
+  Typography,
+  Backdrop,
 } from "@mui/material";
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
 import CloseIcon from "@mui/icons-material/Close";
 import UserPost from "./UserPost";
 import CreatePost from "./CreatePost";
 import DBPost from "./DBPost";
+import CircularIndeterminate from "./Spinner";
 import { ControlContext } from "../context/ControlContext";
 import { useTranslation } from "react-i18next";
 
@@ -27,7 +29,7 @@ export default function Dashboard() {
   const [alignment, setAlignment] = useState("user_posts");
   const [toggle, setToggle] = useState(false)
 
-  const { handleClickOpen, handleClickClose, open, setOpen } =
+  const { handleClickOpen, handleClickClose, open, loading } =
     useContext(ControlContext);
   const { theme } = useContext(ThemeContext);
 
@@ -47,6 +49,17 @@ export default function Dashboard() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Container maxWidth="xs" sx={{ mt: "20px", display: "flex", justifyContent: "center" }}>
+        {loading ? (
+          <Backdrop
+            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={true}
+            invisible={true}
+          >
+            <CircularIndeterminate />
+          </Backdrop>
+        ) : (
+          <></>
+        )}
           <ToggleButtonGroup
           color="secondary"
           value={alignment}
@@ -78,6 +91,7 @@ export default function Dashboard() {
           </DialogTitle>
           <CreatePost />
         </Dialog>
+        {!toggle?
         <AppBar
           position="fixed"
           color="primary"
@@ -101,7 +115,9 @@ export default function Dashboard() {
             </Fab>
             <Box sx={{ flexGrow: 1 }} />
           </Toolbar>
-        </AppBar>
+        </AppBar> 
+        : 
+        <></>}
       </ThemeProvider>
     </>
   );
