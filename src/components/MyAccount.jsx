@@ -218,10 +218,10 @@ return (
                 open={openMenu}
                 >
                     <MenuItem>
-                    Edit
+                    {t("myaccount.delete")}
                     </MenuItem>
                     <MenuItem>
-                    Delete
+                    {t("myaccount.edit")}
                     </MenuItem>
                 </Menu>
                 <CardContent
