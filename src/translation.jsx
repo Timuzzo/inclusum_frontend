@@ -30,6 +30,7 @@ i18next
             please_describe_the_issue: 'Please describe the issue',
             please_fill_in_all_fields: 'Please fill in all fields',
             post_created_successfully: 'Malfunction info was created successfully',
+            no_match: 'No match',
           },
           user_post: {
             loading: 'Loading',
@@ -106,6 +107,7 @@ i18next
             please_describe_the_issue: 'Bitte beschreiben Sie die Störungsmeldung.',
             please_fill_in_all_fields: 'Bitte füllen Sie alle Felder aus',
             post_created_successfully: 'Störungsmeldung wurde erfolgreich erstellt',
+            no_match: 'Nicht gefunden',
           },
           user_post: {
             loading: 'Lädt',
@@ -156,8 +158,8 @@ i18next
             slogan: 'Social-App für mehr Inklusion in der Stadt',
           }, 
           dashboard: {
-            user_post: 'Nutzer-Meldungen',
-            db_post: 'DB-Meldungen'
+            user_post: 'Nutzer-Posts',
+            db_post: 'DB-Posts'
           },
         }
       }

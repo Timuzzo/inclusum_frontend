@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { ThemeContext } from "../context/ThemeContext";
 import {
   CssBaseline,
@@ -15,6 +15,7 @@ import {
   Container,
   Typography,
   Backdrop,
+  Badge,
 } from "@mui/material";
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
 import CloseIcon from "@mui/icons-material/Close";
@@ -23,17 +24,23 @@ import CreatePost from "./CreatePost";
 import DBPost from "./DBPost";
 import CircularIndeterminate from "./Spinner";
 import { ControlContext } from "../context/ControlContext";
+import { DataContext } from "../context/DataContext";
 import { useTranslation } from "react-i18next";
+
 
 export default function Dashboard() {
   const [alignment, setAlignment] = useState("user_posts");
   const [toggle, setToggle] = useState(false)
 
-  const { handleClickOpen, handleClickClose, open, loading } =
-    useContext(ControlContext);
+  const { handleClickOpen, handleClickClose, open} = useContext(ControlContext);
+  const { cityPosts, loading, mergedDBDataArray, currentUser} = useContext(DataContext);
   const { theme } = useContext(ThemeContext);
 
   const { t } = useTranslation();
+
+  const filteredDBPosts = mergedDBDataArray?.filter((post) =>
+  post?.stationName?.includes(currentUser?.city)
+);
 
   const handleClickToggle1 = () => {
       setToggle(false)
@@ -66,11 +73,15 @@ export default function Dashboard() {
           exclusive
           aria-label="togglefeed"
           >
-          <ToggleButton value="user_posts" onClick={handleClickToggle1}>
-            <Typography fontFamily="Poppins">{t("dashboard.user_post")}</Typography>
+          <ToggleButton value="user_posts" onClick={handleClickToggle1} sx={{p:2}}>
+          <Badge badgeContent={cityPosts?.length ? cityPosts.length : 0} color="secondary" showZero>
+            <Typography fontFamily="Poppins" sx={{p:0.5}}>{t("dashboard.user_post")}</Typography>
+          </Badge>
           </ToggleButton>
-          <ToggleButton value="DB_posts" onClick={handleClickToggle2}>
-          <Typography fontFamily="Poppins">{t("dashboard.db_post")}</Typography>
+          <ToggleButton value="DB_posts" onClick={handleClickToggle2} sx={{p:2}}>
+            <Badge badgeContent={filteredDBPosts?.length ? filteredDBPosts.length : 0} color="secondary" showZero>
+              <Typography fontFamily="Poppins" sx={{p:0.5}}>{t("dashboard.db_post")}</Typography>
+            </Badge>
           </ToggleButton>
           </ToggleButtonGroup>
         </Container>
