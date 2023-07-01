@@ -7,6 +7,7 @@ export const DataContext = createContext();
 export default function DataContextProvider(props) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingMyAccount, setLoadingMyAccount] = useState(false)
   const [avatarImg, setAvatarImg] = useState(null);
   const [postImg, setPostImg] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
@@ -21,7 +22,7 @@ export default function DataContextProvider(props) {
 
   // getUserPosts
   const getUserPosts = async () => {
-    setLoading(true)
+    setLoadingMyAccount(true)
     try {
       const res = await fetch("https://inclusum.onrender.com/posts", {
         headers: {
@@ -30,9 +31,10 @@ export default function DataContextProvider(props) {
       });
       const data = await res.json();
       setPosts(data);
-      setLoading(false);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadingMyAccount(false)
     }
   };
 
@@ -80,9 +82,10 @@ export default function DataContextProvider(props) {
       );
       const cityPost = await data.json();
       setCityPosts(cityPost);
-      setLoading(false)
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -107,14 +110,12 @@ export default function DataContextProvider(props) {
 
   // get all Deutsche Bahn train stations from MongoDB
   const getAllDBTrainStations = async () => {
-    setLoading(true)
     try {
       const res = await fetch(
         "https://inclusum.onrender.com/station/alltrainstations"
       );
       const data = await res.json();
       setAllDBTrainStations(data?.data);
-      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -123,7 +124,6 @@ export default function DataContextProvider(props) {
   // get Deutsche Bahn inactive facility data
 
   const getDbFacilitiesData = async () => {
-    setLoading(true)
     try {
       const res = await fetch(
         "https://apis.deutschebahn.com/db-api-marketplace/apis/fasta/v2/facilities",
@@ -140,7 +140,6 @@ export default function DataContextProvider(props) {
         (result) => result.state === "INACTIVE"
       );
       setDbFacilitiesData(inactiveResults);
-      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -188,7 +187,7 @@ export default function DataContextProvider(props) {
         loading,
         posts,
         setPosts,
-        setLoading,
+        loadingMyAccount,
         getUserPosts,
         decodedToken,
         token,
