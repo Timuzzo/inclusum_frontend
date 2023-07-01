@@ -47,87 +47,93 @@ export default function DBPost() {
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Container maxWidth="xs" sx={{ mb: 3}}>
-        {loading ? (
-          <Backdrop
-            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            open={true}
-            invisible={true}
-          >
-            <CircularIndeterminate />
-          </Backdrop>
-        ) : (
-          <></>
-        )}
+        <Container maxWidth="xs" sx={{ mb: 3 }}>
+          {loading ? (
+            <Backdrop
+              sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={true}
+              invisible={true}
+            >
+              <CircularIndeterminate />
+            </Backdrop>
+          ) : (
+            <></>
+          )}
           <>
             {filteredDBPosts?.map((post) => (
-                <Card
-                  sx={{ mt: 2, border: "2px solid #0f6B63" }}
-                  key={post?.equipmentnumber}
+              <Card
+                sx={{ mt: 2, border: "2px solid #0f6B63" }}
+                key={post?.equipmentnumber}
+              >
+                <CardHeader
+                  avatar={
+                    <Avatar src="https://marketingportal.extranet.deutschebahn.com/resource/blob/9692854/85e5d516abe712affc4c29b6dc7d0a3d/Bild_06-data.png" />
+                  }
+                  title="Deutsche Bahn"
+                />
+                <CardContent
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    p: "0 16px 0 16px",
+                  }}
                 >
-                  <CardHeader
-                    avatar={
-                      <Avatar src="https://marketingportal.extranet.deutschebahn.com/resource/blob/9692854/85e5d516abe712affc4c29b6dc7d0a3d/Bild_06-data.png" />
-                    }
-                    title="Deutsche Bahn"
-                  />
-                  <CardContent
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "5px",
-                      p: "0 16px 0 16px",
-                    }}
-                  >
-                    <PlaceIcon fontSize="small" />
-                    <Typography fontSize="14px">{post?.stationName}</Typography>
-                  </CardContent>
-                  <CardContent>
-                    <Typography variant="h6">{post.type}</Typography>
-                    {post.stateExplanation !== "not available" ? (
-                      <Typography variant="body2">
-                        {post.stateExplanation}
-                      </Typography>
-                    ) : (
-                      <Typography>No detailed information</Typography>
-                    )}
-                  </CardContent>
-                  <CardActions sx={{ p: 1, display: "flex", justifyContent: "space-between"}}>
-                    <Box sx={{display: "flex", gap: "10px"}}>
+                  <PlaceIcon fontSize="small" />
+                  <Typography fontSize="14px">{post?.stationName}</Typography>
+                </CardContent>
+                <CardContent>
+                  <Typography variant="h6">{post.type}</Typography>
+                  {post?.description ? (
+                    <Typography variant="body2">{post.description}</Typography>
+                  ) : (
+                    <></>
+                  )}
+                  {post.stateExplanation !== "not available" ? (
+                    <Typography variant="body2">
+                      {post.stateExplanation}
+                    </Typography>
+                  ) : (
+                    <Typography>No detailed information</Typography>
+                  )}
+                </CardContent>
+                <CardActions
+                  sx={{
+                    p: 1,
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Box sx={{ display: "flex", gap: "10px" }}>
                     <Badge badgeContent={counterLike} color="secondary">
-                    <IconButton
-                        aria-label="like"
-                        onClick={handleCounterLike}
-                    >
+                      <IconButton aria-label="like" onClick={handleCounterLike}>
                         <ThumbUpAltRoundedIcon />
-                    </IconButton>
+                      </IconButton>
                     </Badge>
                     <Badge badgeContent={counterDislike} color="secondary">
-                    <IconButton
+                      <IconButton
                         aria-label="dislike"
                         onClick={handleCounterDislike}
-                    >
+                      >
                         <ThumbDownAltRoundedIcon />
-                    </IconButton>
+                      </IconButton>
                     </Badge>
-                    </Box>
-                    {
-                    counterLike >= 5 && counterLike > counterDislike ? (
-                        <CheckCircleOutlineRoundedIcon
-                        aria-label="verified"
-                        color="success"
-                        fontSize="large"
-                        />
-                    ) : (
-                        <CheckCircleOutlineRoundedIcon
-                        aria-label="verified"
-                        fontSize="large"
-                        />
-                    )}
+                  </Box>
+                  {counterLike >= 5 && counterLike > counterDislike ? (
+                    <CheckCircleOutlineRoundedIcon
+                      aria-label="verified"
+                      color="success"
+                      fontSize="large"
+                    />
+                  ) : (
+                    <CheckCircleOutlineRoundedIcon
+                      aria-label="verified"
+                      fontSize="large"
+                    />
+                  )}
                 </CardActions>
-                </Card>
-              ))
-            }
+              </Card>
+            ))}
           </>
         </Container>
       </ThemeProvider>
