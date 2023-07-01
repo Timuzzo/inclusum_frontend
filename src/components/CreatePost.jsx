@@ -41,9 +41,7 @@ export default function CreatePost() {
   const { theme } = useContext(ThemeContext);
   const { handleClickClose } = useContext(ControlContext);
 
-  const cities = require('../germanCityNames.json');
-
-  console.log(cities)
+  const cities = require('../test.germancities.json');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,6 +49,14 @@ export default function CreatePost() {
     setError(null);
     setMsg(null);
     const d = new Date();
+
+    const date = () => {
+      if (d.getDate() < 10) {
+        return `0${d.getDate()}`;
+      } else {
+        return d.getDate();
+      }
+    };
     const month = () => {
       if (d.getMonth() < 10) {
         return `0${d.getMonth() + 1}`;
@@ -72,7 +78,7 @@ export default function CreatePost() {
         return d.getMinutes();
       }
     };
-    const actualDate = `${d.getDate()}.${month()}.${d.getFullYear()} ${hour()}:${min()}`;
+    const actualDate = `${date()}.${month()}.${d.getFullYear()} ${hour()}:${min()}`;
     try {
       const formData = new FormData();
       formData.append("image", postImg);
@@ -101,6 +107,7 @@ export default function CreatePost() {
     setPostImg(null);
     setTitle("");
     setText("");
+    setCity("")
     setIsLoading(false);
   };
 
@@ -188,19 +195,24 @@ export default function CreatePost() {
             <></>
           )}
           <Autocomplete
-            disablePortal
-            id="city"
-            options={cities}
-            getOptionLabel={(option) => option.name || ""}
-            fullWidth
-            renderInput={(params, index) => 
+          disablePortal
+          id="city"
+          options={cities}
+          getOptionLabel={(option) => option.name || ""}
+          renderOption={(props, option) => (
+            <li {...props} key={option._id.$oid}>{option.name}</li>
+          )}
+          fullWidth
+          noOptionsText={t("create_post.no_match")} 
+          onChange={(e, newValue) => setCity(newValue.name)}
+          renderInput={(params) => 
             <TextField 
-            {...params} 
-            label={t("create_post.city")} 
-            helperText={t("create_post.please_select_the_city")}
-            onChange={(e) => setCity(e.target.value)}
-            />}
-          />
+              {...params} 
+              label={t("create_post.city")} 
+              helperText={t("create_post.please_select_the_city")}
+            />
+          }
+        />
           <TextField
             fullWidth
             id="category"
