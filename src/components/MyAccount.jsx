@@ -46,7 +46,7 @@ const [currentImage, setCurrentImage] = useState(null);
 const [anchorEl, setAnchorEl] = useState();
 const openMenu = Boolean(anchorEl);
 
-const { decodedToken, currentUser, findAndUpdateUser, posts, getUserPosts, token, flag} = useContext(DataContext);
+const { decodedToken, currentUser, findAndUpdateUser, posts, getUserPosts, token, flag, loadingMyAccount} = useContext(DataContext);
 const { theme } = useContext(ThemeContext);
 
 const {t} = useTranslation()
@@ -109,15 +109,24 @@ useEffect(() => {
     if (token) {
         getUserPosts();
     }
-    setIsLoading(false);
     }, [token, flag]);
 
 return (
     <>
     <ThemeProvider theme={theme}>
     <CssBaseline/>
-    <Container component="main" maxWidth="xs" sx={{mt: 3, mb: 3, display: "flex", flexDirection: "column", gap: "30px"}}>
+    <Container component="main" maxWidth="xs" sx={{mt: 3, mb: 3, display: "flex", flexDirection: "column", gap: "20px"}}>
     {isLoading ? 
+    <Backdrop
+    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
+    open = {true}
+    invisible = {true}
+    >
+    <CircularIndeterminate/>
+    </Backdrop> 
+    : 
+    <></>}
+    {loadingMyAccount ? 
     <Backdrop
     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
     open = {true}
@@ -184,17 +193,17 @@ return (
     </Box>
         <>
         <Box sx={{alignSelf: "center"}}>
-            <Badge badgeContent={posts.length} color="secondary" style={{ fontSize: "15px" }}>
+            <Badge badgeContent={posts.length ? posts.length : 0} color="secondary" style={{ fontSize: "15px" }} showZero>
                 <Typography variant="h4" >{t('myaccount.myposts')}</Typography>
             </Badge>
         </Box>
-            {posts.length ? (
-            posts
+        <Box>
+            {posts
             .slice(0)
             .reverse()
             .map((post) => (
                 <Card
-                sx={{ border: "2px solid #0f6B63" }}
+                sx={{ mt: 2, border: "2px solid #0f6B63" }}
                 key={post._id}
                 >
                 <CardHeader
@@ -288,22 +297,8 @@ return (
                     )}
                 </CardActions>
                 </Card>
-            ))
-            ) : (
-            <Box
-                sx={{
-                marginTop: 25,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                }}
-            >
-                <Typography variant="h5" style={{ color: "red" }}>
-                {t("user_post.no_posts_found")}
-                </Typography>
-            </Box>
-            )}
+            ))}
+        </Box>
         </>
         <Dialog open={open}>
         <img

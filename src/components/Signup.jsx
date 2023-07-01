@@ -35,7 +35,7 @@ export default function Signup() {
   const navigate = useNavigate()
   const {t} = useTranslation()
   
-  const cities = require('../germanCityNames.json');
+  const cities = require('../test.germancities.json');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -242,17 +242,20 @@ export default function Signup() {
             id="city"
             options={cities}
             getOptionLabel={(option) => option.name || ""}
+            renderOption={(props, option) => (
+              <li {...props} key={option._id.$oid}>{option.name}</li>
+            )}
             fullWidth
-            renderInput={(params, index) => 
-            <TextField 
-            {...params} 
-            required
-            label={t('signup.city')}
-            margin="normal"
-            onChange={(e) => setCity(e.target.value)}
-            value={city}
-            />}/>
-            </>
+            noOptionsText={t("create_post.no_match")} 
+            onChange={(e, newValue) => setCity(newValue.name)}
+            renderInput={(params) => 
+              <TextField 
+                {...params} 
+                label={t('signup.city')} 
+                helperText={t("create_post.please_select_the_city")}
+              />}
+            />
+          </>
           )}
           </Box>
           <Button

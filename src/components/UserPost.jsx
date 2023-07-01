@@ -100,20 +100,6 @@ export default function UserPost() {
                             <AccountCircleIcon fontSize="large" />
                           )
                         }
-                        action={
-                          counterLike >= 5 && counterLike > counterDislike ? (
-                            <CheckCircleOutlineRoundedIcon
-                              aria-label="verified"
-                              color="success"
-                              fontSize="large"
-                            />
-                          ) : (
-                            <CheckCircleOutlineRoundedIcon
-                              aria-label="verified"
-                              fontSize="large"
-                            />
-                          )
-                        }
                         title={post?.username}
                         subheader={`${t("user_post.posted")} ${post.timestamp}`}
                       />
@@ -151,41 +137,43 @@ export default function UserPost() {
                         <Typography variant="h6">{post.title}</Typography>
                         <Typography variant="body2">{post.text}</Typography>
                       </CardContent>
-                      <CardActions sx={{ p: 1 }}>
-                        <Badge badgeContent={counterLike} color="secondary">
-                          <IconButton
-                            aria-label="like"
-                            onClick={handleCounterLike}
-                          >
-                            <ThumbUpAltRoundedIcon />
-                          </IconButton>
-                        </Badge>
-                        <Badge badgeContent={counterDislike} color="secondary">
-                          <IconButton
-                            aria-label="dislike"
-                            onClick={handleCounterDislike}
-                          >
-                            <ThumbDownAltRoundedIcon />
-                          </IconButton>
-                        </Badge>
-                      </CardActions>
+                      <CardActions sx={{ p: 1, display: "flex", justifyContent: "space-between"}}>
+                    <Box sx={{display: "flex", gap: "10px"}}>
+                    <Badge badgeContent={counterLike} color="secondary">
+                    <IconButton
+                        aria-label="like"
+                        onClick={handleCounterLike}
+                    >
+                        <ThumbUpAltRoundedIcon />
+                    </IconButton>
+                    </Badge>
+                    <Badge badgeContent={counterDislike} color="secondary">
+                    <IconButton
+                        aria-label="dislike"
+                        onClick={handleCounterDislike}
+                    >
+                        <ThumbDownAltRoundedIcon />
+                    </IconButton>
+                    </Badge>
+                    </Box>
+                    {
+                    counterLike >= 5 && counterLike > counterDislike ? (
+                        <CheckCircleOutlineRoundedIcon
+                        aria-label="verified"
+                        color="success"
+                        fontSize="large"
+                        />
+                    ) : (
+                        <CheckCircleOutlineRoundedIcon
+                        aria-label="verified"
+                        fontSize="large"
+                        />
+                    )}
+                </CardActions>
                     </Card>
                   ))
-              ) : (
-                <Box
-                  sx={{
-                    marginTop: 25,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Typography variant="h5" style={{ color: "red" }}>
-                    {t("user_post.no_posts_found")}
-                  </Typography>
-                </Box>
-              )}
+              ) : <></>
+              }
             </>
           <Dialog open={open}>
             <img
