@@ -60,8 +60,7 @@ export default function DBPost() {
           <></>
         )}
           <>
-            {filteredDBPosts.length ? (
-              filteredDBPosts.map((post) => (
+            {filteredDBPosts?.map((post) => (
                 <Card
                   sx={{ mt: 2, border: "2px solid #0f6B63" }}
                   key={post?.equipmentnumber}
@@ -128,21 +127,7 @@ export default function DBPost() {
                 </CardActions>
                 </Card>
               ))
-            ) : (
-              <Box
-                sx={{
-                  marginTop: 25,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Typography variant="h5" style={{ color: "red" }}>
-                  {t("user_post.no_posts_found")}
-                </Typography>
-              </Box>
-            )}
+            }
           </>
         </Container>
       </ThemeProvider>

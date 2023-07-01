@@ -46,7 +46,7 @@ const [currentImage, setCurrentImage] = useState(null);
 const [anchorEl, setAnchorEl] = useState();
 const openMenu = Boolean(anchorEl);
 
-const { decodedToken, currentUser, findAndUpdateUser, posts, getUserPosts, token, flag} = useContext(DataContext);
+const { decodedToken, currentUser, findAndUpdateUser, posts, getUserPosts, token, flag, loadingMyAccount} = useContext(DataContext);
 const { theme } = useContext(ThemeContext);
 
 const {t} = useTranslation()
@@ -109,7 +109,6 @@ useEffect(() => {
     if (token) {
         getUserPosts();
     }
-    setIsLoading(false);
     }, [token, flag]);
 
 return (
@@ -118,6 +117,16 @@ return (
     <CssBaseline/>
     <Container component="main" maxWidth="xs" sx={{mt: 3, mb: 3, display: "flex", flexDirection: "column", gap: "20px"}}>
     {isLoading ? 
+    <Backdrop
+    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
+    open = {true}
+    invisible = {true}
+    >
+    <CircularIndeterminate/>
+    </Backdrop> 
+    : 
+    <></>}
+    {loadingMyAccount ? 
     <Backdrop
     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
     open = {true}
@@ -189,8 +198,7 @@ return (
             </Badge>
         </Box>
         <Box>
-            {posts.length ? (
-            posts
+            {posts
             .slice(0)
             .reverse()
             .map((post) => (
@@ -289,22 +297,7 @@ return (
                     )}
                 </CardActions>
                 </Card>
-            ))
-            ) : (
-            <Box
-                sx={{
-                marginTop: 25,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                }}
-            >
-                <Typography variant="h5" style={{ color: "red" }}>
-                {t("user_post.no_posts_found")}
-                </Typography>
-            </Box>
-            )}
+            ))}
         </Box>
         </>
         <Dialog open={open}>
