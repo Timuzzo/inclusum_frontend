@@ -32,7 +32,7 @@ export default function DBPost() {
 
   const { t } = useTranslation();
   const filteredDBPosts = mergedDBDataArray?.filter((post) =>
-    post?.stationName?.includes(currentUser.city)
+    post?.stationName?.includes(currentUser?.city)
   );
 
   const handleCounterLike = () => {
