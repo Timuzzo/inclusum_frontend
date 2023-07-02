@@ -94,7 +94,7 @@ export default function DBPost() {
                       {post.stateExplanation}
                     </Typography>
                   ) : (
-                    <Typography>No detailed information</Typography>
+                    <Typography variant="body2">No detailed information</Typography>
                   )}
                 </CardContent>
                 <CardActions
