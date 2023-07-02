@@ -14,6 +14,8 @@ import {
   Badge,
   Box,
   Backdrop,
+  Zoom,
+  CardMedia,
 } from "@mui/material/";
 import IconButton from "@mui/material/IconButton";
 import ThumbUpAltRoundedIcon from "@mui/icons-material/ThumbUpAltRounded";
@@ -22,6 +24,9 @@ import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlin
 import PlaceIcon from "@mui/icons-material/Place";
 import CircularIndeterminate from "./Spinner";
 import { useTranslation } from "react-i18next";
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import { Icon } from "leaflet";
+import "leaflet/dist/leaflet.css";
 
 export default function DBPost() {
   const [counterLike, setCounterLike] = useState(0);
@@ -42,6 +47,8 @@ export default function DBPost() {
   const handleCounterDislike = () => {
     setCounterDislike(counterDislike + 1);
   };
+
+  const customMarkerIcon = new Icon({ iconUrl: "", iconSize: [30, 30] });
 
   return (
     <>
@@ -82,6 +89,30 @@ export default function DBPost() {
                   <PlaceIcon fontSize="small" />
                   <Typography fontSize="14px">{post?.stationName}</Typography>
                 </CardContent>
+
+                <MapContainer
+                  center={[post.geocoordY, post.geocoordX]}
+                  zoom={17}
+                >
+                  <CardMedia
+                    height="300"
+                    width="300"
+                    sx={{
+                      pt: 1,
+                      objectFit: "cover",
+                      cursor: "pointer",
+                      mb: "150px",
+                    }}
+                  >
+                    <TileLayer
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>contributors'
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <Marker
+                      position={[post.geocoordY, post.geocoordX]}
+                    ></Marker>
+                  </CardMedia>
+                </MapContainer>
                 <CardContent>
                   <Typography variant="h6">{post.type}</Typography>
                   {post?.description ? (
@@ -94,7 +125,9 @@ export default function DBPost() {
                       {post.stateExplanation}
                     </Typography>
                   ) : (
-                    <Typography variant="body2">No detailed information</Typography>
+                    <Typography variant="body2">
+                      No detailed information
+                    </Typography>
                   )}
                 </CardContent>
                 <CardActions
