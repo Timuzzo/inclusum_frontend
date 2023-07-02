@@ -78,6 +78,8 @@ const handleSubmitImage = async (e) => {
 
     const handleSubmitCity = async (e) => {
     e.preventDefault();
+    setMsg("")
+    if(city !== "" && city !== currentUser?.city) {
     const databody = {
     _id: decodedToken._id,
     city: city
@@ -96,6 +98,7 @@ const handleSubmitImage = async (e) => {
     const res = await data.json();
     setMsg(res.msg)
     setFlag(!flag)
+    }
     }
 
     const errorHandling = () => {
@@ -162,7 +165,7 @@ return (
     <CircularIndeterminate/>
     </Backdrop> 
     : 
-    <></>}
+    <>
     <Avatar 
     src={currentUser?.avatar}
     sx={{ width: 100, height: 100, alignSelf: "center" }}
@@ -274,8 +277,10 @@ return (
                 <Typography variant="h4" >{t('myaccount.myposts')}</Typography>
             </Badge>
         </Box>
+        {console.log("posts", posts )}
         <Box>
-            {posts
+            {posts.length? 
+            posts
             .slice(0)
             .reverse()
             .map((post) => (
@@ -296,7 +301,7 @@ return (
                         <MoreVertRoundedIcon/>
                     </IconButton>}
                     title={post?.username}
-                    subheader={`${t("user_post.posted")} ${post.timestamp}`}
+                    subheader={post?.timestamp}
                 />
                 <Menu
                 anchorEl={anchorEl}
@@ -374,9 +379,13 @@ return (
                     )}
                 </CardActions>
                 </Card>
-            ))}
+            )) 
+            :
+            <></>
+        }
         </Box>
         </>
+    </>}
         <Dialog open={open}>
         <img
             src={currentImage}

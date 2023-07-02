@@ -24,7 +24,6 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
 import CircularIndeterminate from "./Spinner";
 import PlaceIcon from "@mui/icons-material/Place";
-import { useTranslation } from "react-i18next";
 
 export default function UserPost() {
   const [counterLike, setCounterLike] = useState(0);
@@ -35,8 +34,6 @@ export default function UserPost() {
 
   const { theme } = useContext(ThemeContext);
   const { getUserPosts, token, flag, cityPosts, loading } = useContext(DataContext);
-
-  const { t } = useTranslation();
 
   const handleCounterLike = (e) => {
     console.log(e.target);
@@ -101,7 +98,7 @@ export default function UserPost() {
                           )
                         }
                         title={post?.username}
-                        subheader={`${t("user_post.posted")} ${post.timestamp}`}
+                        subheader={post?.timestamp}
                       />
                       <CardContent
                         sx={{
