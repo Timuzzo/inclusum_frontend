@@ -7,7 +7,7 @@ export const DataContext = createContext();
 export default function DataContextProvider(props) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [loadingMyAccount, setLoadingMyAccount] = useState(false)
+  const [loadingMyAccount, setLoadingMyAccount] = useState(false);
   const [avatarImg, setAvatarImg] = useState(null);
   const [postImg, setPostImg] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
@@ -22,7 +22,7 @@ export default function DataContextProvider(props) {
 
   // getUserPosts
   const getUserPosts = async () => {
-    setLoadingMyAccount(true)
+    setLoadingMyAccount(true);
     try {
       const res = await fetch("https://inclusum.onrender.com/posts", {
         headers: {
@@ -34,7 +34,7 @@ export default function DataContextProvider(props) {
     } catch (error) {
       console.log(error);
     } finally {
-      setLoadingMyAccount(false)
+      setLoadingMyAccount(false);
     }
   };
 
@@ -70,7 +70,7 @@ export default function DataContextProvider(props) {
 
   // get posts based on current users city in profile
   const getCityPosts = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       const data = await fetch(
         `https://inclusum.onrender.com/posts/${currentUser?.city}`,
@@ -85,7 +85,7 @@ export default function DataContextProvider(props) {
     } catch (error) {
       console.error(error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -179,6 +179,8 @@ export default function DataContextProvider(props) {
   useEffect(() => {
     if (avatarImg) findAndUpdateUser();
   }, [avatarImg]);
+
+  console.log("description data", mergedDBDataArray);
 
   return (
     <DataContext.Provider
