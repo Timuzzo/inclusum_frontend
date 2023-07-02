@@ -22,7 +22,9 @@ import {
     Badge,
     Dialog,
     MenuItem,
-    Menu
+    Menu,
+    Autocomplete,
+    TextField
 } from "@mui/material";
 import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateRounded';
 import CircularIndeterminate from "./Spinner";
@@ -38,6 +40,7 @@ export default function MyAccount () {
 const [msg, setMsg] = useState(null)
 const [error, setError] = useState(null);
 const [avatar, setAvatar] = useState(null);
+const [city, setCity] = useState("");
 const [isLoading, setIsLoading] = useState(false);
 const [counterLike, setCounterLike] = useState(0);
 const [counterDislike, setCounterDislike] = useState(0);
@@ -46,10 +49,12 @@ const [currentImage, setCurrentImage] = useState(null);
 const [anchorEl, setAnchorEl] = useState();
 const openMenu = Boolean(anchorEl);
 
-const { decodedToken, currentUser, findAndUpdateUser, posts, getUserPosts, token, flag, loadingMyAccount} = useContext(DataContext);
+const { decodedToken, currentUser, findAndUpdateUser, posts, getUserPosts, token, flag, setFlag, loadingMyAccount} = useContext(DataContext);
 const { theme } = useContext(ThemeContext);
 
 const {t} = useTranslation()
+
+const cities = require('../test.germancities.json');
 
 const handleSubmitImage = async (e) => {
     e.preventDefault();
@@ -69,6 +74,28 @@ const handleSubmitImage = async (e) => {
     findAndUpdateUser()
     setAvatar(null)
     setIsLoading(false)
+    }
+
+    const handleSubmitCity = async (e) => {
+    e.preventDefault();
+    const databody = {
+    _id: decodedToken._id,
+    city: city
+    };
+    const data = await fetch(
+        "https://inclusum.onrender.com/user/updateuser",
+        {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(databody),
+        }
+    );
+    const res = await data.json();
+    setMsg(res.msg)
+    setFlag(!flag)
     }
 
     const errorHandling = () => {
@@ -161,7 +188,7 @@ return (
         {avatar ? 
         <Typography sx={{overflow: "hidden", maxWidth: "100%", mb: 1}} variant="h5">{avatar.name}</Typography> 
         : 
-        <Typography sx={{mb: 1}}variant="h5">{t('myaccount.changeavatar')}</Typography>
+        <Typography sx={{mb: 1}} variant="h5">{t('myaccount.changeavatar')}</Typography>
         }
         {msg === 'image successfully saved'? 
         <Alert severity="success" variant="outlined" color="secondary">
@@ -191,6 +218,56 @@ return (
         </Box>
     </label>
     </Box>
+    <Typography variant="h4"  sx={{alignSelf: "center"}}>{t('myaccount.my_city')}</Typography>
+        <Box sx={{alignSelf: "center", display: "flex", alignItems: "center", flexDirection: "column", width: "100%"}}>
+            <Box sx={{display: "flex", justifyContent: "center"}}>
+                <PlaceIcon fontSize="large" />
+                <Typography variant="h5">{currentUser?.city}</Typography>
+                
+            </Box>
+            {msg === "User updated successfully"? 
+                <Alert severity="success" variant="outlined" color="secondary" sx={{ mt: 2}}>
+                    <AlertTitle>{t('myaccount.updatesuccess')}</AlertTitle>
+                </Alert> 
+                :
+                <></>
+            }
+            <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmitCity}
+            sx={{display: "flex", flexDirection: "column", width: "75%"}}
+            >
+                <Autocomplete
+                sx={{ mt: 2, width: "100%"}}
+                disablePortal
+                id="city"
+                options={cities}
+                getOptionLabel={(option) => option.name || ""}
+                renderOption={(props, option) => (
+                    <li {...props} key={option._id.$oid}>{option.name}</li>
+                )}
+                fullWidth
+                noOptionsText={t("create_post.no_match")} 
+                onChange={(e, newValue) => setCity(newValue?.name)}
+                renderInput={(params) => 
+                    <TextField 
+                    {...params} 
+                    label={t("create_post.city")} 
+                    helperText={t("create_post.please_select_the_city")}
+                    />
+                }
+                />
+                <Button 
+                    type="submit"
+                    variant="contained"
+                    color="secondary"
+                    size="large"
+                    sx={{ mt: 2, mb: 2}}>
+                    <Typography fontFamily="Poppins">{t('myaccount.change_city')}</Typography>
+                </Button>
+            </Box>
+        </Box>
         <>
         <Box sx={{alignSelf: "center"}}>
             <Badge badgeContent={posts.length ? posts.length : 0} color="secondary" style={{ fontSize: "15px" }} showZero>
@@ -203,7 +280,7 @@ return (
             .reverse()
             .map((post) => (
                 <Card
-                sx={{ mt: 2, border: "2px solid #0f6B63" }}
+                sx={{ mb: 2, border: "2px solid #0f6B63" }}
                 key={post._id}
                 >
                 <CardHeader
@@ -305,6 +382,7 @@ return (
             src={currentImage}
             onClick={handleImgOpen}
             style={{ cursor: "pointer" }}
+            alt="currentImage"
         />
         </Dialog>
     </Container>
