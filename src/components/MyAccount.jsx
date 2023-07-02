@@ -26,7 +26,7 @@ import {
     Autocomplete,
     TextField
 } from "@mui/material";
-import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateRounded';
+import AddPhotoAlternateRoundedIcon from "@mui/icons-material/AddPhotoAlternateRounded";
 import CircularIndeterminate from "./Spinner";
 import IconButton from "@mui/material/IconButton";
 import ThumbUpAltRoundedIcon from "@mui/icons-material/ThumbUpAltRounded";
@@ -34,47 +34,60 @@ import ThumbDownAltRoundedIcon from "@mui/icons-material/ThumbDownAltRounded";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
 import PlaceIcon from "@mui/icons-material/Place";
-import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
+import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 
-export default function MyAccount () {
-const [msg, setMsg] = useState(null)
-const [error, setError] = useState(null);
-const [avatar, setAvatar] = useState(null);
-const [city, setCity] = useState("");
+export default function MyAccount() {
+  const [msg, setMsg] = useState(null);
+  const [error, setError] = useState(null);
+  const [avatar, setAvatar] = useState(null);
+  const [city, setCity] = useState("");
 const [isLoading, setIsLoading] = useState(false);
-const [counterLike, setCounterLike] = useState(0);
-const [counterDislike, setCounterDislike] = useState(0);
-const [open, setOpen] = useState(false);
-const [currentImage, setCurrentImage] = useState(null);
-const [anchorEl, setAnchorEl] = useState();
-const openMenu = Boolean(anchorEl);
+  const [counterLike, setCounterLike] = useState(0);
+  const [counterDislike, setCounterDislike] = useState(0);
+  const [open, setOpen] = useState(false);
+  const [currentImage, setCurrentImage] = useState(null);
+  const [anchorEl, setAnchorEl] = useState();
+  const openMenu = Boolean(anchorEl);
+  const [userPostDeleted, setUserPostDeleted] = useState(false);
 
-const { decodedToken, currentUser, findAndUpdateUser, posts, getUserPosts, token, flag, setFlag, loadingMyAccount} = useContext(DataContext);
-const { theme } = useContext(ThemeContext);
+  const {
+    decodedToken,
+    currentUser,
+    findAndUpdateUser,
+    posts,
+    getUserPosts,
+    token,
+    flag,
+    setFlag, loadingMyAccount,
+  } = useContext(DataContext);
+  const { theme } = useContext(ThemeContext);
 
-const {t} = useTranslation()
+  const { t } = useTranslation();
 
 const cities = require('../test.germancities.json');
 
-const handleSubmitImage = async (e) => {
+  const handleSubmitImage = async (e) => {
     e.preventDefault();
-    setIsLoading(true)
-    setError(null)
-    setMsg(null)
+    setIsLoading(true);
+    setError(null);
+    setMsg(null);
     try {
-        const formData = new FormData();
-        formData.append("picture", avatar, avatar?.name);
-        formData.append("user_id", decodedToken._id);
-        const res = await axios.post("https://inclusum.onrender.com/avatar/uploadavatar", formData)
-        setMsg(res.data.msg)
+      const formData = new FormData();
+      formData.append("picture", avatar, avatar?.name);
+      formData.append("user_id", decodedToken._id);
+      const res = await axios.post(
+        "https://inclusum.onrender.com/avatar/uploadavatar",
+        formData
+      );
+      setMsg(res.data.msg);
     } catch (error) {
-        setError(error.message);
-        console.error(error)
+      setError(error.message);
+      console.error(error);
     }
-    findAndUpdateUser()
-    setAvatar(null)
-    setIsLoading(false)
-    }
+    findAndUpdateUser();
+    setAvatar(null);
+    setIsLoading(false);
+  };
 
     const handleSubmitCity = async (e) => {
     e.preventDefault();
@@ -101,47 +114,64 @@ const handleSubmitImage = async (e) => {
     }
     }
 
-    const errorHandling = () => {
+  const errorHandling = () => {
     if (error === "Request failed with status code 500") {
-        return (
+      return (
         <Alert severity="error" variant="outlined">
-        <AlertTitle>{t('myaccount.uploadfailure')}</AlertTitle>
-        </Alert>)
+          <AlertTitle>{t("myaccount.uploadfailure")}</AlertTitle>
+        </Alert>
+      );
     }
-    }
+  };
 
-const handleCounterLike = (e) => {
+  const handleCounterLike = (e) => {
     console.log(e.target);
     setCounterLike(counterLike + 1);
-    };
+  };
 
-    const handleCounterDislike = (e) => {
+  const handleCounterDislike = (e) => {
     console.log(e.target);
     setCounterDislike(counterDislike + 1);
-    };
+  };
 
-    const handleImgOpen = (event) => {
+  const handleImgOpen = (event) => {
     if (open) setOpen(false);
     setCurrentImage(event.target.src);
     if (!open) setOpen(true);
     setCurrentImage(event.target.src);
-    };
+  };
 
-const handleClickMenu = (event) => {
+  const handleClickMenu = (event) => {
+    console.log("handleClickMenu");
     setAnchorEl(event.currentTarget);
-    };
+  };
 
-const handleCloseMenu = () => {
-setAnchorEl(null);
-};
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
 
-useEffect(() => {
+  const handleDeletePost = async (e) => {
+    console.log("delete clicked");
+    console.log("e.target.id", e.target.id);
+    await fetch(`https://inclusum.onrender.com/posts/${e.target.id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    setUserPostDeleted(!userPostDeleted);
+  };
+
+  useEffect(() => {}, [userPostDeleted]);
+
+  useEffect(() => {
     if (token) {
-        getUserPosts();
+      getUserPosts();
     }
-    }, [token, flag]);
+  }, [token, flag]);
 
-return (
+  return (
     <>
     <ThemeProvider theme={theme}>
     <CssBaseline/>
@@ -367,14 +397,14 @@ return (
                     {
                     counterLike >= 5 && counterLike > counterDislike ? (
                         <CheckCircleOutlineRoundedIcon
-                        aria-label="verified"
-                        color="success"
-                        fontSize="large"
+                          aria-label="verified"
+                          color="success"
+                          fontSize="large"
                         />
-                    ) : (
+                      ) : (
                         <CheckCircleOutlineRoundedIcon
-                        aria-label="verified"
-                        fontSize="large"
+                          aria-label="verified"
+                          fontSize="large"
                         />
                     )}
                 </CardActions>
@@ -397,4 +427,5 @@ return (
     </Container>
     </ThemeProvider>
     </>
-)}
+  );
+}
