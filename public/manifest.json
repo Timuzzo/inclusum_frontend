@@ -3,14 +3,19 @@
   "name": "Inclusum",
   "icons": [
     {
-      "src": "02_inclusum_icon_V2.ico",
+      "src": "02_inclusum_icon_V3.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
       "src": "02_inclusum_white.png",
       "type": "image/png",
-      "sizes": "1033x444"
+      "sizes": "192x192"
+    },
+    {
+      "src": "02_inclusum_white.png",
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ],
   "start_url": ".",

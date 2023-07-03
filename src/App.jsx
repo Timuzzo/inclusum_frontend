@@ -19,7 +19,6 @@ function App() {
   return (
     <>
     <header>
-			<h1>My app</h1>
 			{install && <button onClick={install}>Install</button>}
 		</header>
       <Navbar />
