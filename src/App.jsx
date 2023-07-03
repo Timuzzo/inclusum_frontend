@@ -9,18 +9,12 @@ import MyAccount from "./components/MyAccount";
 import { AuthContext } from "./context/AuthContext";
 import Landingpage from "./components/Landingpage";
 import React from 'react'
-import { usePWAInstall } from 'react-use-pwa-install'
 
 function App() {
   const { token } = useContext(AuthContext);
-	const install = usePWAInstall()
-  console.log("PWA", install)
 
   return (
     <>
-    <header>
-			{install && <button onClick={install}>Install</button>}
-		</header>
       <Navbar />
       <Routes>
         <Route
