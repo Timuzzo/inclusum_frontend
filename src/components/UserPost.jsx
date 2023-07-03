@@ -26,8 +26,8 @@ import CircularIndeterminate from "./Spinner";
 import PlaceIcon from "@mui/icons-material/Place";
 
 export default function UserPost() {
-  const [counterLike, setCounterLike] = useState(0);
-  const [counterDislike, setCounterDislike] = useState(0);
+  // const [counterLike, setCounterLike] = useState(0);
+  // const [counterDislike, setCounterDislike] = useState(0);
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [currentImage, setCurrentImage] = useState(null);
@@ -35,15 +35,15 @@ export default function UserPost() {
   const { theme } = useContext(ThemeContext);
   const { getUserPosts, token, flag, cityPosts, loading } = useContext(DataContext);
 
-  const handleCounterLike = (e) => {
-    console.log(e.target);
-    setCounterLike(counterLike + 1);
-  };
+  // const handleCounterLike = (e) => {
+  //   console.log(e.target);
+  //   setCounterLike(counterLike + 1);
+  // };
 
-  const handleCounterDislike = (e) => {
-    console.log(e.target);
-    setCounterDislike(counterDislike + 1);
-  };
+  // const handleCounterDislike = (e) => {
+  //   console.log(e.target);
+  //   setCounterDislike(counterDislike + 1);
+  // };
 
   const handleImgOpen = (event) => {
     if (open) setOpen(false);
@@ -51,6 +51,44 @@ export default function UserPost() {
     if (!open) setOpen(true);
     setCurrentImage(event.target.src);
   };
+
+  async function updateLike(e) {
+    const databody = {
+      likes: 0,
+    };
+    const data = await fetch(
+      `https://inclusum.onrender.com/posts/likes/${e.currentTarget.value}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(databody),
+      }
+    );
+    const res = await data.json();
+    console.log("resLike", res);
+  }
+
+  async function updateDislike(e) {
+    const databody = {
+      dislikes: 0,
+    };
+    const data = await fetch(
+      `https://inclusum.onrender.com/posts/dislikes/${e.currentTarget.value}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(databody),
+      }
+    );
+    const res = await data.json();
+    console.log("resDislike", res);
+  }
 
   useEffect(() => {
     if (token) {
@@ -136,25 +174,27 @@ export default function UserPost() {
                       </CardContent>
                       <CardActions sx={{ p: 1, display: "flex", justifyContent: "space-between"}}>
                     <Box sx={{display: "flex", gap: "10px"}}>
-                    <Badge badgeContent={counterLike} color="secondary">
+                    <Badge badgeContent={post.likes} color="secondary">
                     <IconButton
                         aria-label="like"
-                        onClick={handleCounterLike}
+                        onClick={updateLike}
+                        value={post._id}
                     >
                         <ThumbUpAltRoundedIcon />
                     </IconButton>
                     </Badge>
-                    <Badge badgeContent={counterDislike} color="secondary">
+                    <Badge badgeContent={post.dislikes} color="secondary">
                     <IconButton
                         aria-label="dislike"
-                        onClick={handleCounterDislike}
+                        onClick={updateDislike}
+                        value={post._id}
                     >
                         <ThumbDownAltRoundedIcon />
                     </IconButton>
                     </Badge>
                     </Box>
                     {
-                    counterLike >= 5 && counterLike > counterDislike ? (
+                    post.likes >= 5 && post.likes > post.dislikes ? (
                         <CheckCircleOutlineRoundedIcon
                         aria-label="verified"
                         color="success"
