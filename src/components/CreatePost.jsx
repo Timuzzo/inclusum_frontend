@@ -15,7 +15,7 @@ import {
   Alert,
   AlertTitle,
   Backdrop,
-  Autocomplete
+  Autocomplete,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import AddPhotoAlternateRoundedIcon from "@mui/icons-material/AddPhotoAlternateRounded";
@@ -41,7 +41,7 @@ export default function CreatePost() {
   const { theme } = useContext(ThemeContext);
   const { handleClickClose } = useContext(ControlContext);
 
-  const cities = require('../test.germancities.json');
+  const cities = require("../test.germancities.json");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -109,7 +109,7 @@ export default function CreatePost() {
     setPostImg(null);
     setTitle("");
     setText("");
-    setCity("")
+    setCity("");
     setIsLoading(false);
   };
 
@@ -197,24 +197,26 @@ export default function CreatePost() {
             <></>
           )}
           <Autocomplete
-          disablePortal
-          id="city"
-          options={cities}
-          getOptionLabel={(option) => option.name || ""}
-          renderOption={(props, option) => (
-            <li {...props} key={option._id.$oid}>{option.name}</li>
-          )}
-          fullWidth
-          noOptionsText={t("create_post.no_match")} 
-          onChange={(e, newValue) => setCity(newValue.name)}
-          renderInput={(params) => 
-            <TextField 
-              {...params} 
-              label={t("create_post.city")} 
-              helperText={t("create_post.please_select_the_city")}
-            />
-          }
-        />
+            disablePortal
+            id="city"
+            options={cities}
+            getOptionLabel={(option) => option?.name || ""}
+            renderOption={(props, option) => (
+              <li {...props} key={option._id.$oid}>
+                {option?.name}
+              </li>
+            )}
+            fullWidth
+            noOptionsText={t("create_post.no_match")}
+            onChange={(e, newValue) => setCity(newValue?.name)}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={t("create_post.city")}
+                helperText={t("create_post.please_select_the_city")}
+              />
+            )}
+          />
           <TextField
             fullWidth
             id="category"

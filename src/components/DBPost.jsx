@@ -11,20 +11,38 @@ import {
   ThemeProvider,
   CssBaseline,
   Backdrop,
+  Dialog,
+  CardMedia,
 } from "@mui/material/";
 import PlaceIcon from "@mui/icons-material/Place";
 import CircularIndeterminate from "./Spinner";
 import { useTranslation } from "react-i18next";
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import L from "leaflet";
+import icon from "leaflet/dist/images/marker-icon.png";
 
 export default function DBPost() {
+  const [open, setOpen] = useState(false);
+  const [currentMapY, setCurrentMapY] = useState(null);
+  const [currentMapX, setCurrentMapX] = useState(null);
 
   const { theme } = useContext(ThemeContext);
   const { mergedDBDataArray, currentUser, loading } = useContext(DataContext);
 
-  const { t } = useTranslation();
   const filteredDBPosts = mergedDBDataArray?.filter((post) =>
     post?.stationName?.includes(currentUser?.city)
   );
+
+  const handleMapOpen = (event) => {
+    if (open) setOpen(false);
+    setCurrentMapY(event.target.id);
+    setCurrentMapX(event.target.title);
+    if (!open) setOpen(true);
+  };
+
+  let DefaultIcon = L.icon({
+    iconUrl: icon,
+  });
 
   return (
     <>
@@ -59,12 +77,35 @@ export default function DBPost() {
                     display: "flex",
                     alignItems: "center",
                     gap: "5px",
-                    p: "0 16px 0 16px",
+                    p: "0 16px 16px 16px",
                   }}
                 >
                   <PlaceIcon fontSize="small" />
                   <Typography fontSize="14px">{post?.stationName}</Typography>
                 </CardContent>
+                <MapContainer
+                  center={[post?.geocoordY, post?.geocoordX]}
+                  zoom={16}
+                  scrollWheelZoom={false}
+                  style={{ height: "180px" }}
+                >
+                  <div
+                    onClick={handleMapOpen}
+                    id={post?.geocoordY}
+                    title={post?.geocoordX}
+                    style={{ height: "180px" }}
+                    type="image"
+                  >
+                    <TileLayer
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <Marker
+                      position={[post.geocoordY, post.geocoordX]}
+                      icon={DefaultIcon}
+                    ></Marker>
+                  </div>
+                </MapContainer>
                 <CardContent>
                   <Typography variant="h6">{post.type}</Typography>
                   {post?.description ? (
@@ -77,12 +118,31 @@ export default function DBPost() {
                       {post.stateExplanation}
                     </Typography>
                   ) : (
-                    <Typography variant="body2">No detailed information</Typography>
+                    <></>
                   )}
                 </CardContent>
               </Card>
             ))}
           </>
+          <Dialog open={open}>
+            <MapContainer
+              center={[currentMapY, currentMapX]}
+              zoom={15}
+              scrollWheelZoom={false}
+              style={{ height: "500px", width: "300px" }}
+            >
+              <div onClick={handleMapOpen} style={{ height: "500px" }}>
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <Marker
+                  position={[currentMapY, currentMapX]}
+                  icon={DefaultIcon}
+                ></Marker>
+              </div>
+            </MapContainer>
+          </Dialog>
         </Container>
       </ThemeProvider>
     </>
