@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+  import { useContext, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import Signup from "./components/Signup";
@@ -8,12 +8,20 @@ import Dashboard from "./components/Dashboard";
 import MyAccount from "./components/MyAccount";
 import { AuthContext } from "./context/AuthContext";
 import Landingpage from "./components/Landingpage";
+import React from 'react'
+import { usePWAInstall } from 'react-use-pwa-install'
 
 function App() {
   const { token } = useContext(AuthContext);
+	const install = usePWAInstall()
+  console.log("PWA", install)
 
   return (
     <>
+    <header>
+			<h1>My app</h1>
+			{install && <button onClick={install}>Install</button>}
+		</header>
       <Navbar />
       <Routes>
         <Route
