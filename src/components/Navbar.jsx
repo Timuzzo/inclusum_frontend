@@ -15,11 +15,13 @@ import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 import WbSunnyRoundedIcon from "@mui/icons-material/WbSunnyRounded";
 import LanguageIcon from "@mui/icons-material/Language";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import DownloadIcon from '@mui/icons-material/Download';
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { ThemeContext } from "../context/ThemeContext";
 import { DataContext } from "../context/DataContext";
 import { useTranslation } from "react-i18next";
+import { usePWAInstall } from 'react-use-pwa-install'
 
 export default function Navbar() {
   const { logout, token } = useContext(AuthContext);
@@ -33,6 +35,8 @@ export default function Navbar() {
     en: { nativeName: "English" },
     de: { nativeName: "Deutsch" },
   };
+
+  const install = usePWAInstall()
 
   const [anchorLanguage, setAnchorLanguage] = useState();
   const [anchorAccount, setAnchorAccount] = useState();
@@ -87,6 +91,7 @@ export default function Navbar() {
             <Link to="/" sx={{ cursor: "pointer"}} ><img src="/02_inclusum_white.png" alt="logo" style={{width: "100px"}}/></Link>
             </IconButton>
             <Box sx={{ display: "flex", alignItems: "center"}}>
+              {install && <DownloadIcon onClick={install}  sx={{ mr: 2, cursor: "pointer" }}/>}
               <LanguageIcon
               sx={{ mr: 2, cursor: "pointer" }}
               onClick={handleClickLanguage}
