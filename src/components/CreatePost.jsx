@@ -89,6 +89,8 @@ export default function CreatePost() {
       formData.append("city", city);
       formData.append("username", currentUser.username);
       formData.append("avatar", currentUser.avatar);
+      formData.append("likes", 0);
+      formData.append("dislikes", 0);
       const res = await axios.post(
         "https://inclusum.onrender.com/posts",
         formData,
