@@ -5,27 +5,18 @@ import {
   Card,
   CardHeader,
   CardContent,
-  CardActions,
   Avatar,
   Typography,
   Container,
   ThemeProvider,
   CssBaseline,
-  Badge,
-  Box,
   Backdrop,
 } from "@mui/material/";
-import IconButton from "@mui/material/IconButton";
-import ThumbUpAltRoundedIcon from "@mui/icons-material/ThumbUpAltRounded";
-import ThumbDownAltRoundedIcon from "@mui/icons-material/ThumbDownAltRounded";
-import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
 import PlaceIcon from "@mui/icons-material/Place";
 import CircularIndeterminate from "./Spinner";
 import { useTranslation } from "react-i18next";
 
 export default function DBPost() {
-  const [counterLike, setCounterLike] = useState(0);
-  const [counterDislike, setCounterDislike] = useState(0);
 
   const { theme } = useContext(ThemeContext);
   const { mergedDBDataArray, currentUser, loading } = useContext(DataContext);
@@ -34,14 +25,6 @@ export default function DBPost() {
   const filteredDBPosts = mergedDBDataArray?.filter((post) =>
     post?.stationName?.includes(currentUser?.city)
   );
-
-  const handleCounterLike = () => {
-    setCounterLike(counterLike + 1);
-  };
-
-  const handleCounterDislike = () => {
-    setCounterDislike(counterDislike + 1);
-  };
 
   return (
     <>
@@ -97,41 +80,6 @@ export default function DBPost() {
                     <Typography variant="body2">No detailed information</Typography>
                   )}
                 </CardContent>
-                <CardActions
-                  sx={{
-                    p: 1,
-                    display: "flex",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Box sx={{ display: "flex", gap: "10px" }}>
-                    <Badge badgeContent={counterLike} color="secondary">
-                      <IconButton aria-label="like" onClick={handleCounterLike}>
-                        <ThumbUpAltRoundedIcon />
-                      </IconButton>
-                    </Badge>
-                    <Badge badgeContent={counterDislike} color="secondary">
-                      <IconButton
-                        aria-label="dislike"
-                        onClick={handleCounterDislike}
-                      >
-                        <ThumbDownAltRoundedIcon />
-                      </IconButton>
-                    </Badge>
-                  </Box>
-                  {counterLike >= 5 && counterLike > counterDislike ? (
-                    <CheckCircleOutlineRoundedIcon
-                      aria-label="verified"
-                      color="success"
-                      fontSize="large"
-                    />
-                  ) : (
-                    <CheckCircleOutlineRoundedIcon
-                      aria-label="verified"
-                      fontSize="large"
-                    />
-                  )}
-                </CardActions>
               </Card>
             ))}
           </>

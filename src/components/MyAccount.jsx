@@ -35,6 +35,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
 import PlaceIcon from "@mui/icons-material/Place";
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 
 export default function MyAccount() {
   const [msg, setMsg] = useState(null);
@@ -48,7 +49,6 @@ export default function MyAccount() {
   const [currentImage, setCurrentImage] = useState(null);
   const [anchorEl, setAnchorEl] = useState();
   const openMenu = Boolean(anchorEl);
-  const [userPostDeleted, setUserPostDeleted] = useState(false);
 
   const {
     decodedToken,
@@ -125,16 +125,6 @@ export default function MyAccount() {
     }
   };
 
-  const handleCounterLike = (e) => {
-    console.log(e.target);
-    setCounterLike(counterLike + 1);
-  };
-
-  const handleCounterDislike = (e) => {
-    console.log(e.target);
-    setCounterDislike(counterDislike + 1);
-  };
-
   const handleImgOpen = (event) => {
     if (open) setOpen(false);
     setCurrentImage(event.target.src);
@@ -142,26 +132,20 @@ export default function MyAccount() {
     setCurrentImage(event.target.src);
   };
 
-  const handleClickMenu = (event) => {
-    console.log("handleClickMenu");
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
-  };
-
   const handleDeletePost = async (e) => {
+    setMsg("");
     console.log("delete clicked");
-    console.log("e.target.id", e.target.id);
-    await fetch(`https://inclusum.onrender.com/posts/${e.target.id}`, {
+    console.log("e.currentTarget.value", e.currentTarget.value);
+    const res = await fetch(`https://inclusum.onrender.com/posts/${e.currentTarget.value}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
-    setUserPostDeleted(!userPostDeleted);
+    const response = await res.json()
+    setMsg(response.msg);
+    setFlag(!flag);
   };
 
   useEffect(() => {}, []);
@@ -368,7 +352,19 @@ export default function MyAccount() {
                     </Typography>
                   </Badge>
                 </Box>
-                {console.log("posts", posts)}
+                <Box sx={{ alignSelf: "center", width: "75%" }}>
+                  {msg === "User post successfully deleted" ? (
+                  <Alert
+                    severity="success"
+                    variant="outlined"
+                    color="secondary"
+                  >
+                    <AlertTitle>{t("myaccount.deletesuccess")}</AlertTitle>
+                  </Alert>
+                ) : (
+                  <></>
+                )}
+                </Box>
                 <Box>
                   {posts.length ? (
                     posts
@@ -388,23 +384,13 @@ export default function MyAccount() {
                               )
                             }
                             action={
-                              <IconButton onClick={handleClickMenu}>
-                                <MoreVertRoundedIcon />
+                              <IconButton onClick={handleDeletePost} value={post._id}>
+                                <DeleteRoundedIcon />
                               </IconButton>
                             }
                             title={post?.username}
                             subheader={post?.timestamp}
                           />
-                          <Menu
-                            anchorEl={anchorEl}
-                            onClose={handleCloseMenu}
-                            open={openMenu}
-                          >
-                            <MenuItem onClick={handleDeletePost} id={post._id}>
-                              {t("myaccount.delete")}
-                            </MenuItem>
-                            <MenuItem>{t("myaccount.edit")}</MenuItem>
-                          </Menu>
                           <CardContent
                             sx={{
                               display: "flex",
@@ -450,23 +436,23 @@ export default function MyAccount() {
                           >
                             <Box sx={{ display: "flex", gap: "10px" }}>
                               <Badge
-                                badgeContent={counterLike}
+                                badgeContent={post.likes}
                                 color="secondary"
                               >
                                 <IconButton
                                   aria-label="like"
-                                  onClick={handleCounterLike}
+                                  disabled
                                 >
                                   <ThumbUpAltRoundedIcon />
                                 </IconButton>
                               </Badge>
                               <Badge
-                                badgeContent={counterDislike}
+                                badgeContent={post.dislikes}
                                 color="secondary"
                               >
                                 <IconButton
                                   aria-label="dislike"
-                                  onClick={handleCounterDislike}
+                                  disabled
                                 >
                                   <ThumbDownAltRoundedIcon />
                                 </IconButton>
