@@ -48,7 +48,7 @@ export default function DBPost() {
     setCounterDislike(counterDislike + 1);
   };
 
-  const customMarkerIcon = new Icon({ iconUrl: "", iconSize: [30, 30] });
+  //const customMarkerIcon = new Icon({ iconUrl: "", iconSize: [30, 30] });
 
   return (
     <>
@@ -89,17 +89,16 @@ export default function DBPost() {
                   <PlaceIcon fontSize="small" />
                   <Typography fontSize="14px">{post?.stationName}</Typography>
                 </CardContent>
-
                 <MapContainer
                   center={[post.geocoordY, post.geocoordX]}
-                  zoom={17}
+                  zoom={15}
                 >
                   <CardMedia
                     height="300"
                     width="300"
                     sx={{
                       pt: 1,
-                      objectFit: "cover",
+                      objectFit: "center",
                       cursor: "pointer",
                       mb: "150px",
                     }}
