@@ -436,7 +436,7 @@ export default function MyAccount() {
                           >
                             <Box sx={{ display: "flex", gap: "10px" }}>
                               <Badge
-                                badgeContent={counterLike}
+                                badgeContent={post.likes}
                                 color="secondary"
                               >
                                 <IconButton
@@ -447,7 +447,7 @@ export default function MyAccount() {
                                 </IconButton>
                               </Badge>
                               <Badge
-                                badgeContent={counterDislike}
+                                badgeContent={post.dislikes}
                                 color="secondary"
                               >
                                 <IconButton

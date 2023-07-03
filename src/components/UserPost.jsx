@@ -33,7 +33,7 @@ export default function UserPost() {
   const [currentImage, setCurrentImage] = useState(null);
 
   const { theme } = useContext(ThemeContext);
-  const { getUserPosts, token, flag, cityPosts, loading } = useContext(DataContext);
+  const { getUserPosts, token, flag, cityPosts, loading, currentUser } = useContext(DataContext);
 
   // const handleCounterLike = (e) => {
   //   console.log(e.target);
@@ -174,15 +174,36 @@ export default function UserPost() {
                       </CardContent>
                       <CardActions sx={{ p: 1, display: "flex", justifyContent: "space-between"}}>
                     <Box sx={{display: "flex", gap: "10px"}}>
-                    <Badge badgeContent={post.likes} color="secondary">
-                    <IconButton
+                      {currentUser._id === post.user_id ? 
+                      <Badge badgeContent={post.likes} color="secondary">
+                      <IconButton
+                          aria-label="like"
+                          disabled={true}
+                      >
+                          <ThumbUpAltRoundedIcon />
+                      </IconButton>
+                      </Badge>
+                      :
+                      <Badge badgeContent={post.likes} color="secondary">
+                      <IconButton
                         aria-label="like"
                         onClick={updateLike}
                         value={post._id}
+                      >
+                          <ThumbUpAltRoundedIcon />
+                      </IconButton>
+                      </Badge>
+                      }
+                    {currentUser._id === post.user_id ? 
+                    <Badge badgeContent={post.dislikes} color="secondary">
+                    <IconButton
+                        aria-label="dislike"
+                        disabled={true}
                     >
-                        <ThumbUpAltRoundedIcon />
+                        <ThumbDownAltRoundedIcon />
                     </IconButton>
                     </Badge>
+                    :
                     <Badge badgeContent={post.dislikes} color="secondary">
                     <IconButton
                         aria-label="dislike"
@@ -192,6 +213,7 @@ export default function UserPost() {
                         <ThumbDownAltRoundedIcon />
                     </IconButton>
                     </Badge>
+                    }
                     </Box>
                     {
                     post.likes >= 5 && post.likes > post.dislikes ? (
