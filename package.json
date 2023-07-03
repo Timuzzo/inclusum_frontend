@@ -21,6 +21,7 @@
     "react-leaflet": "^4.2.1",
     "react-router-dom": "^6.12.1",
     "react-scripts": "5.0.1",
+    "react-use-pwa-install": "^0.2.4",
     "typewriter-effect": "^2.20.1",
     "web-vitals": "^2.1.4"
   },
