@@ -11,17 +11,19 @@ import {
   ThemeProvider,
   CssBaseline,
   Backdrop,
-  Zoom,
+  Dialog,
   CardMedia,
 } from "@mui/material/";
 import PlaceIcon from "@mui/icons-material/Place";
 import CircularIndeterminate from "./Spinner";
 import { useTranslation } from "react-i18next";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
-import { Icon } from "leaflet";
-import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import icon from "leaflet/dist/images/marker-icon.png";
 
 export default function DBPost() {
+  const [open, setOpen] = useState(false);
+
   const { theme } = useContext(ThemeContext);
   const { mergedDBDataArray, currentUser, loading } = useContext(DataContext);
 
@@ -29,6 +31,17 @@ export default function DBPost() {
   const filteredDBPosts = mergedDBDataArray?.filter((post) =>
     post?.stationName?.includes(currentUser?.city)
   );
+
+  const handleMapOpen = (event) => {
+    if (open) setOpen(false);
+    console.log("event.target", event.target);
+    if (!open) setOpen(true);
+    console.log("event.target", event.target);
+  };
+
+  let DefaultIcon = L.icon({
+    iconUrl: icon,
+  });
 
   return (
     <>
@@ -63,7 +76,7 @@ export default function DBPost() {
                     display: "flex",
                     alignItems: "center",
                     gap: "5px",
-                    p: "0 16px 0 16px",
+                    p: "0 16px 16px 16px",
                   }}
                 >
                   <PlaceIcon fontSize="small" />
@@ -71,26 +84,20 @@ export default function DBPost() {
                 </CardContent>
                 <MapContainer
                   center={[post.geocoordY, post.geocoordX]}
-                  zoom={15}
+                  zoom={16}
+                  scrollWheelZoom={false}
+                  style={{ height: "180px" }}
                 >
-                  <CardMedia
-                    height="300"
-                    width="300"
-                    sx={{
-                      pt: 1,
-                      objectFit: "center",
-                      cursor: "pointer",
-                      mb: "150px",
-                    }}
-                  >
+                  <div id="map" style={{ height: "180px" }}>
                     <TileLayer
-                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>contributors'
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
                     <Marker
                       position={[post.geocoordY, post.geocoordX]}
+                      icon={DefaultIcon}
                     ></Marker>
-                  </CardMedia>
+                  </div>
                 </MapContainer>
                 <CardContent>
                   <Typography variant="h6">{post.type}</Typography>
@@ -104,14 +111,28 @@ export default function DBPost() {
                       {post.stateExplanation}
                     </Typography>
                   ) : (
-                    <Typography variant="body2">
-                      No detailed information
-                    </Typography>
+                    <></>
                   )}
                 </CardContent>
               </Card>
             ))}
           </>
+          {/* <Dialog open={open}>
+            <MapContainer
+              center={[51.505, -0.09]}
+              zoom={15}
+              scrollWheelZoom={false}
+            >
+              <div id="map" style={{ height: "180px" }}>
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  onClick={handleMapOpen}
+                />
+                <Marker position={[51.505, -0.09]} icon={DefaultIcon}></Marker>
+              </div>
+            </MapContainer>
+          </Dialog> */}
         </Container>
       </ThemeProvider>
     </>
