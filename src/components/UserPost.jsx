@@ -26,25 +26,20 @@ import CircularIndeterminate from "./Spinner";
 import PlaceIcon from "@mui/icons-material/Place";
 
 export default function UserPost() {
-  // const [counterLike, setCounterLike] = useState(0);
-  // const [counterDislike, setCounterDislike] = useState(0);
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [currentImage, setCurrentImage] = useState(null);
 
   const { theme } = useContext(ThemeContext);
-  const { getUserPosts, token, flag, cityPosts, loading, currentUser } =
-    useContext(DataContext);
-
-  // const handleCounterLike = (e) => {
-  //   console.log(e.target);
-  //   setCounterLike(counterLike + 1);
-  // };
-
-  // const handleCounterDislike = (e) => {
-  //   console.log(e.target);
-  //   setCounterDislike(counterDislike + 1);
-  // };
+  const {
+    getUserPosts,
+    token,
+    flag,
+    cityPosts,
+    loading,
+    currentUser,
+    setFlag,
+  } = useContext(DataContext);
 
   const handleImgOpen = (event) => {
     if (open) setOpen(false);
@@ -69,7 +64,7 @@ export default function UserPost() {
       }
     );
     const res = await data.json();
-    console.log("resLike", res);
+    setFlag(!flag);
   }
 
   async function updateDislike(e) {
@@ -88,7 +83,7 @@ export default function UserPost() {
       }
     );
     const res = await data.json();
-    console.log("resDislike", res);
+    setFlag(!flag);
   }
 
   useEffect(() => {
