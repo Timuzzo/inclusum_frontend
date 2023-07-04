@@ -14,6 +14,7 @@ export default function DataContextProvider(props) {
   const [flag, setFlag] = useState(false);
   const [mergedDBDataArray, setMergedDBDataArray] = useState([]);
   const [filteredDBPosts, setFilteredDBPosts] = useState([]);
+  
   const [cityPosts, setCityPosts] = useState([]);
 
   const { token, login } = useContext(AuthContext);
