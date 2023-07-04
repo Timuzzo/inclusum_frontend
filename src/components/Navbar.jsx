@@ -66,6 +66,26 @@ export default function Navbar() {
     logout();
   };
 
+  const handleClickLogin = () => {
+    navigate("/login")
+    setAnchorAccount(null);
+  }
+
+  const handleClickSignup = () => {
+    navigate("/signup")
+    setAnchorAccount(null);
+  }
+
+  const handleClickMyaccount = () => {
+    navigate("/myaccount")
+    setAnchorAccount(null);
+  }
+
+  const handleClickMyDashboard = () => {
+    navigate("/dashboard")
+    setAnchorAccount(null);
+  }
+
   const handleClickTheme = () => {
     if (themeToggle) {
       localStorage.removeItem("darkmode");
@@ -88,7 +108,7 @@ export default function Navbar() {
               color="inherit"
               aria-label="menu"
             >
-            <Link to="/" sx={{ cursor: "pointer"}} ><img src="/02_inclusum_white.png" alt="logo" style={{width: "100px"}}/></Link>
+            <Link to="/dashboard" sx={{ cursor: "pointer"}} ><img src="/02_inclusum_white.png" alt="logo" style={{width: "100px"}}/></Link>
             </IconButton>
             <Box sx={{ display: "flex", alignItems: "center"}}>
               {install && <DownloadIcon onClick={install}  sx={{ mr: 2, cursor: "pointer" }}/>}
@@ -102,7 +122,7 @@ export default function Navbar() {
               open={openLanguage}
             >
               {Object.keys(languages).map((lng) => (
-                <MenuItem key={lng} onClick={() => i18n.changeLanguage(lng)}>
+                <MenuItem key={lng} onClick={() => {i18n.changeLanguage(lng);  setAnchorLanguage(null);}}>
                   {languages[lng].nativeName}
                 </MenuItem>
               ))}
@@ -134,12 +154,12 @@ export default function Navbar() {
                       {t("navbar.logout")}
                     </Typography>
                   </MenuItem>
-                  <MenuItem onClick={() => navigate("/myaccount")}>
+                  <MenuItem onClick={handleClickMyaccount}>
                     <Typography color="inherit">
                       {t("navbar.myaccount")}
                     </Typography>
                   </MenuItem>
-                  <MenuItem onClick={() => navigate("/dashboard")}>
+                  <MenuItem onClick={handleClickMyDashboard}>
                     <Typography color="inherit" >
                       {t("navbar.dashboard")}
                     </Typography>
@@ -158,12 +178,12 @@ export default function Navbar() {
                   onClose={handleCloseAccount}
                   open={openAccount}
                 >
-                  <MenuItem onClick={() => navigate("/login")}>
+                  <MenuItem onClick={handleClickLogin}>
                     <Typography color="inherit">
                       {t("navbar.login")}
                     </Typography>
                   </MenuItem>
-                  <MenuItem onClick={() => navigate("/signup")}>
+                  <MenuItem onClick={handleClickSignup}>
                     <Typography color="inherit">
                       {t("navbar.signup")}
                     </Typography>

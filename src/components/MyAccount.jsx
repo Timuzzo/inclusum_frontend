@@ -21,8 +21,6 @@ import {
   Container,
   Badge,
   Dialog,
-  MenuItem,
-  Menu,
   Autocomplete,
   TextField,
 } from "@mui/material";
@@ -34,7 +32,6 @@ import ThumbDownAltRoundedIcon from "@mui/icons-material/ThumbDownAltRounded";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
 import PlaceIcon from "@mui/icons-material/Place";
-import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 
 export default function MyAccount() {
@@ -47,8 +44,6 @@ export default function MyAccount() {
   const [counterDislike, setCounterDislike] = useState(0);
   const [open, setOpen] = useState(false);
   const [currentImage, setCurrentImage] = useState(null);
-  const [anchorEl, setAnchorEl] = useState();
-  const openMenu = Boolean(anchorEl);
 
   const {
     decodedToken,
@@ -61,6 +56,7 @@ export default function MyAccount() {
     setFlag,
     loadingMyAccount,
   } = useContext(DataContext);
+
   const { theme } = useContext(ThemeContext);
 
   const { t } = useTranslation();
@@ -147,8 +143,6 @@ export default function MyAccount() {
     setMsg(response.msg);
     setFlag(!flag);
   };
-
-  useEffect(() => {}, []);
 
   useEffect(() => {
     if (token) {
