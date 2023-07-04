@@ -12,11 +12,9 @@ import {
   CssBaseline,
   Backdrop,
   Dialog,
-  CardMedia,
 } from "@mui/material/";
 import PlaceIcon from "@mui/icons-material/Place";
 import CircularIndeterminate from "./Spinner";
-import { useTranslation } from "react-i18next";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import L from "leaflet";
 import icon from "leaflet/dist/images/marker-icon.png";
@@ -27,11 +25,7 @@ export default function DBPost() {
   const [currentMapX, setCurrentMapX] = useState(null);
 
   const { theme } = useContext(ThemeContext);
-  const { mergedDBDataArray, currentUser, loading } = useContext(DataContext);
-
-  const filteredDBPosts = mergedDBDataArray?.filter((post) =>
-    post?.stationName?.includes(currentUser?.city)
-  );
+  const {loading, filteredDBPosts } = useContext(DataContext);
 
   const handleMapOpen = (event) => {
     if (open) setOpen(false);
