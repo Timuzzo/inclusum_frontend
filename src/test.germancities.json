@@ -525,7 +525,7 @@
     "lat": "51.05139",
     "lon": "10.24472"
   },
-  "district": "Wartburgkreis",
+  "district": "WartburgkreiColognes",
   "name": "Amt Creuzburg",
   "population": "4705",
   "state": "Thuringia"
@@ -674,7 +674,7 @@
   "_id": {
     "$oid": "649fe714cbbc8427693df4c7"
   },
-  "area": "269.68",
+  "area": "269.68",Cologne
   "coords": {
     "lat": "52.8767",
     "lon": "11.4867"
@@ -708,7 +708,7 @@
     "lon": "9.93139"
   },
   "district": "Schleswig-Flensburg",
-  "name": "ArnisArnæs",
+  "name": "Arnis Arnæs",
   "population": "280",
   "state": "Schleswig-Holstein"
 },
@@ -4848,7 +4848,7 @@
     "lon": "6.95278"
   },
   "district": "Urban districts of Germany",
-  "name": "Cologne",
+  "name": "Köln",
   "population": "1083498",
   "state": "North Rhine-Westphalia"
 },
@@ -4862,7 +4862,7 @@
     "lon": "9.183"
   },
   "district": "Konstanz",
-  "name": "Constance",
+  "name": "Konstanz",
   "population": "84446",
   "state": "Baden-Württemberg"
 },
@@ -10124,7 +10124,7 @@
     "lon": "9.717"
   },
   "district": "Hannover",
-  "name": "Hanover",
+  "name": "Hannover",
   "population": "534049",
   "state": "Lower Saxony"
 },
@@ -16550,7 +16550,7 @@
     "lon": "11.567"
   },
   "district": "Urban district",
-  "name": "Munich",
+  "name": "München",
   "population": "1488202",
   "state": "Bavaria"
 },
