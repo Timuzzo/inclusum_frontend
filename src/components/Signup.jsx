@@ -209,6 +209,7 @@ export default function Signup() {
                 label={t('signup.email')}
                 name="email"
                 autoComplete="email"
+                autoFocus
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
               />
@@ -232,6 +233,7 @@ export default function Signup() {
               label={t('signup.username')}
               name="username"
               autoComplete="username"
+              autoFocus
               onChange={(e) => setUsername(e.target.value)}
               value={username}
             />

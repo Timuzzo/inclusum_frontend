@@ -15,13 +15,13 @@ import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 import WbSunnyRoundedIcon from "@mui/icons-material/WbSunnyRounded";
 import LanguageIcon from "@mui/icons-material/Language";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import DownloadIcon from '@mui/icons-material/Download';
+import DownloadIcon from "@mui/icons-material/Download";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { ThemeContext } from "../context/ThemeContext";
 import { DataContext } from "../context/DataContext";
 import { useTranslation } from "react-i18next";
-import { usePWAInstall } from 'react-use-pwa-install'
+import { usePWAInstall } from "react-use-pwa-install";
 
 export default function Navbar() {
   const { logout, token } = useContext(AuthContext);
@@ -36,7 +36,7 @@ export default function Navbar() {
     de: { nativeName: "Deutsch" },
   };
 
-  const install = usePWAInstall()
+  const install = usePWAInstall();
 
   const [anchorLanguage, setAnchorLanguage] = useState();
   const [anchorAccount, setAnchorAccount] = useState();
@@ -60,38 +60,18 @@ export default function Navbar() {
 
   const handleClickLogout = () => {
     localStorage.removeItem("token");
-    setAnchorAccount(false);
+    setAnchorAccount(null);
     setFlag(!flag);
     navigate("/login");
     logout();
   };
 
-  const handleClickLogin = () => {
-    navigate("/login")
-    setAnchorAccount(null);
-  }
-
-  const handleClickSignup = () => {
-    navigate("/signup")
-    setAnchorAccount(null);
-  }
-
-  const handleClickMyaccount = () => {
-    navigate("/myaccount")
-    setAnchorAccount(null);
-  }
-
-  const handleClickMyDashboard = () => {
-    navigate("/dashboard")
-    setAnchorAccount(null);
-  }
-
   const handleClickTheme = () => {
     if (themeToggle) {
       localStorage.removeItem("darkmode");
-      setThemeToggle(false)
+      setThemeToggle(false);
     } else {
-      setThemeToggle(true)
+      setThemeToggle(true);
     }
   };
 
@@ -100,19 +80,36 @@ export default function Navbar() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-        <AppBar position="static" sx={{ backgroundColor: "#3476AD" }}>
-          <Toolbar sx={{ display: "flex", alignItems: "center", justifyContent: "space-between"}}>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-            >
-            <Link to="/dashboard" sx={{ cursor: "pointer"}} ><img src="/02_inclusum_white.png" alt="logo" style={{width: "100px"}}/></Link>
-            </IconButton>
-            <Box sx={{ display: "flex", alignItems: "center"}}>
-              {install && <DownloadIcon onClick={install}  sx={{ mr: 2, cursor: "pointer" }}/>}
-              <LanguageIcon
+      <AppBar position="static" sx={{ backgroundColor: "#3476AD" }}>
+        <Toolbar
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+          >
+            <Link to="/dashboard" sx={{ cursor: "pointer" }}>
+              <img
+                src="/02_inclusum_white.png"
+                alt="logo"
+                style={{ width: "100px" }}
+              />
+            </Link>
+          </IconButton>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            {install && (
+              <DownloadIcon
+                onClick={install}
+                sx={{ mr: 2, cursor: "pointer" }}
+              />
+            )}
+            <LanguageIcon
               sx={{ mr: 2, cursor: "pointer" }}
               onClick={handleClickLanguage}
             />
@@ -122,7 +119,13 @@ export default function Navbar() {
               open={openLanguage}
             >
               {Object.keys(languages).map((lng) => (
-                <MenuItem key={lng} onClick={() => {i18n.changeLanguage(lng);  setAnchorLanguage(null);}}>
+                <MenuItem
+                  key={lng}
+                  onClick={() => {
+                    i18n.changeLanguage(lng);
+                    setAnchorLanguage(null);
+                  }}
+                >
                   {languages[lng].nativeName}
                 </MenuItem>
               ))}
@@ -140,27 +143,46 @@ export default function Navbar() {
             )}
             {token !== null && (
               <>
-                {currentUser?.avatar !== "" ? 
-                <Avatar sx={{ cursor: "pointer" }} onClick={handleClickAccount} aria-label="avatar" src={currentUser?.avatar}/>
-                : 
-                <AccountCircleIcon sx={{ cursor: "pointer" }} onClick={handleClickAccount}/>}
+                {currentUser?.avatar !== "" ? (
+                  <Avatar
+                    sx={{ cursor: "pointer" }}
+                    onClick={handleClickAccount}
+                    aria-label="avatar"
+                    src={currentUser?.avatar}
+                  />
+                ) : (
+                  <AccountCircleIcon
+                    sx={{ cursor: "pointer" }}
+                    onClick={handleClickAccount}
+                  />
+                )}
                 <Menu
                   anchorEl={anchorAccount}
                   onClose={handleCloseAccount}
                   open={openAccount}
                 >
                   <MenuItem onClick={handleClickLogout}>
-                    <Typography color="inherit" >
+                    <Typography color="inherit">
                       {t("navbar.logout")}
                     </Typography>
                   </MenuItem>
-                  <MenuItem onClick={handleClickMyaccount}>
+                  <MenuItem
+                    onClick={() => {
+                      navigate("/myaccount");
+                      setAnchorAccount(null);
+                    }}
+                  >
                     <Typography color="inherit">
                       {t("navbar.myaccount")}
                     </Typography>
                   </MenuItem>
-                  <MenuItem onClick={handleClickMyDashboard}>
-                    <Typography color="inherit" >
+                  <MenuItem
+                    onClick={() => {
+                      navigate("/dashboard");
+                      setAnchorAccount(null);
+                    }}
+                  >
+                    <Typography color="inherit">
                       {t("navbar.dashboard")}
                     </Typography>
                   </MenuItem>
@@ -178,12 +200,20 @@ export default function Navbar() {
                   onClose={handleCloseAccount}
                   open={openAccount}
                 >
-                  <MenuItem onClick={handleClickLogin}>
-                    <Typography color="inherit">
-                      {t("navbar.login")}
-                    </Typography>
+                  <MenuItem
+                    onClick={() => {
+                      navigate("/login");
+                      setAnchorAccount(null);
+                    }}
+                  >
+                    <Typography color="inherit">{t("navbar.login")}</Typography>
                   </MenuItem>
-                  <MenuItem onClick={handleClickSignup}>
+                  <MenuItem
+                    onClick={() => {
+                      navigate("/signup");
+                      setAnchorAccount(null);
+                    }}
+                  >
                     <Typography color="inherit">
                       {t("navbar.signup")}
                     </Typography>
@@ -191,9 +221,9 @@ export default function Navbar() {
                 </Menu>
               </>
             )}
-            </Box>
-          </Toolbar>
-        </AppBar>
+          </Box>
+        </Toolbar>
+      </AppBar>
     </ThemeProvider>
   );
 }
