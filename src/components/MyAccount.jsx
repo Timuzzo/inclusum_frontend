@@ -21,8 +21,6 @@ import {
   Container,
   Badge,
   Dialog,
-  MenuItem,
-  Menu,
   Autocomplete,
   TextField,
 } from "@mui/material";
@@ -32,10 +30,9 @@ import IconButton from "@mui/material/IconButton";
 import ThumbUpAltRoundedIcon from "@mui/icons-material/ThumbUpAltRounded";
 import ThumbDownAltRoundedIcon from "@mui/icons-material/ThumbDownAltRounded";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import PlaceIcon from "@mui/icons-material/Place";
-import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
-import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 
 export default function MyAccount() {
   const [msg, setMsg] = useState(null);
@@ -43,12 +40,8 @@ export default function MyAccount() {
   const [avatar, setAvatar] = useState(null);
   const [city, setCity] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [counterLike, setCounterLike] = useState(0);
-  const [counterDislike, setCounterDislike] = useState(0);
   const [open, setOpen] = useState(false);
   const [currentImage, setCurrentImage] = useState(null);
-  const [anchorEl, setAnchorEl] = useState();
-  const openMenu = Boolean(anchorEl);
 
   const {
     decodedToken,
@@ -136,19 +129,20 @@ export default function MyAccount() {
     setMsg("");
     console.log("delete clicked");
     console.log("e.currentTarget.value", e.currentTarget.value);
-    const res = await fetch(`https://inclusum.onrender.com/posts/${e.currentTarget.value}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const response = await res.json()
+    const res = await fetch(
+      `https://inclusum.onrender.com/posts/${e.currentTarget.value}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const response = await res.json();
     setMsg(response.msg);
     setFlag(!flag);
   };
-
-  useEffect(() => {}, []);
 
   useEffect(() => {
     if (token) {
@@ -354,16 +348,16 @@ export default function MyAccount() {
                 </Box>
                 <Box sx={{ alignSelf: "center", width: "75%" }}>
                   {msg === "User post successfully deleted" ? (
-                  <Alert
-                    severity="success"
-                    variant="outlined"
-                    color="secondary"
-                  >
-                    <AlertTitle>{t("myaccount.deletesuccess")}</AlertTitle>
-                  </Alert>
-                ) : (
-                  <></>
-                )}
+                    <Alert
+                      severity="success"
+                      variant="outlined"
+                      color="secondary"
+                    >
+                      <AlertTitle>{t("myaccount.deletesuccess")}</AlertTitle>
+                    </Alert>
+                  ) : (
+                    <></>
+                  )}
                 </Box>
                 <Box>
                   {posts.length ? (
@@ -384,7 +378,10 @@ export default function MyAccount() {
                               )
                             }
                             action={
-                              <IconButton onClick={handleDeletePost} value={post._id}>
+                              <IconButton
+                                onClick={handleDeletePost}
+                                value={post._id}
+                              >
                                 <DeleteRoundedIcon />
                               </IconButton>
                             }
@@ -439,10 +436,7 @@ export default function MyAccount() {
                                 badgeContent={post.likes}
                                 color="secondary"
                               >
-                                <IconButton
-                                  aria-label="like"
-                                  disabled
-                                >
+                                <IconButton aria-label="like" disabled>
                                   <ThumbUpAltRoundedIcon />
                                 </IconButton>
                               </Badge>
@@ -450,23 +444,19 @@ export default function MyAccount() {
                                 badgeContent={post.dislikes}
                                 color="secondary"
                               >
-                                <IconButton
-                                  aria-label="dislike"
-                                  disabled
-                                >
+                                <IconButton aria-label="dislike" disabled>
                                   <ThumbDownAltRoundedIcon />
                                 </IconButton>
                               </Badge>
                             </Box>
-                            {counterLike >= 5 &&
-                            counterLike > counterDislike ? (
-                              <CheckCircleOutlineRoundedIcon
+                            {post.likes >= 5 && post.likes > post.dislikes ? (
+                              <CheckCircleRoundedIcon
                                 aria-label="verified"
                                 color="success"
                                 fontSize="large"
                               />
                             ) : (
-                              <CheckCircleOutlineRoundedIcon
+                              <CheckCircleRoundedIcon
                                 aria-label="verified"
                                 fontSize="large"
                               />
