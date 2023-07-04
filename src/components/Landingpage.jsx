@@ -20,7 +20,7 @@ export default function Landingpage() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          minHeight: "100vh",
+          minHeight: "70vh",
           gap: "20px",
         }}
       >
