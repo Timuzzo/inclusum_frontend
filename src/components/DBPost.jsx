@@ -25,7 +25,7 @@ export default function DBPost() {
   const [currentMapX, setCurrentMapX] = useState(null);
 
   const { theme } = useContext(ThemeContext);
-  const {loading, filteredDBPosts } = useContext(DataContext);
+  const { loading, filteredDBPosts } = useContext(DataContext);
 
   const handleMapOpen = (event) => {
     if (open) setOpen(false);
@@ -80,6 +80,8 @@ export default function DBPost() {
                 <MapContainer
                   center={[post?.geocoordY, post?.geocoordX]}
                   zoom={16}
+                  dragging={false}
+                  tap={false}
                   scrollWheelZoom={false}
                   style={{ height: "180px" }}
                 >
