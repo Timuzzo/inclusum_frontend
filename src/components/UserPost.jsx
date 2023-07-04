@@ -22,6 +22,7 @@ import ThumbUpAltRoundedIcon from "@mui/icons-material/ThumbUpAltRounded";
 import ThumbDownAltRoundedIcon from "@mui/icons-material/ThumbDownAltRounded";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import CircularIndeterminate from "./Spinner";
 import PlaceIcon from "@mui/icons-material/Place";
 
@@ -212,13 +213,13 @@ export default function UserPost() {
                         )}
                       </Box>
                       {post.likes >= 5 && post.likes > post.dislikes ? (
-                        <CheckCircleOutlineRoundedIcon
+                        <CheckCircleRoundedIcon
                           aria-label="verified"
                           color="success"
                           fontSize="large"
                         />
                       ) : (
-                        <CheckCircleOutlineRoundedIcon
+                        <CheckCircleRoundedIcon
                           aria-label="verified"
                           fontSize="large"
                         />
