@@ -12,8 +12,9 @@ export default function DataContextProvider(props) {
   const [postImg, setPostImg] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const [flag, setFlag] = useState(false);
-  const [dbFacilitiesData, setDbFacilitiesData] = useState([]);
-  const [allDBTrainStations, setAllDBTrainStations] = useState([]);
+  const [mergedDBDataArray, setMergedDBDataArray] = useState([]);
+  const [filteredDBPosts, setFilteredDBPosts] = useState([]);
+  
   const [cityPosts, setCityPosts] = useState([]);
 
   const { token, login } = useContext(AuthContext);
@@ -108,14 +109,22 @@ export default function DataContextProvider(props) {
     });
   };
 
+
+  //merge dbFacilitiesData with train Station data from MongoDB
+
+  
+  
+  useEffect(() => {
   // get all Deutsche Bahn train stations from MongoDB
+  let dbFacilitiesData = []
+  let allDBTrainStations=[]
   const getAllDBTrainStations = async () => {
     try {
       const res = await fetch(
         "https://inclusum.onrender.com/station/alltrainstations"
       );
       const data = await res.json();
-      setAllDBTrainStations(data?.data);
+      allDBTrainStations = data?.data;
     } catch (error) {
       console.log(error);
     }
@@ -138,35 +147,39 @@ export default function DataContextProvider(props) {
       const data = await res.json();
       const inactiveResults = data?.filter(
         (result) => result.state === "INACTIVE"
-      );
-      setDbFacilitiesData(inactiveResults);
+        );
+        console.log("facilities",inactiveResults)
+      dbFacilitiesData= inactiveResults;
     } catch (error) {
       console.log(error);
     }
   };
+  const getData = async () => {
+    await  getAllDBTrainStations();
+    await getDbFacilitiesData();
+    setMergedDBDataArray(dbFacilitiesData.filter(el => !!el.geocoordX && !!el.geocoordY ).map((facility) => {
+      const haveEqualStationNumber = (stationNumber) =>
+        stationNumber.stationNumber === facility.stationnumber;
+      const stationNameWithEqualNumber = allDBTrainStations.find(
+        haveEqualStationNumber
+      );
+      return Object.assign({}, facility, stationNameWithEqualNumber);
+    }));
 
-  //merge dbFacilitiesData with train Station data from MongoDB
+    
+  }
 
-  const mergedDBDataArray = dbFacilitiesData.map((facility) => {
-    const haveEqualStationNumber = (stationNumber) =>
-      stationNumber.stationNumber === facility.stationnumber;
-    const stationNameWithEqualNumber = allDBTrainStations.find(
-      haveEqualStationNumber
-    );
-    return Object.assign({}, facility, stationNameWithEqualNumber);
-  });
-
-  useEffect(() => {
-    getAllDBTrainStations();
+  getData()
   }, []);
+
+  useEffect(()=>{
+    currentUser && setFilteredDBPosts(mergedDBDataArray?.filter((post) => post.stationName.includes(currentUser.city)))
+  }, [mergedDBDataArray,currentUser])
 
   useEffect(() => {
     if (currentUser) getCityPosts();
-  }, [currentUser]);
+  }, [currentUser, flag]);
 
-  useEffect(() => {
-    getDbFacilitiesData();
-  }, []);
 
   useEffect(() => {
     if (!avatarImg) getAvatarImage();
@@ -182,9 +195,13 @@ export default function DataContextProvider(props) {
 
   console.log("description data", mergedDBDataArray);
 
+
+ 
+  
   return (
     <DataContext.Provider
       value={{
+        filteredDBPosts,
         login,
         loading,
         posts,
@@ -201,7 +218,6 @@ export default function DataContextProvider(props) {
         setPostImg,
         mergedDBDataArray,
         cityPosts,
-        posts,
       }}
     >
       {props.children}
