@@ -212,13 +212,13 @@ export default function MyAccount() {
                   >
                     {avatar ? (
                       <Typography
-                        sx={{ overflow: "hidden", maxWidth: "100%", mb: 1 }}
+                        sx={{ maxWidth: "100%"}}
                         variant="h5"
                       >
-                        {avatar.name}
+                      {avatar.name.length > 30 ? `${avatar.name.slice(0,30)}...` : avatar.name}
                       </Typography>
                     ) : (
-                      <Typography sx={{ mb: 1 }} variant="h5">
+                      <Typography variant="h5">
                         {t("myaccount.changeavatar")}
                       </Typography>
                     )}

@@ -145,7 +145,6 @@ export default function Signup() {
                 label={t('signup.email')}
                 name="email"
                 autoComplete="email"
-                autoFocus
                 inputProps={{
                   style: { WebkitBoxShadow: "0 0 0 100px #121212 inset" },
                 }}
@@ -175,7 +174,6 @@ export default function Signup() {
               label={t('signup.username')}
               name="username"
               autoComplete="username"
-              autoFocus
               inputProps={{
                 style: { WebkitBoxShadow: "0 0 0 100px #121212 inset" },
               }}
@@ -184,6 +182,7 @@ export default function Signup() {
             />
             <Autocomplete
             disablePortal
+            sx={{mt:2}}
             id="city"
             options={cities}
             getOptionLabel={(option) => option.name || ""}
@@ -193,7 +192,6 @@ export default function Signup() {
             {...params} 
             required
             label={t('signup.city')}
-            margin="normal"
             onChange={(e) => setCity(e.target.value)}
             value={city}
             />}
@@ -209,7 +207,6 @@ export default function Signup() {
                 label={t('signup.email')}
                 name="email"
                 autoComplete="email"
-                autoFocus
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
               />
@@ -233,12 +230,12 @@ export default function Signup() {
               label={t('signup.username')}
               name="username"
               autoComplete="username"
-              autoFocus
               onChange={(e) => setUsername(e.target.value)}
               value={username}
             />
             <Autocomplete
             disablePortal
+            sx={{mt:2}}
             id="city"
             options={cities}
             getOptionLabel={(option) => option.name || ""}
@@ -249,10 +246,10 @@ export default function Signup() {
             noOptionsText={t("create_post.no_match")} 
             onChange={(e, newValue) => setCity(newValue.name)}
             renderInput={(params) => 
-              <TextField 
+              <TextField
+                required
                 {...params} 
                 label={t('signup.city')} 
-                helperText={t("create_post.please_select_the_city")}
               />}
             />
           </>
