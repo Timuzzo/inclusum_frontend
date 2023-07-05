@@ -120,7 +120,7 @@ export default function CreatePost() {
   }
 
   const fileData = () => {
-    if (postImg) return <Typography variant="h5" sx={{maxWidth: "100%"}}>{postImg.name.length > 30 ? `${postImg.name.slice(0,30)}...` : postImg.name}</Typography>;
+    if (postImg) return <Typography variant="h5" sx={{maxWidth: "100%"}}>{postImg.name.length > 20 ? `${postImg.name.slice(0,20)}...` : postImg.name}</Typography>;
   };
 
   const { t } = useTranslation();

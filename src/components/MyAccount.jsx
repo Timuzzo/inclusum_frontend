@@ -215,7 +215,7 @@ export default function MyAccount() {
                         sx={{ maxWidth: "100%"}}
                         variant="h5"
                       >
-                      {avatar.name.length > 30 ? `${avatar.name.slice(0,30)}...` : avatar.name}
+                      {avatar.name.length > 20 ? `${avatar.name.slice(0,20)}...` : avatar.name}
                       </Typography>
                     ) : (
                       <Typography variant="h5">
