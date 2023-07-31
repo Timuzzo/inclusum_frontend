@@ -90,6 +90,10 @@ i18next
             user_post: "User info",
             db_post: "DB info",
           },
+          verifypage: {
+            success_message: "Please click button below to verify email",
+            verify_email: "verify Email",
+          },
         },
       },
       de: {
@@ -173,6 +177,11 @@ i18next
           dashboard: {
             user_post: "Nutzer-Posts",
             db_post: "DB-Posts",
+          },
+          verifypage: {
+            success_message:
+              "Bitte auf den Button klicken um Email zu verifizieren",
+            verify_button: "Email verifizieren",
           },
         },
       },
