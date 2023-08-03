@@ -28,6 +28,7 @@ export default function Signup() {
   const [city, setCity] = useState("");
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [msg, setMsg] = useState(null);
   const { login } = useContext(AuthContext);
 
   const { theme, themeToggle } = useContext(ThemeContext);
@@ -53,7 +54,7 @@ export default function Signup() {
       verified: false,
     };
 
-    const response = await fetch("http://localhost:8080/user/signup", {
+    const response = await fetch("https://inclusum.onrender.com/user/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(databody),
@@ -61,20 +62,15 @@ export default function Signup() {
 
     const data = await response.json();
 
+    console.log("DATA", data);
+
     if (!response.ok) {
       setIsLoading(false);
       setError(data.error);
-    }
-
-    if (response.ok) {
-      localStorage.setItem("token", data.token);
+    } else {
       setIsLoading(false);
-      login(data.token);
+      setMsg(data.msg);
     }
-    setEmail("");
-    setCity("");
-    setPassword("");
-    setUsername("");
   };
 
   const errorHandling = () => {
@@ -147,6 +143,13 @@ export default function Signup() {
             {t("signup.signup")}
           </Typography>
           {error ? errorHandling() : <></>}
+          {msg ? (
+            <Alert severity="success" variant="outlined">
+              <AlertTitle>{t("signup.email_verification")}</AlertTitle>
+            </Alert>
+          ) : (
+            <></>
+          )}
           <Box component="form" noValidate sx={{ mt: 1 }}>
             {themeToggle ? (
               <>
