@@ -8,6 +8,7 @@ import Dashboard from "./components/Dashboard";
 import MyAccount from "./components/MyAccount";
 import { AuthContext } from "./context/AuthContext";
 import Landingpage from "./components/Landingpage";
+import Verifypage from "./components/Verifypage";
 import React from "react";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Landingpage />} />
+        <Route path="/user/:_id/verify/:verifytoken" element={<Verifypage />} />
         <Route
           path="/dashboard"
           element={token ? <Dashboard /> : <Navigate to="/login" />}

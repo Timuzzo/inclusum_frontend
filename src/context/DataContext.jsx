@@ -14,12 +14,13 @@ export default function DataContextProvider(props) {
   const [flag, setFlag] = useState(false);
   const [mergedDBDataArray, setMergedDBDataArray] = useState([]);
   const [filteredDBPosts, setFilteredDBPosts] = useState([]);
-  
+
   const [cityPosts, setCityPosts] = useState([]);
 
   const { token, login } = useContext(AuthContext);
 
   const { decodedToken } = useJwt(token);
+  console.log("decodedToken", decodedToken);
 
   // getUserPosts
   const getUserPosts = async () => {
@@ -109,76 +110,79 @@ export default function DataContextProvider(props) {
     });
   };
 
-
   //merge dbFacilitiesData with train Station data from MongoDB
 
-  
-  
   useEffect(() => {
-  // get all Deutsche Bahn train stations from MongoDB
-  let dbFacilitiesData = []
-  let allDBTrainStations=[]
-  const getAllDBTrainStations = async () => {
-    try {
-      const res = await fetch(
-        "https://inclusum.onrender.com/station/alltrainstations"
-      );
-      const data = await res.json();
-      allDBTrainStations = data?.data;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // get Deutsche Bahn inactive facility data
-
-  const getDbFacilitiesData = async () => {
-    try {
-      const res = await fetch(
-        "https://apis.deutschebahn.com/db-api-marketplace/apis/fasta/v2/facilities",
-        {
-          headers: {
-            Accept: "application/json",
-            "DB-Client-Id": process.env.REACT_APP_ID,
-            "DB-Api-Key": process.env.REACT_APP_KEY,
-          },
-        }
-      );
-      const data = await res.json();
-      const inactiveResults = data?.filter(
-        (result) => result.state === "INACTIVE"
+    // get all Deutsche Bahn train stations from MongoDB
+    let dbFacilitiesData = [];
+    let allDBTrainStations = [];
+    const getAllDBTrainStations = async () => {
+      try {
+        const res = await fetch(
+          "https://inclusum.onrender.com/station/alltrainstations"
         );
-      dbFacilitiesData= inactiveResults;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const getData = async () => {
-    await  getAllDBTrainStations();
-    await getDbFacilitiesData();
-    setMergedDBDataArray(dbFacilitiesData.filter(el => !!el.geocoordX && !!el.geocoordY ).map((facility) => {
-      const haveEqualStationNumber = (stationNumber) =>
-        stationNumber.stationNumber === facility.stationnumber;
-      const stationNameWithEqualNumber = allDBTrainStations.find(
-        haveEqualStationNumber
+        const data = await res.json();
+        allDBTrainStations = data?.data;
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    // get Deutsche Bahn inactive facility data
+
+    const getDbFacilitiesData = async () => {
+      try {
+        const res = await fetch(
+          "https://apis.deutschebahn.com/db-api-marketplace/apis/fasta/v2/facilities",
+          {
+            headers: {
+              Accept: "application/json",
+              "DB-Client-Id": process.env.REACT_APP_ID,
+              "DB-Api-Key": process.env.REACT_APP_KEY,
+            },
+          }
+        );
+        const data = await res.json();
+        const inactiveResults = data?.filter(
+          (result) => result.state === "INACTIVE"
+        );
+        dbFacilitiesData = inactiveResults;
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const getData = async () => {
+      await getAllDBTrainStations();
+      await getDbFacilitiesData();
+      setMergedDBDataArray(
+        dbFacilitiesData
+          .filter((el) => !!el.geocoordX && !!el.geocoordY)
+          .map((facility) => {
+            const haveEqualStationNumber = (stationNumber) =>
+              stationNumber.stationNumber === facility.stationnumber;
+            const stationNameWithEqualNumber = allDBTrainStations.find(
+              haveEqualStationNumber
+            );
+            return Object.assign({}, facility, stationNameWithEqualNumber);
+          })
       );
-      return Object.assign({}, facility, stationNameWithEqualNumber);
-    }));
+    };
 
-    
-  }
-
-  getData()
+    getData();
   }, []);
 
-  useEffect(()=>{
-    currentUser && setFilteredDBPosts(mergedDBDataArray?.filter((post) => post.stationName.includes(currentUser.city)))
-  }, [mergedDBDataArray,currentUser])
+  useEffect(() => {
+    currentUser &&
+      setFilteredDBPosts(
+        mergedDBDataArray?.filter((post) =>
+          post.stationName.includes(currentUser.city)
+        )
+      );
+  }, [mergedDBDataArray, currentUser]);
 
   useEffect(() => {
     if (currentUser) getCityPosts();
   }, [currentUser, flag]);
-
 
   useEffect(() => {
     if (!avatarImg) getAvatarImage();
@@ -192,10 +196,6 @@ export default function DataContextProvider(props) {
     if (avatarImg) findAndUpdateUser();
   }, [avatarImg]);
 
-
-
- 
-  
   return (
     <DataContext.Provider
       value={{

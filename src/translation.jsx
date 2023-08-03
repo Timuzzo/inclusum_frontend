@@ -66,6 +66,8 @@ i18next
             invalid_email: "Wrong email format",
             strong_password:
               "Make sure to use at least 8 characters, one upper case, one lower, one number and one symbol",
+            email_verification:
+              "A verification link has been sent to your email account, please verify.",
           },
           myaccount: {
             greeting: "Hello",
@@ -90,6 +92,11 @@ i18next
           dashboard: {
             user_post: "User info",
             db_post: "DB info",
+          },
+          verifypage: {
+            success_message:
+              "Please click the button below to verify your account",
+            verify_button: "Verify Email",
           },
         },
       },
@@ -151,6 +158,8 @@ i18next
             invalid_email: "Falsches Email-Format",
             strong_password:
               "Passwort sollte mindestens 8 Zeichen lang sein, aus einer Groß- und Kleinbuchstabe und eine Ziffer sowie einem Sonderzeichen bestehen.",
+            email_verification:
+              "Ein Verifizierungslink wurde an Ihre Email-Adresse gesendet, bitte verifizieren.",
           },
           myaccount: {
             greeting: "Hallo",
@@ -175,6 +184,11 @@ i18next
           dashboard: {
             user_post: "Nutzer-Posts",
             db_post: "DB-Posts",
+          },
+          verifypage: {
+            success_message:
+              "Bitte auf den Button klicken um Konto zu verifizieren",
+            verify_button: "Email verifizieren",
           },
         },
       },
