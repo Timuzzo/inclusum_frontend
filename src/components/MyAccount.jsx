@@ -228,7 +228,7 @@ export default function MyAccount() {
                         variant="outlined"
                         color="secondary"
                       >
-                        <AlertTitle>{t("myaccount.updatesuccess")}</AlertTitle>
+                        <AlertTitle>{t("myaccount.avatarupdatesuccess")}</AlertTitle>
                       </Alert>
                     ) : (
                       <></>
@@ -433,7 +433,7 @@ export default function MyAccount() {
                           >
                             <Box sx={{ display: "flex", gap: "10px" }}>
                               <Badge
-                                badgeContent={post.likes}
+                                badgeContent={post.likes.length}
                                 color="secondary"
                               >
                                 <IconButton aria-label="like" disabled>
@@ -441,7 +441,7 @@ export default function MyAccount() {
                                 </IconButton>
                               </Badge>
                               <Badge
-                                badgeContent={post.dislikes}
+                                badgeContent={post.dislikes.length}
                                 color="secondary"
                               >
                                 <IconButton aria-label="dislike" disabled>
@@ -449,7 +449,7 @@ export default function MyAccount() {
                                 </IconButton>
                               </Badge>
                             </Box>
-                            {post.likes >= 5 && post.likes > post.dislikes ? (
+                            {post.likes.length >= 5 && post.likes.length > post.dislikes.length ? (
                               <CheckCircleRoundedIcon
                                 aria-label="verified"
                                 color="success"
