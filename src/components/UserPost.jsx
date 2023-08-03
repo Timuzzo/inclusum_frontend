@@ -21,7 +21,6 @@ import IconButton from "@mui/material/IconButton";
 import ThumbUpAltRoundedIcon from "@mui/icons-material/ThumbUpAltRounded";
 import ThumbDownAltRoundedIcon from "@mui/icons-material/ThumbDownAltRounded";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import CircularIndeterminate from "./Spinner";
 import PlaceIcon from "@mui/icons-material/Place";
@@ -50,11 +49,16 @@ export default function UserPost() {
   };
 
   async function updateLike(e) {
-    const databody = {
-      likes: 0,
+    const clickedCard = cityPosts.find(card => card._id === e.currentTarget.value)
+    const alreadyLiked = clickedCard.likes.find(like => like === currentUser._id) 
+    const alreadyDisliked = clickedCard.dislikes.find(dislike => dislike === currentUser._id)
+
+    if (!alreadyLiked && !alreadyDisliked) {
+      const databody = {
+      user_id: currentUser._id,
     };
     const data = await fetch(
-      `https://inclusum.onrender.com/posts/likes/${e.currentTarget.value}`,
+      `https://inclusum.onrender.com/posts/likes/add/${e.currentTarget.value}`,
       {
         method: "PUT",
         headers: {
@@ -66,14 +70,38 @@ export default function UserPost() {
     );
     const res = await data.json();
     setFlag(!flag);
+
+    } else if (alreadyLiked) {
+      const databody = {
+      user_id: currentUser._id,
+    };
+    const data = await fetch(
+      `https://inclusum.onrender.com/posts/likes/delete/${e.currentTarget.value}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(databody),
+      }
+    );
+    const res = await data.json();
+    setFlag(!flag);
+    }
   }
 
   async function updateDislike(e) {
+    const clickedCard = cityPosts.find(card => card._id === e.currentTarget.value)
+    const alreadyLiked = clickedCard.likes.find(like => like === currentUser._id) 
+    const alreadyDisliked = clickedCard.dislikes.find(dislike => dislike === currentUser._id)
+    
+    if (!alreadyLiked && !alreadyDisliked) {
     const databody = {
-      dislikes: 0,
+      user_id: currentUser._id,
     };
     const data = await fetch(
-      `https://inclusum.onrender.com/posts/dislikes/${e.currentTarget.value}`,
+      `https://inclusum.onrender.com/posts/dislikes/add/${e.currentTarget.value}`,
       {
         method: "PUT",
         headers: {
@@ -85,6 +113,25 @@ export default function UserPost() {
     );
     const res = await data.json();
     setFlag(!flag);
+
+    } else if (alreadyDisliked) {
+    const databody = {
+      user_id: currentUser._id,
+    };
+    const data = await fetch(
+      `https://inclusum.onrender.com/posts/dislikes/delete/${e.currentTarget.value}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(databody),
+      }
+    );
+    const res = await data.json();
+    setFlag(!flag);
+    }
   }
 
   useEffect(() => {
@@ -178,41 +225,47 @@ export default function UserPost() {
                     >
                       <Box sx={{ display: "flex", gap: "10px" }}>
                         {currentUser._id === post.user_id ? (
-                          <Badge badgeContent={post.likes} color="secondary">
+                          <Badge badgeContent={post.likes.length} color="secondary">
                             <IconButton aria-label="like" disabled={true}>
                               <ThumbUpAltRoundedIcon />
                             </IconButton>
                           </Badge>
                         ) : (
-                          <Badge badgeContent={post.likes} color="secondary">
+                          <Badge badgeContent={post.likes.length} color="secondary">
                             <IconButton
                               aria-label="like"
                               onClick={updateLike}
                               value={post._id}
                             >
-                              <ThumbUpAltRoundedIcon />
+                              {post.likes.find(like => like === currentUser._id) ? 
+                              <ThumbUpAltRoundedIcon color="secondary"/> 
+                              :
+                              <ThumbUpAltRoundedIcon />}
                             </IconButton>
                           </Badge>
                         )}
                         {currentUser._id === post.user_id ? (
-                          <Badge badgeContent={post.dislikes} color="secondary">
+                          <Badge badgeContent={post.dislikes.length} color="secondary">
                             <IconButton aria-label="dislike" disabled={true}>
                               <ThumbDownAltRoundedIcon />
                             </IconButton>
                           </Badge>
                         ) : (
-                          <Badge badgeContent={post.dislikes} color="secondary">
+                          <Badge badgeContent={post.dislikes.length} color="secondary">
                             <IconButton
                               aria-label="dislike"
                               onClick={updateDislike}
                               value={post._id}
                             >
-                              <ThumbDownAltRoundedIcon />
+                              {post.dislikes.find(like => like === currentUser._id) ? 
+                              <ThumbDownAltRoundedIcon color="secondary"/> 
+                              :
+                              <ThumbDownAltRoundedIcon />}
                             </IconButton>
                           </Badge>
                         )}
                       </Box>
-                      {post.likes >= 5 && post.likes > post.dislikes ? (
+                      {post.likes.length >= 5 && post.likes.length > post.dislikes.length ? (
                         <CheckCircleRoundedIcon
                           aria-label="verified"
                           color="success"

@@ -148,7 +148,6 @@ export default function DataContextProvider(props) {
       const inactiveResults = data?.filter(
         (result) => result.state === "INACTIVE"
         );
-        console.log("facilities",inactiveResults)
       dbFacilitiesData= inactiveResults;
     } catch (error) {
       console.log(error);
@@ -193,7 +192,6 @@ export default function DataContextProvider(props) {
     if (avatarImg) findAndUpdateUser();
   }, [avatarImg]);
 
-  console.log("description data", mergedDBDataArray);
 
 
  
