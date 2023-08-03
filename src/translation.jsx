@@ -75,6 +75,7 @@ i18next
             changeavatar: "Change avatar",
             chooseavatar: "Choose picture",
             upload: "Upload",
+            avatarupdatesuccess: "Updated successfully. It may take a few minutes.",
             updatesuccess: "Updated successfully",
             deletesuccess: "Deleted successfully",
             uploadfailure:
@@ -166,6 +167,7 @@ i18next
             changeavatar: "Avatar ändern",
             chooseavatar: "Bild auswählen",
             upload: "Hochladen",
+            avatarupdatesuccess: "Erfolgreich geändert. Es kann eine Minuten dauern.",
             updatesuccess: "Erfolgreich geändert",
             deletesuccess: "Erfolgreich gelöscht",
             uploadfailure:
