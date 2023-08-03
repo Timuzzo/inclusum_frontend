@@ -67,7 +67,7 @@ i18next
             strong_password:
               "Make sure to use at least 8 characters, one upper case, one lower, one number and one symbol",
             email_verification:
-              "A verification link has been sent to your email account, please verify.",
+              "A verification link has been sent to your email account, please verify. Please also check your spam folder.",
           },
           myaccount: {
             greeting: "Hello",
@@ -159,7 +159,7 @@ i18next
             strong_password:
               "Passwort sollte mindestens 8 Zeichen lang sein, aus einer Groß- und Kleinbuchstabe und eine Ziffer sowie einem Sonderzeichen bestehen.",
             email_verification:
-              "Ein Verifizierungslink wurde an Ihre Email-Adresse gesendet, bitte verifizieren.",
+              "Ein Verifizierungslink wurde an Ihre Email-Adresse gesendet, bitte verifizieren. Schauen Sie auch im Spam-Ordner nach.",
           },
           myaccount: {
             greeting: "Hallo",
